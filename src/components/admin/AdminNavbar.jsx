@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../ConfirmationModal";
 
-const Navbar = () => {
+const Navbar = ({toggleSidebar}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
   
@@ -18,6 +18,12 @@ const Navbar = () => {
     return(
         <div className="dashboard-header">
             <nav className="navbar navbar-expand-lg bg-white fixed-top">
+                <button 
+                    className="btn ml-3"
+                    onClick={toggleSidebar}
+                >
+                    <i className="fas fa-bars" />
+                </button>
                 <a className="navbar-brand" href="#">
                 <img src="../../../public/images/logo-eurekalogistics.png" alt style={{width: 100}} />
                 </a>

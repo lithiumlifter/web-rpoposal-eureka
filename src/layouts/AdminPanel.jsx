@@ -211,6 +211,7 @@ const pageTitles = {
   "/admin/registrasiuser": "Registrasi User",
   "/admin/setupuser": "Setup User",
   "/admin/ubahpassword": "Ubah Password",
+  "/admin/updateanggaran/7616": "Input Anggaran"
 };
 
 const AdminPanel = () => {

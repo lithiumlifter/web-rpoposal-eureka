@@ -1,0 +1,42 @@
+.drop-zone {
+    border: 2px dashed #007bff;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .drop-zone:hover {
+    background-color: #f0f8ff;
+  }
+  
+  .file-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+  
+  .file-list li {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .file-list button {
+    border: none;
+    background: #dc3545;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .file-list button:hover {
+    background: #c82333;
+  }
+  

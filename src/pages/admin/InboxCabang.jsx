@@ -310,10 +310,12 @@
 
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import { useNavigate } from "react-router-dom"; 
 import inboxCabangServices from "../../services/admin/inboxCabangServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
 
 const InboxCabang = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [selectedBU, setSelectedBU] = useState("");
     const [searchText, setSearchText] = useState("");
@@ -438,11 +440,23 @@ const InboxCabang = () => {
         },
         {
             name: "VIEW",
-            cell: () => <button className="btn btn-info"><i className="fas fa-eye" /></button>, 
+            cell: (row) => {
+              return (
+                <button
+                  className="btn btn-info"
+                  onClick={() => {
+                    console.log("ID yang dikirim ke detail:", row.id); // Debugging
+                    navigate(`/admin/inboxcabang/${row.id}`);
+                  }}
+                >
+                  <i className="fas fa-eye" />
+                </button>
+              );
+            },
             ignoreRowClick: true,
             allowOverflow: true,
-            button: true
-        }
+            button: true,
+          },
     ];
 
     return (

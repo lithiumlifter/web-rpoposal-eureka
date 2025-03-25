@@ -91,22 +91,42 @@ const Sidebar = ({ isOpen }) => {
           <ul className="navbar-nav flex-column">
             <li className="nav-item">
               <Link className="nav-link" to="/admin">
-                <i className="fas fa-fw fa-home"></i> <span>Home</span>
+                <i className="fas fa-fw fa-home"></i> <span  className="menu-text">Home</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/admin/inputproposal">
-                <i className="fas fa-fw fa-comment-alt"></i> <span>Input Proposal Baru</span>
+                <i className="fas fa-fw fa-comment-alt"></i> <span  className="menu-text">Input Proposal Baru</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/admin/inboxpusat">
-                <i className="fas fa-fw fa-inbox"></i> <span>Inbox Pusat</span>
+                <i className="fas fa-fw fa-inbox"></i> <span  className="menu-text">Inbox Pusat</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/admin/updatestatuspst">
-                <i className="fas fa-fw fa-edit"></i> <span>Update Status Pst</span>
+                <i className="fas fa-fw fa-edit"></i> <span  className="menu-text">Update Status Pst</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/inboxcabang">
+                <i className="fas fa-fw fa-inbox"></i> <span  className="menu-text">Inbox Cabang</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/updatestatuscabang">
+                <i className="fas fa-fw fa-edit"></i> <span  className="menu-text">Update Status Cabang</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/updateanggaran">
+                <i className="fas fa-fw fa-edit"></i> <span  className="menu-text">Update Anggaran</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/updateanggaran">
+                <i className="fas fa-fw fa-edit"></i> <span  className="menu-text">Update Anggaran</span>
               </Link>
             </li>
           </ul>

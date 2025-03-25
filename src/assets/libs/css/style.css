@@ -238,7 +238,7 @@ ul li {}
     color: #3d3f5d;
 }
 
-/* TABEL */
+/* TABEL DATATABLES*/
 .table td, .table th {
     text-align: left;
     font-size: 0.875rem;
@@ -6915,7 +6915,7 @@ html, body {
 }
 
 .dashboard-wrapper {
-    width: 100vw;
+    width: 94vw;
     margin-left: 80px; /* Default jika sidebar collapsed */
     transition: margin-left 0.3s ease-in-out;
     display: flex;
@@ -7004,6 +7004,53 @@ html, body {
 .nav-left-sidebar:hover .nav-link span {
     display: inline;
     opacity: 1;
+}
+/*  */
+.nav-left-sidebar {
+    width: 80px; /* Lebar sidebar awal */
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.nav-left-sidebar.expanded {
+    width: 250px; /* Lebar sidebar saat diperluas */
+}
+
+/* Flexbox untuk mencegah pergeseran ikon */
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center; /* Pastikan ikon dan teks sejajar */
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    position: relative; /* Buat teks bisa absolute */
+}
+
+/* Ikon harus punya ukuran tetap */
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px; /* Supaya posisinya tetap */
+    text-align: center;
+}
+
+/* Teks dibuat absolute supaya tidak menggeser ikon */
+.nav-left-sidebar .nav-link .menu-text {
+    position: absolute;
+    left: 50px; /* Jarak dari ikon */
+    visibility: hidden;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateX(-10px);
+}
+
+/* Saat sidebar terbuka, teks muncul */
+.nav-left-sidebar.expanded .nav-link .menu-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
 }
 
 

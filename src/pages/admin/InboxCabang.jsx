@@ -445,7 +445,7 @@ const InboxCabang = () => {
                 <button
                   className="btn btn-info"
                   onClick={() => {
-                    console.log("ID yang dikirim ke detail:", row.id); // Debugging
+                    console.log("ID yang dikirim ke detail:", row.id);
                     navigate(`/admin/inboxcabang/${row.id}`);
                   }}
                 >
@@ -493,9 +493,9 @@ const InboxCabang = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleApprove}
-                title="Konfirmasi Approve"
+                title="Konfirmasi Kirim"
                 message={`Apakah Anda yakin ingin menyetujui proposal dengan ID ${selectedItem?.id}?`}
-                confirmText="Ya, Approve"
+                confirmText="Ya, Kirim"
                 cancelText="Batal"
                 theme="success"
             />

@@ -27,7 +27,7 @@ const Home = () => {
           <div className="container">
               <div className="mt-4">
                   <h4>Eureka Bookhouse</h4>
-                  <div className="row justify-content-around">
+                  <div className="row justify-content-evenly">
                       {Array(4).fill().map((_, index) => (
                           <div key={index} className="col-md-3 col-sm-6 mb-3">
                               <div className="card">

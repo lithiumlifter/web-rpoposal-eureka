@@ -3394,7 +3394,13 @@ btn-link
 .card-figure:hover .figure-tools {
     opacity: 1;
 }
-
+@media (max-width: 768px) {
+    .rdt_Table {
+      overflow-x: auto;
+      display: block;
+    }
+  }
+  
 .figure-description {
     position: absolute;
     top: 0;

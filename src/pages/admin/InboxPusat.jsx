@@ -288,9 +288,9 @@ const InboxPusat = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleApprove}
-                title="Konfirmasi Approve"
+                title="Konfirmasi Kirim"
                 message={`Apakah Anda yakin ingin menyetujui proposal dengan ID ${selectedItem?.id}?`}
-                confirmText="Ya, Approve"
+                confirmText="Ya, Kirim"
                 cancelText="Batal"
                 theme="success"
             />

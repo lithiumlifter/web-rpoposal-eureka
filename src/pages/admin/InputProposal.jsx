@@ -1,7 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import CategoryService from "../../services/admin/categoryServices";
-import "../../assets/styles/UploadFile.css"
+import "../../assets/styles/UploadFile.css";
+import Select from "react-select";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const InputProposal = () => {
   const [tanggal, setTanggal] = useState(new Date().toISOString().split("T")[0]);
@@ -60,6 +63,55 @@ const InputProposal = () => {
   const [customNumber, setCustomNumber] = useState("");
   const [selectedType, setSelectedType] = useState("");
 
+  // catatan
+  const [catatan, setCatatan] = useState("");
+  
+  // fetch category
+  const optionBisnisunit = categories.bisnisUnit.map((item) => ({
+    value: item.value,
+    label: `${item.name} - ${item.wilayah}`,
+  }));
+
+  const optionsRuangLingkup = categories.ruangLingkup.map((item) => ({
+    value: item.value,
+    label: item.name,
+  }));
+
+  const optionsKategori = categories.dataKategori.map((item) => ({
+    value: item.value,
+    label: item.name,
+  }));
+
+  const optionsOtorisasi = categories.dataOtorisasi.map((item) => ({
+    value: item.value,
+    label: item.name,
+  }));
+
+  // custom style select search
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      textAlign: "left",
+    }),
+    singleValue: (base) => ({
+      ...base,
+      textAlign: "left",
+    }),
+    menu: (base) => ({
+      ...base,
+      textAlign: "left",
+    }),
+    option: (base) => ({
+      ...base,
+      textAlign: "left",
+    }),
+    placeholder: (base) => ({
+      ...base,
+      textAlign: "left",
+      color: "#aaa", // Warna placeholder bisa diubah
+    }),
+  };
+
   // handle submit
 
 
@@ -108,13 +160,13 @@ const InputProposal = () => {
               BU:
             </label>
             <div className="col-12 col-sm-8 col-lg-8">
-              <select className="form-control">
-              {categories.bisnisUnit.map((item) => (
-                <option key={item.value} value={item.value}>
-                  {item.name} - {item.wilayah}
-                </option>
-              ))}
-              </select>
+            <Select
+              options={optionBisnisunit}
+              placeholder="Pilih BU"
+              className="basic-single"
+              classNamePrefix="select"
+              styles={customStyles}
+            />
             </div>
           </div>
 
@@ -124,13 +176,13 @@ const InputProposal = () => {
               Ruang Lingkup:
             </label>
             <div className="col-12 col-sm-8 col-lg-8">
-              <select className="form-control">
-                {categories.ruangLingkup.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
+            <Select
+                options={optionsRuangLingkup}
+                placeholder="Pilih Ruang Lingkup"
+                className="basic-single"
+                classNamePrefix="select"
+                styles={customStyles}
+              />
             </div>
           </div>
 
@@ -140,13 +192,13 @@ const InputProposal = () => {
               Kategori:
             </label>
             <div className="col-12 col-sm-8 col-lg-8">
-              <select className="form-control">
-                  {categories.dataKategori.map((item) => (
-                    <option key={item.value} value={item.value}>
-                      {item.name}
-                    </option>
-                  ))}
-              </select>
+            <Select
+              options={optionsKategori}
+              placeholder="Pilih Kategori"
+              className="basic-single"
+              classNamePrefix="select"
+              styles={customStyles}
+            />
             </div>
           </div>
 
@@ -204,23 +256,19 @@ const InputProposal = () => {
           </div>
 
           {/* Otorisasi */}
-          {/* Otorisasi */}
           <div className="form-group row align-items-center">
             <label className="col-12 col-sm-3 col-form-label text-left">Otorisasi:</label>
             <div className="col-12 col-sm-6 col-lg-8">
               <div className="input-group">
-                <select 
-                  className="form-control" 
-                  value={selectedOtorisasi} 
-                  onChange={(e) => setSelectedOtorisasi(e.target.value)}
-                >
-                  <option value="">Pilih Otorisasi</option>
-                  {categories.dataOtorisasi.map((item) => (
-                    <option key={item.value} value={item.name}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
+              <Select
+                options={optionsOtorisasi}
+                placeholder="Pilih Otorisasi"
+                className="basic-single flex-grow-1"
+                classNamePrefix="select"
+                styles={customStyles}
+                value={optionsOtorisasi.find((opt) => opt.value === selectedOtorisasi) || null}
+                onChange={(selectedOption) => setSelectedOtorisasi(selectedOption ? selectedOption.value : "")}
+              />
                 <button type="button" className="btn btn-primary" onClick={handleAddOtorisasi}>
                   Add
                 </button>
@@ -288,18 +336,13 @@ const InputProposal = () => {
                 <div className="form-group row">
                   <label className="col-12 col-sm-3 col-form-label text-left">Masukkan Catatan:</label>
                   <div className="col-12 col-sm-8 col-lg-8">
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={customNumber}
-                      onChange={(e) => setCustomNumber(e.target.value)}
-                    />
+                    <ReactQuill value={catatan} onChange={setCatatan} />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="card mt-3">
+            {/* <div className="card mt-3">
               <div className="card-header text-start">I. ANGGARAN</div>
               <div className="card-body">
                 <div className="form-group row">
@@ -314,7 +357,7 @@ const InputProposal = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             </>
       )}
 
@@ -380,3 +423,128 @@ const InputProposal = () => {
 };
 
 export default InputProposal;
+
+// import { useEffect, useState } from "react";
+// import CategoryService from "../../services/admin/categoryServices";
+// import InputProposalServices from "../../services/admin/inputProposalServices";
+// import "../../assets/styles/UploadFile.css";
+
+// const InputProposal = () => {
+//   const [formData, setFormData] = useState({
+//     tanggal_pengajuan: new Date().toISOString().split("T")[0],
+//     bisnis_unit: "",
+//     proposalid: "",
+//     ruanglingkup: "",
+//     kategori: "",
+//     proposaldate: "2025-03-25",
+//     title: "",
+//     tipe: "",
+//     biayalainlain: 0,
+//     description: "",
+//     email1: "",
+//     email2: "",
+//     email3: "",
+//     otorisasi: [50009],
+//   });
+
+//   const [categories, setCategories] = useState({
+//     bisnisUnit: [],
+//     ruangLingkup: [],
+//     dataKategori: [],
+//     dataTipe: [],
+//     dataOtorisasi: [],
+//   });
+
+//   useEffect(() => {
+//     const fetchCategories = async () => {
+//       try {
+//         const response = await CategoryService.getCategories();
+//         setCategories(response.data);
+//       } catch (error) {
+//         console.error("Error fetching categories:", error);
+//       }
+//     };
+//     fetchCategories();
+//   }, []);
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   const handleAddOtorisasi = (e) => {
+//     const selectedOtorisasi = e.target.value;
+//     if (selectedOtorisasi && !formData.otorisasi.includes(selectedOtorisasi)) {
+//       setFormData({
+//         ...formData,
+//         otorisasi: [...formData.otorisasi, selectedOtorisasi],
+//       });
+//     }
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     console.log("Data yang dikirim:", JSON.stringify(formData, null, 2));
+//     try {
+//       const response = await InputProposalServices.submitProposal(formData);
+//       alert("Proposal berhasil disimpan");
+//       console.log("Response:", response);
+//     } catch (error) {
+//       alert("Gagal menyimpan proposal", error);
+//     }
+//   };
+  
+
+//   return (
+//     <div className="card">
+//       <div className="card-header text-start">Master</div>
+//       <div className="card-body">
+//         <form onSubmit={handleSubmit}>
+//           {Object.keys(formData).map((key) => (
+//             key !== "otorisasi" && (
+//               <div className="form-group row" key={key}>
+//                 <label className="col-12 col-sm-3 col-form-label text-left">
+//                   {key.replace("_", " ")}
+//                 </label>
+//                 <div className="col-12 col-sm-8 col-lg-8">
+//                   <input
+//                     type={key.includes("date") ? "date" : "text"}
+//                     className="form-control"
+//                     name={key}
+//                     value={formData[key]}
+//                     onChange={handleChange}
+//                   />
+//                 </div>
+//               </div>
+//             )
+//           ))}
+//           <div className="form-group row">
+//             <label className="col-12 col-sm-3 col-form-label text-left">Otorisasi:</label>
+//             <div className="col-12 col-sm-8 col-lg-8">
+//               <select className="form-control" onChange={handleAddOtorisasi}>
+//                 <option value="">Pilih Otorisasi</option>
+//                 {categories.dataOtorisasi.map((item) => (
+//                   <option key={item.value} value={item.value}>{item.name}</option>
+//                 ))}
+//               </select>
+//               <ul className="list-group mt-2">
+//                 {formData.otorisasi.map((item, index) => (
+//                   <li key={index} className="list-group-item">
+//                     {item}
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+//           </div>
+//           <div className="form-group row">
+//             <div className="col-12 col-sm-8 col-lg-6 offset-sm-3">
+//               <button type="submit" className="btn btn-primary">Simpan</button>
+//             </div>
+//           </div>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default InputProposal;

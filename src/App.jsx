@@ -33,6 +33,7 @@ import OtorisasiPending from "./pages/admin/OtorisasiPending";
 import ReportKpi from "./pages/admin/ReportKpi";
 import DetailProposalCabang from "./pages/admin/DetailProposalCabang";
 import InputAnggaran from "./pages/admin/InputAnggaran";
+import DetailProposalReport from "./pages/admin/DetailProposalReport";
 
 function App() {
   return (
@@ -65,8 +66,10 @@ function App() {
           <Route path="reportkpi" element={<ReportKpi />} />
           {/* <Route path="inboxcabang/:id" element={<DetailProposalCabang />} /> */}
           <Route path="inboxcabang/:id_proposal" element={<DetailProposalCabang />} />
+          <Route path="updatestatuscabang/:id_proposal" element={<DetailProposalCabang />} />
+          <Route path="updatestatuspusat/:id_proposal" element={<DetailProposalCabang />} />
           <Route path="updateanggaran/:id_proposal" element={<InputAnggaran />} />
-
+          <Route path="proposalreport/:id_proposal" element={<DetailProposalReport />} />
 
           <Route path="registrasiuser" element={<RegistrasiUser />} />
           <Route path="setupuser" element={<SetupUser />} />

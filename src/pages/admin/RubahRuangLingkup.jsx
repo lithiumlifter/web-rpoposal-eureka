@@ -136,6 +136,7 @@
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import RuangLingkupServices from "../../services/admin/ruangLingkupServices";
+import CustomTable from "../../components/table/customTable";
 
 const RubahRuangLingkup = () => {
     const [data, setData] = useState([]);
@@ -248,7 +249,14 @@ const RubahRuangLingkup = () => {
                     />
                 </div>
 
-                <DataTable
+                
+                <CustomTable
+                columns={columns}
+                data={filteredData}
+                loading={loading}
+                />
+
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     progressPending={loading}
@@ -257,7 +265,7 @@ const RubahRuangLingkup = () => {
                     striped
                     responsive
                     persistTableHead
-                />
+                /> */}
             </div>
         </div>
     );

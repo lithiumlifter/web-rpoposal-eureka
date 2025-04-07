@@ -215,6 +215,7 @@
 import { useState, useEffect } from "react";
 import AllReportServices from "../../services/admin/allReportServices";
 import DataTable from "react-data-table-component";
+import CustomTable from "../../components/table/customTable";
 
 const ReportKpi = () => {
     const [searchText, setSearchText] = useState("");
@@ -293,7 +294,7 @@ const ReportKpi = () => {
                         Tampilkan
                     </button> */}
                 </div>
-                <DataTable
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     progressPending={loading}
@@ -301,6 +302,11 @@ const ReportKpi = () => {
                     highlightOnHover
                     pointerOnHover
                     responsive
+                /> */}
+                <CustomTable
+                    columns={columns}
+                    data={filteredData}
+                    loading={loading}
                 />
             </div>
         </div>

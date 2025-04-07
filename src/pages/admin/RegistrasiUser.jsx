@@ -8,7 +8,8 @@ const RegistrasiUser = () => {
                     <thead>
                     <tr>
                         <th>NO</th>
-                        <th />
+                        <th></th>
+                        <th>EMPLID</th>
                         <th>EMPLNAME</th>
                         <th>DIMENSION</th>
                         <th>EMAIL</th>

@@ -16,17 +16,35 @@ const Navbar = ({toggleSidebar}) => {
     };
 
     return(
-        <div className="dashboard-header">
-            <nav className="navbar navbar-expand-lg bg-white fixed-top">
+       <>
+         <div className="dashboard-header">
+            <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: "#14489e" }}>
                 <button 
                     className="btn ml-3"
                     onClick={toggleSidebar}
+                    style={{ backgroundColor: "#f0ad4e" }}
                 >
-                    <i className="fas fa-bars" />
+                    <i className="fas fa-bars text-white" />
                 </button>
-                <a className="navbar-brand" href="#">
-                <img src="../../../public/images/logo-eurekalogistics.png" alt style={{width: 100}} />
+                <a 
+                    className="navbar-brand" 
+                    href="#" 
+                    style={{ 
+                        backgroundColor: "white", 
+                        padding: "10px 25px", 
+                        marginLeft: "24px",
+                        height: "100%", 
+                        display: "flex", 
+                        alignItems: "center"
+                    }}
+                >
+                    <img 
+                        src="../../../public/images/logo-eurekalogistics.png" 
+                        alt="Eureka Logistics" 
+                        style={{ width: 100, height: "auto" }} 
+                    />
                 </a>
+
                 <button 
                     className="navbar-toggler" 
                     type="button" 
@@ -76,6 +94,7 @@ const Navbar = ({toggleSidebar}) => {
                 theme="danger"
             />
         </div>
+       </>
     );
 }
 

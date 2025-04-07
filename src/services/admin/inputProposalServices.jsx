@@ -9,7 +9,8 @@ const InputProposalServices = {
             const response = await axios.post(`${BASE_URL}/master/create-proposal`, proposalData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
+                    // "Content-Type": "application/json",
+                    // "Content-Type": "multipart/form-data"
                 },
             });
             console.log("Proposal submitted successfully:", response.data);

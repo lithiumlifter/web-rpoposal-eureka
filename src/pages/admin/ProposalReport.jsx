@@ -337,6 +337,7 @@ import { useState, useEffect } from "react";
 import AllReportServices from "../../services/admin/allReportServices";
 import { useNavigate } from "react-router-dom"; 
 import DataTable from "react-data-table-component";
+import CustomTable from "../../components/table/customTable";
 
 const ProposalReport = () => {
     const navigate = useNavigate();
@@ -380,31 +381,64 @@ const ProposalReport = () => {
             : true)
     );
 
-    const columns = [
-        { name: "NO", selector: (_, index) => index + 1, width: "60px" },
-        { name: "REG1/REG2", selector: row => `${row.reg_branch || "-"}/${row.reg || "-"}`, sortable: true },
-        { name: "NO. PROPOSAL", selector: row => row.kode_proposal || "-", sortable: true },
-        { name: "TITLE", selector: row => row.title || "-", sortable: true },
-        { name: "BU", selector: row => row.bisnis_unit || "-", sortable: true },
-        { name: "VIEW", cell: row => <button className="btn btn-success" onClick={() => {
-            console.log("ID yang dikirim ke detail:", row.id);
-            navigate(`/admin/proposalreport/${row.id}`);
-        }}><i className="fas fa-search" /></button> },
-        { name: "TGL RECEIVED CAB", selector: row => row.date?.receive_cabang || "-", sortable: true },
-        { name: "MGRCAB", selector: () => "-", sortable: true },
-        { name: "KADEPT", selector: () => "-", sortable: true },
-        { name: "AKTCAB", selector: () => "-", sortable: true },
-        { name: "KACAB", selector: () => "-", sortable: true },
-        { name: "MGRPST", selector: () => "-", sortable: true },
-        { name: "AKTPST", selector: () => "-", sortable: true },
-        { name: "FIN", selector: () => "-", sortable: true },
-        { name: "AMD", selector: () => "-", sortable: true },
-        { name: "DIRMKT", selector: () => "-", sortable: true },
-        { name: "DIRUTM", selector: () => "-", sortable: true },
-        { name: "STATUS", selector: row => row.status || "-", sortable: true },
-        { name: "USER", selector: row => row.user || "-", sortable: true }
-    ];
+    // const columns = [
+    //     { name: "NO", selector: (_, index) => index + 1, width: "60px" },
+    //     { name: "REG1/REG2", selector: row => `${row.reg_branch || "-"}/${row.reg || "-"}`, sortable: true },
+    //     { name: "NO. PROPOSAL", selector: row => row.kode_proposal || "-", sortable: true },
+    //     { name: "TITLE", selector: row => row.title || "-", sortable: true },
+    //     { name: "BU", selector: row => row.bisnis_unit || "-", sortable: true },
+    //     { name: "VIEW", cell: row => <button className="btn btn-success" onClick={() => {
+    //         console.log("ID yang dikirim ke detail:", row.id);
+    //         navigate(`/admin/proposalreport/${row.id}`);
+    //     }}><i className="fas fa-search" /></button> },
+    //     { name: "TGL RECEIVED CAB", selector: row => row.date?.receive_cabang || "-", sortable: true },
+    //     { name: "MGRCAB", selector: () => "-", sortable: true },
+    //     { name: "KADEPT", selector: () => "-", sortable: true },
+    //     { name: "AKTCAB", selector: () => "-", sortable: true },
+    //     { name: "KACAB", selector: () => "-", sortable: true },
+    //     { name: "MGRPST", selector: () => "-", sortable: true },
+    //     { name: "AKTPST", selector: () => "-", sortable: true },
+    //     { name: "FIN", selector: () => "-", sortable: true },
+    //     { name: "AMD", selector: () => "-", sortable: true },
+    //     { name: "DIRMKT", selector: () => "-", sortable: true },
+    //     { name: "DIRUTM", selector: () => "-", sortable: true },
+    //     { name: "STATUS", selector: row => row.status || "-", sortable: true },
+    //     { name: "USER", selector: row => row.user || "-", sortable: true }
+    // ];
 
+    const columns = [
+        { name: "NO", selector: (_, index) => index + 1, width: "60px", wrap: true },
+        { name: "REG", selector: row => `${row.reg_branch || "-"}/${row.reg || "-"}`, maxWidth: "120px", wrap: true },
+        { name: "PROPOSAL", selector: row => row.kode_proposal || "-", maxWidth: "130px", wrap: true },
+        { name: "TITLE", selector: row => row.title || "-", grow: 2, wrap: true },
+        { name: "BU", selector: row => row.bisnis_unit || "-", maxWidth: "70px", wrap: true },
+        {
+          name: "VIEW",
+          cell: row => (
+            <button className="btn btn-success btn-sm" onClick={() => navigate(`/admin/proposalreport/${row.id}`)}>
+              <i className="fas fa-search" />
+            </button>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+          maxWidth: "70px"
+        },
+        { name: "RECV", selector: row => row.date?.receive_cabang || "-", maxWidth: "120px", wrap: true },
+        { name: "MGRCAB", selector: () => "-", maxWidth: "90px", wrap: true },
+        { name: "KADEPT", selector: () => "-", maxWidth: "90px", wrap: true },
+        { name: "AKTCAB", selector: () => "-", maxWidth: "90px", wrap: true },
+        { name: "KACAB", selector: () => "-", maxWidth: "90px", wrap: true },
+        { name: "MGRPST", selector: () => "-", maxWidth: "90px", wrap: true },
+        { name: "AKTPST", selector: () => "-", maxWidth: "90px", wrap: true },
+        { name: "FIN", selector: () => "-", maxWidth: "80px", wrap: true },
+        { name: "AMD", selector: () => "-", maxWidth: "80px", wrap: true },
+        { name: "DIRMKT", selector: () => "-", maxWidth: "90px", wrap: true },
+        { name: "DIRUTM", selector: () => "-", maxWidth: "90px", wrap: true },
+        { name: "STATUS", selector: row => row.status || "-", maxWidth: "100px", wrap: true },
+        { name: "USER", selector: row => row.user || "-", maxWidth: "100px", wrap: true }
+      ];
+      
     return (
         <div className="card">
             <div className="card-body">
@@ -438,7 +472,12 @@ const ProposalReport = () => {
                         onChange={handleFilterChange}
                     />
                 </div>
-                <DataTable
+                <CustomTable
+                    columns={columns}
+                    data={filteredData}
+                    loading={loading}
+                />
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     progressPending={loading}
@@ -446,7 +485,7 @@ const ProposalReport = () => {
                     highlightOnHover
                     pointerOnHover
                     responsive
-                />
+                /> */}
             </div>
         </div>
     );

@@ -67,9 +67,11 @@ import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 import updateStatusPusatServices from "../../services/admin/updateStatusPusatServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import CustomTable from "../../components/table/customTable";
 
 const UpdateStatusPst = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
     const [dataPusat, setDataPusat] = useState([]);
     const [selectedBU, setSelectedBU] = useState("");
     const [searchText, setSearchText] = useState("");
@@ -86,6 +88,8 @@ const UpdateStatusPst = () => {
                 }
             } catch (error) {
                 console.error("Error fetching data: ", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -110,12 +114,12 @@ const UpdateStatusPst = () => {
         }
     };
 
-    const handleCloseModal = (item) => {
+    const handleCancelModal = (item) => {
         setSelectedItem(item);
         setIsCloseModalOpen(true);
     };
 
-    const handleCloseConfirm = async () => {
+    const handleCancelConfirm = async () => {
         try {
             await updateStatusPusatServices.cancelProposalPusat(selectedItem?.id);
             alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`);
@@ -135,49 +139,97 @@ const UpdateStatusPst = () => {
             item.type.toLowerCase().includes(searchText.toLowerCase()))
     );
 
+    // const columns = [
+    //     { name: "RL", selector: row => row.ruang_lingkup, sortable: true },
+    //     { name: "CAB", selector: row => row.reg_branch || "-", sortable: true },
+    //     { name: "PST", selector: row => row.reg || "-", sortable: true },
+    //     { name: "ID", selector: row => row.kode_proposal, sortable: true },
+    //     { name: "BU", selector: row => row.bisnis_unit, sortable: true },
+    //     { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true },
+    //     { name: "TITLE", selector: row => row.title, sortable: true },
+    //     { name: "TYPE", selector: row => row.type, sortable: true },
+    //     {
+    //         name: "EDIT/VIEW",
+    //         cell: row => (
+    //             <div className="flex space-x-2">
+    //                 {/* <button className="btn btn-primary">
+    //                     <i className="fas fa-edit" />
+    //                 </button> */}
+    //                 <button className="btn btn-warning" onClick={() => {
+    //                     console.log("ID yang dikirim ke detail:", row.id);
+    //                     navigate(`/admin/updatestatuspusat/${row.id}`);
+    //                 }}>
+    //                     <i className="fas fa-edit" />
+    //                 </button>
+    //             </div>
+    //         )
+    //     },
+    //     {
+    //         name: "CANCEL",
+    //         cell: row => (
+    //             <button className="btn btn-danger" onClick={() => handleCloseModal(row)}>
+    //                 <i className="fas fa-times" />
+    //             </button>
+    //         )
+    //     },
+    //     {
+    //         name: "CLOSE",
+    //         cell: row => (
+    //             <button className="btn btn-success" onClick={() => handleOpenModal(row)}>
+    //                 {/* <i className="fas fa-check" /> */}
+    //                 Close
+    //             </button>
+    //         )
+    //     },
+    // ];
+
     const columns = [
-        { name: "RL", selector: row => row.ruang_lingkup, sortable: true },
-        { name: "CAB", selector: row => row.reg_branch || "-", sortable: true },
-        { name: "PST", selector: row => row.reg || "-", sortable: true },
-        { name: "ID", selector: row => row.kode_proposal, sortable: true },
-        { name: "BU", selector: row => row.bisnis_unit, sortable: true },
-        { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true },
-        { name: "TITLE", selector: row => row.title, sortable: true },
-        { name: "TYPE", selector: row => row.type, sortable: true },
+        { name: "RL", selector: row => row.ruang_lingkup, sortable: true, maxWidth: "80px" },
+        { name: "CAB", selector: row => row.reg_branch || "-", sortable: true, maxWidth: "80px" },
+        { name: "PST", selector: row => row.reg || "-", sortable: true, maxWidth: "80px" },
+        { name: "ID", selector: row => row.kode_proposal, sortable: true, maxWidth: "100px" },
+        { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "70px" },
+        { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },
+        { name: "TITLE", selector: row => row.title, sortable: true, grow: 2 },
+        { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },
         {
             name: "EDIT/VIEW",
             cell: row => (
-                <div className="flex space-x-2">
-                    {/* <button className="btn btn-primary">
-                        <i className="fas fa-edit" />
-                    </button> */}
-                    <button className="btn btn-warning" onClick={() => {
-                        console.log("ID yang dikirim ke detail:", row.id);
-                        navigate(`/admin/updatestatuspusat/${row.id}`);
-                    }}>
-                        <i className="fas fa-edit" />
-                    </button>
-                </div>
-            )
+                <button className="btn btn-warning btn-sm" onClick={() => navigate(`/admin/updatestatuspusat/${row.id}`)}>
+                    <i className="fas fa-edit" />
+                </button>
+            ),
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+            maxWidth: "80px"
+        },
+        {
+            name: "CANCEL",
+            cell: row => (
+                <button className="btn btn-danger btn-sm" onClick={() => handleCancelModal(row)}>
+                    <i className="fas fa-times" />
+                </button>
+            ),
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+            maxWidth: "90px"
         },
         {
             name: "CLOSE",
             cell: row => (
-                <button className="btn btn-danger" onClick={() => handleCloseModal(row)}>
-                    <i className="fas fa-times" />
+                <button className="btn btn-success btn-sm" onClick={() => handleOpenModal(row)}>
+                    Close
                 </button>
-            )
-        },
-        {
-            name: "CONFIRM",
-            cell: row => (
-                <button className="btn btn-success" onClick={() => handleOpenModal(row)}>
-                    <i className="fas fa-check" />
-                </button>
-            )
+            ),
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+            maxWidth: "90px"
         },
     ];
-
+    
     return (
         <div className="card">
             <div className="card-body">
@@ -196,7 +248,7 @@ const UpdateStatusPst = () => {
                     />
                 </div>
 
-                <DataTable
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     pagination
@@ -204,6 +256,11 @@ const UpdateStatusPst = () => {
                     striped
                     responsive
                     persistTableHead
+                /> */}
+                <CustomTable
+                    columns={columns}
+                    data={filteredData}
+                    loading={loading}
                 />
             </div>
 
@@ -221,7 +278,7 @@ const UpdateStatusPst = () => {
             <ConfirmationModal
                 isOpen={isCloseModalOpen}
                 onClose={() => setIsCloseModalOpen(false)}
-                onConfirm={handleCloseConfirm}
+                onConfirm={handleCancelConfirm}
                 title="Konfirmasi Tutup"
                 message={`Apakah Anda yakin ingin cancel proposal dengan ID ${selectedItem?.id}?`}
                 confirmText="Ya, Cancel"

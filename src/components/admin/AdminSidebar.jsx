@@ -81,12 +81,12 @@ const Sidebar = ({ isOpen }) => {
     //   </div>
     // </div>
 
-    <div
-      className={`nav-left-sidebar sidebar-dark ${isOpen || isHovered ? "expanded" : "collapsed"}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="menu-list">
+      <div
+        className={`nav-left-sidebar sidebar-dark ${isOpen || isHovered ? "expanded" : "collapsed"}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+      <div className="menu-list"  style={{ backgroundColor: "#003366" }}>
         <nav className="navbar navbar-expand-lg navbar-light">
           <ul className="navbar-nav flex-column">
             <li className="nav-item">
@@ -99,7 +99,7 @@ const Sidebar = ({ isOpen }) => {
                 <i className="fas fa-fw fa-comment-alt"></i> <span  className="menu-text">Input Proposal Baru</span>
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link className="nav-link" to="/admin/axdimension">
                 <i className="far fa-folder"></i> <span  className="menu-text">Ax Dimension</span>
               </Link>
@@ -108,7 +108,7 @@ const Sidebar = ({ isOpen }) => {
               <Link className="nav-link" to="/admin/axcustomer">
                 <i className="far fa-folder-open"></i> <span  className="menu-text">Ax Customer</span>
               </Link>
-            </li>
+            </li> */}
             <li className="nav-item">
               <Link className="nav-link" to="/admin/inboxcabang">
                 <i className="fas fa-fw fa-inbox"></i> <span  className="menu-text">Inbox Cabang</span>
@@ -120,6 +120,11 @@ const Sidebar = ({ isOpen }) => {
               </Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link" to="/admin/otorisasicabang">
+                <i className="fas fa-wrench"></i> <span  className="menu-text">Otorisasi Cabang</span>
+              </Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link" to="/admin/inboxpusat">
                 <i className="fas fa-fw fa-inbox"></i> <span  className="menu-text">Inbox Pusat</span>
               </Link>
@@ -127,6 +132,11 @@ const Sidebar = ({ isOpen }) => {
             <li className="nav-item">
               <Link className="nav-link" to="/admin/updatestatuspst">
                 <i className="fas fa-fw fa-edit"></i> <span  className="menu-text">Update Status Pst</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/otorisasipusat">
+                <i className="fas fa-th-list"></i> <span  className="menu-text">Otorisasi Pusat</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -144,19 +154,19 @@ const Sidebar = ({ isOpen }) => {
                 <i className="fas fa-file"></i> <span  className="menu-text">Proposal Report</span>
               </Link>
             </li>
-            {/* <li className="nav-item">
-              <Link className="nav-link" to="/admin/reportbanding">
-                <i className="fas fa-file"></i> <span  className="menu-text">Report Banding</span>
-              </Link>
-            </li> */}
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/levelotorisasi">
-                <i className="fas fa-th-list"></i> <span  className="menu-text">Level Otorisasi</span>
+              <Link className="nav-link" to="/admin/otorisationnotcompleted">
+                <i className="fas fa-file"></i> <span  className="menu-text">Otorisation Not Completed</span>
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/rubahruanglingkup">
-                <i className="fas fa-wrench"></i> <span  className="menu-text">Rubah Ruang Lingkup</span>
+              <Link className="nav-link" to="/admin/otorisationpending">
+                <i className="fas fa-file"></i> <span  className="menu-text">Otorisation Pending</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/levelotorisasi">
+                <i className="fas fa-th-list"></i> <span  className="menu-text">Level Otorisasi</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -165,13 +175,18 @@ const Sidebar = ({ isOpen }) => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/otorisasicabang">
-                <i className="fas fa-wrench"></i> <span  className="menu-text">Otorisasi Cabang</span>
+              <Link className="nav-link" to="/admin/rubahruanglingkup">
+                <i className="fas fa-wrench"></i> <span  className="menu-text">Rubah Ruang Lingkup</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/admin/setupuser">
                 <i className="fas fa-wrench"></i> <span  className="menu-text">Setup User</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/registrasiuser">
+                <i className="fas fa-wrench"></i> <span  className="menu-text">Registrasi User</span>
               </Link>
             </li>
           </ul>

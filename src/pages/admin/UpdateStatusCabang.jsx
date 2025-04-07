@@ -433,9 +433,11 @@ import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 import updateStatusCabangServices from "../../services/admin/updateStatusCabangServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import CustomTable from "../../components/table/customTable";
 
 const UpdateStatusCabang = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
     const [dataCabang, setDataCabang] = useState([]);
     const [selectedBU, setSelectedBU] = useState("");
     const [searchText, setSearchText] = useState("");
@@ -452,6 +454,8 @@ const UpdateStatusCabang = () => {
                 }
             } catch (error) {
                 console.error("Error fetching data: ", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -535,10 +539,11 @@ const UpdateStatusCabang = () => {
             )
         },
         {
-            name: "CONFIRM",
+            name: "CLOSE",
             cell: row => (
                 <button className="btn btn-success" onClick={() => handleOpenModal(row)}>
-                    <i className="fas fa-check" />
+                    {/* <i className="fas fa-check" /> */}
+                    Close
                 </button>
             )
         },
@@ -562,7 +567,7 @@ const UpdateStatusCabang = () => {
                     />
                 </div>
 
-                <DataTable
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     pagination
@@ -570,6 +575,11 @@ const UpdateStatusCabang = () => {
                     striped
                     responsive
                     persistTableHead
+                /> */}
+                <CustomTable
+                    columns={columns}
+                    data={filteredData}
+                    loading={loading}
                 />
             </div>
 

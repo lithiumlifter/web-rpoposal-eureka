@@ -130,6 +130,7 @@ import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 import inboxPusatServices from "../../services/admin/inboxPusatServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import CustomTable from "../../components/table/customTable";
 
 const InboxPusat = () => {
     const navigate = useNavigate();
@@ -272,7 +273,7 @@ const InboxPusat = () => {
                         onChange={(e) => setSearchText(e.target.value)}
                     />
                 </div>
-                <DataTable
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     progressPending={loading}
@@ -281,6 +282,11 @@ const InboxPusat = () => {
                     striped
                     responsive
                     persistTableHead
+                /> */}
+                <CustomTable
+                    columns={columns}
+                    data={filteredData}
+                    loading={loading}
                 />
             </div>
 

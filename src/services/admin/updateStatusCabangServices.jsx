@@ -22,7 +22,7 @@ const updateStatusCabangServices = {
     approveProposalCabang: async (id_proposal) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`${BASE_URL}/master/update-status-cabang?id_proposal=${id_proposal}&status=Approve`, {}, {
+            const response = await axios.post(`${BASE_URL}/master/approve-proposal?id_proposal=${id_proposal}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -38,7 +38,7 @@ const updateStatusCabangServices = {
     cancelProposalCabang: async (id_proposal) => {
         try {
             const token = localStorage.getItem('token')
-            const response = await axios.post(`${BASE_URL}/master/update-status-cabang?id_proposal=${id_proposal}&status=Cancel`, {}, {
+            const response = await axios.post(`${BASE_URL}/master/cancel-proposal?id_proposal=${id_proposal}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -49,7 +49,24 @@ const updateStatusCabangServices = {
             console.error(`Gagal cancel proposal ID ${id_proposal}:`, error.response?.data || error.message);
             throw error;
         }
-    } 
+    },
+
+    closeProposalCabang: async (id_proposal) => {
+        try {
+            const token = localStorage.getItem('token')
+            const response = await axios.post(`${BASE_URL}/master/update-status-cabang?id_proposal=${id_proposal}&status=Approve`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(`Proposal dengan ID ${id_proposal} berhasil di-cancel`, response.data);
+            return response.data;
+        } catch (error) {
+            console.error(`Gagal cancel proposal ID ${id_proposal}:`, error.response?.data || error.message);
+            throw error;
+        }
+    },
+
 };
 
 export default updateStatusCabangServices;

@@ -560,3 +560,110 @@ export default DetailProposalCabang;
 // };
 
 // export default InputProposal;
+
+// import React, { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
+// import { jsPDF } from "jspdf"; // Import jsPDF
+// import DetailProposal from "../../services/admin/detailProposalServices";
+// import CategoryService from "../../services/admin/categoryServices";
+
+// const DetailProposalCabang = () => {
+//   const { id_proposal } = useParams();
+//   const [proposal, setProposal] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     if (!id_proposal) return;
+
+//     const fetchDetailProposal = async () => {
+//       try {
+//         setLoading(true);
+//         const data = await DetailProposal.getDetailProposal(id_proposal);
+//         setProposal(data.data);
+//       } catch (err) {
+//         setError(err.response?.data || err.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchDetailProposal();
+//   }, [id_proposal]);
+
+//   if (loading) return <p>Loading...</p>;
+//   if (error) return <p>Error: {JSON.stringify(error)}</p>;
+//   if (!proposal) return <p>Data tidak ditemukan</p>;
+
+//   // 🔽 Fungsi untuk download PDF
+//   const handleDownloadPDF = () => {
+//     const doc = new jsPDF();
+//     doc.setFont("helvetica", "bold");
+//     doc.text("Detail Proposal", 20, 10);
+//     doc.setFont("helvetica", "normal");
+
+//     const content = [
+//       `Tanggal Proposal: ${proposal.tgl_proposal || "-"}`,
+//       `Proposal ID: ${proposal.kode_proposal || "-"}`,
+//       `Ruang Lingkup: ${proposal.ruang_lingkup || "-"}`,
+//       `Kategori: ${proposal.kategori || "-"}`,
+//       `Bisnis Unit: ${proposal.bisnis_unit || "-"}`,
+//       `Judul Proposal: ${proposal.title || "-"}`,
+//       `Deskripsi: ${proposal.description || "-"}`,
+//       `Status: ${proposal.status || "-"}`,
+//       `Pemohon: ${proposal.pemohon?.name || "-"}`,
+//       `Tanggal Pengajuan: ${proposal.tgl_pengajuan || "-"}`,
+//     ];
+
+//     let y = 20;
+//     content.forEach((line) => {
+//       doc.text(line, 20, y);
+//       y += 10;
+//     });
+
+//     doc.save(`Detail_Proposal_${id_proposal}.pdf`);
+//   };
+
+//   return (
+//     <div className="card">
+//       <div className="card-header text-start">Detail Proposal</div>
+//       <div className="card-body">
+//         <form>
+//           {/* Detail Data Proposal */}
+//           <div className="form-group row">
+//             <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
+//             <div className="col-12 col-sm-8 col-lg-8">
+//               <input type="text" className="form-control" value={proposal.tgl_proposal || "-"} readOnly />
+//             </div>
+//           </div>
+
+//           <div className="form-group row">
+//             <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
+//             <div className="col-12 col-sm-8 col-lg-8">
+//               <input type="text" className="form-control" value={proposal.kode_proposal || "-"} readOnly />
+//             </div>
+//           </div>
+
+//           <div className="form-group row">
+//             <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
+//             <div className="col-12 col-sm-8 col-lg-8">
+//               <input type="text" className="form-control" value={proposal.title || "-"} readOnly />
+//             </div>
+//           </div>
+
+//           {/* Tombol Download PDF */}
+//           <div className="form-group row mt-3">
+//             <div className="col-12 text-center">
+//               <button type="button" className="btn btn-danger" onClick={handleDownloadPDF}>
+//                 Download PDF
+//               </button>
+//             </div>
+//           </div>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default DetailProposalCabang;
+

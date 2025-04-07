@@ -125,6 +125,7 @@ import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 // import inboxCabangServices from "../../services/admin/inboxCabangServices";
 import AnggaranServices from "../../services/admin/anggaranServices";
+import CustomTable from "../../components/table/customTable";
 // import ConfirmationModal from "../../components/ConfirmationModal";
 
 const UpdateAnggaran = () => {
@@ -200,7 +201,13 @@ const UpdateAnggaran = () => {
                     />
                 </div>
 
-                <DataTable
+                <CustomTable
+                    columns={columns}
+                    data={filteredData}
+                    loading={loading}
+                />
+
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     progressPending={loading}
@@ -209,7 +216,7 @@ const UpdateAnggaran = () => {
                     striped
                     responsive
                     persistTableHead
-                />
+                /> */}
             </div>
         </div>
     );

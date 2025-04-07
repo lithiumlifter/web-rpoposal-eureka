@@ -39,7 +39,25 @@ const OtorisasiServices = {
             throw error;
         }
     },
-    editKonfigursiOtorisasi: async (otorisasiData) => {
+        getDetailOtorisasi: async (id_otorisasi) => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await axios.get(`${BASE_URL}/master/detail-otorisasi?id_otorisasi=${id_otorisasi}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("Data detail otorisasi successfully:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error("Error post data detail otorisasi:", error.response?.data || error.message);
+            throw error;
+        }
+    },
+    editKonfigurasiOtorisasi: async (otorisasiData) => {
         try {
             const token = localStorage.getItem("token");
 
@@ -50,31 +68,36 @@ const OtorisasiServices = {
                 },
             });
 
-            console.log("Data konfigurasi otorisasi successfully:", response.data);
+            console.log("Data edit konfigurasi otorisasi successfully:", response.data);
             return response.data;
         } catch (error) {
-            console.error("Error post data konfigurasi otorisasi:", error.response?.data || error.message);
+            console.error("Error post edit data konfigurasi otorisasi:", error.response?.data || error.message);
             throw error;
         }
     },
-    deleteKonfigursiOtorisasi: async (id) => {
+    deleteKonfigurasiOtorisasi: async (id_otorisasi) => {
         try {
             const token = localStorage.getItem("token");
     
-            const response = await axios.delete(`${BASE_URL}/master/delete-otorisasi?id_otorisasi=${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            });            
-    
+            const response = await axios.post(
+                `${BASE_URL}/master/delete-otorisasi?id_otorisasi=${id_otorisasi}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            );
+            
             console.log("Delete konfigurasi otorisasi successfully:", response.data);
             return response.data;
         } catch (error) {
             console.error("Error deleting data konfigurasi otorisasi:", error.response?.data || error.message);
             throw error;
         }
-    },    
+    }
+    
 };
 
 export default OtorisasiServices;

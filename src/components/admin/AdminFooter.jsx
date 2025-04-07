@@ -6,7 +6,7 @@ const Footer = () => {
             <div className="container-fluid">
                 <div className="row">
                 <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                    Develop by Eureka IT Team.
+                    Develop by Eureka IT Dept.
                 </div>
                 <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     {/* <div className="text-md-right footer-links d-none d-sm-block">

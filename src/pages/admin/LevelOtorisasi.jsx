@@ -576,8 +576,13 @@ import DataTable from "react-data-table-component";
 import OtorisasiServices from "../../services/admin/otorisasiServices";
 import CategoryService from "../../services/admin/categoryServices";
 import { Form } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
+import CustomTable from "../../components/table/customTable";
+
 
 const OtoritorList = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
     const [selectedBU, setSelectedBU] = useState("");
     const [data, setData] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -596,6 +601,8 @@ const OtoritorList = () => {
                 setData(response.data.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchData();
@@ -629,7 +636,7 @@ const OtoritorList = () => {
     };
 
     const handleDelete = async (id) => {
-        console.log("🔍 ID yang dikirim untuk delete:", id); // Debugging
+        console.log("🔍 ID yang dikirim untuk delete:", id);
         if (!id) {
             console.error("❌ ID tidak ditemukan!");
             return;
@@ -637,8 +644,8 @@ const OtoritorList = () => {
     
         if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
             try {
-                const response = await OtorisasiServices.deleteKonfigursiOtorisasi(id);
-                console.log("✅ Response dari server:", response); // Debugging
+                const response = await OtorisasiServices.deleteKonfigurasiOtorisasi(id);
+                console.log("✅ Response dari server:", response);
                 setData(data.filter(item => item.id_otorisasi !== id));
                 alert("Data berhasil dihapus!");
             } catch (error) {
@@ -651,7 +658,7 @@ const OtoritorList = () => {
     const filteredData = data.filter(item => selectedBU === "" || item.bisnis_unit === selectedBU);
 
     const columns = [
-        { name: "ID", selector: row => row.id_otorisasi, sortable: true },
+        { name: "ID", selector: row => row.id_level, sortable: true },
         { name: "Nama", selector: row => row.jabatan, sortable: true },
         { name: "BU", selector: row => row.bisnis_unit, sortable: true },
         { name: "Emplid AX", selector: row => row.emplid + " " + row.name },
@@ -661,7 +668,15 @@ const OtoritorList = () => {
                 <button className="btn btn-danger me-2" onClick={() => handleDelete(row.id_otorisasi)}>
                     <i className="fas fa-times" />
                 </button>
-                <button className="btn btn-primary"><i className="fas fa-edit" /></button>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                    console.log("ID yang dikirim ke detail:", row.id_otorisasi);
+                    navigate(`/admin/detailotorisasi/${row.id_otorisasi}`)
+                  }}
+                >
+                    <i className="fas fa-edit" />
+                </button>
             </>
         )}
     ];
@@ -693,7 +708,7 @@ const OtoritorList = () => {
                                 <select name="emplid" value={formData.emplid} onChange={handleChange} className="form-control">
                                     <option value="">Pilih...</option>
                                     {categories?.dataUser?.map(item => (
-                                        <option key={item.value} value={item.value}>{item.name}</option>
+                                        <option key={item.value} value={item.value}>{(item.value) + " - " + item.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -705,7 +720,7 @@ const OtoritorList = () => {
                                 <select name="bisnis_unit" value={formData.bisnis_unit} onChange={handleChange} className="form-control">
                                     <option value="">Pilih...</option>
                                     {categories?.bisnisUnit?.map(item => (
-                                        <option key={item.value} value={item.value}>{item.name}</option>
+                                        <option key={item.value} value={item.value}>{item.value + " " + item.name + " - " + item.wilayah}</option>
                                     ))}
                                 </select>
                             </div>
@@ -717,7 +732,7 @@ const OtoritorList = () => {
                                 <select name="groupid" value={formData.groupid} onChange={handleChange} className="form-control">
                                     <option value="">Pilih...</option>
                                     {categories?.dataGroup?.map(item => (
-                                        <option key={item.value} value={item.value}>{item.name}</option>
+                                        <option key={item.value} value={item.value}>{item.value + " " + item.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -743,7 +758,17 @@ const OtoritorList = () => {
                         ))}
                     </Form.Select>
                     <div className="table-responsive">
-                        <DataTable columns={columns} data={filteredData} pagination />
+                        {/* <DataTable 
+                            columns={columns} 
+                            data={filteredData} 
+                            pagination 
+                            
+                        /> */}
+                        <CustomTable
+                            columns={columns}
+                            data={filteredData}
+                            loading={loading}
+                        />
                     </div>
                 </div>
             </div>

@@ -260,8 +260,15 @@ const DetailProposalReport = () => {
     setIsEditing(!isEditing); // Toggle mode edit
   };
 
+  // COBA GAMBAR
+  const fileList = [
+    { id: 1, name: "file1.jpg", url: "/path/to/file1.jpg" },
+    { id: 2, name: "file2.png", url: "/path/to/file2.png" },
+  ];
+
   return (
-    <div className="card">
+    <>
+          <div className="card">
       <div className="card-header text-start">Detail Proposal</div>
       <div className="card-body">
         <form id="validationform" data-parsley-validate noValidate>
@@ -391,7 +398,7 @@ const DetailProposalReport = () => {
           </div>
 
           {/* Deskripsi */}
-          <div className="form-group row">
+          {/* <div className="form-group row">
             <label className="col-12 col-sm-3 col-form-label text-left">Deskripsi:</label>
             <div className="col-12 col-sm-8 col-lg-8">
               <textarea
@@ -403,7 +410,7 @@ const DetailProposalReport = () => {
                 rows={3}
               />
             </div>
-          </div>
+          </div> */}
 
           {/* Status */}
           <div className="form-group row">
@@ -452,14 +459,114 @@ const DetailProposalReport = () => {
           {/* Tombol Edit / Simpan */}
           <div className="form-group row mt-3">
             <div className="col-12 text-center">
-              <button type="button" className="btn btn-primary" onClick={toggleEdit}>
+              {/* <button type="button" className="btn btn-primary" onClick={toggleEdit}>
                 {isEditing ? "Simpan" : "Edit"}
-              </button>
+              </button> */}
             </div>
           </div>
         </form>
       </div>
     </div>
+    <div className="card mt-3">
+              <div className="card-header text-start">H. BIAYA LAIN-LAIN</div>
+              <div className="card-body">
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Biaya lain-lain(rp):</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={formData.biaya_lain}
+                      readOnly
+                      // onChange={(e) => setCustomNumber(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+      </div>
+
+      {/* F. CATATAN */}
+      <div className="card mt-3">
+        <div className="card-header text-start">F. CATATAN</div>
+        <div className="card-body">
+          <textarea
+            className="form-control"
+            rows="4"
+            placeholder="Masukkan catatan..."
+            value={formData.description}
+            readOnly
+          ></textarea>
+        </div>
+      </div>
+
+      {/* G. LAMPIRAN */}
+      <div className="card mt-3">
+        <div className="card-header text-start">G. LAMPIRAN</div>
+        <div className="card-body">
+          <ul className="list-group">
+            {fileList.map((file) => (
+              <li key={file.id} className="list-group-item">
+                <a href={file.url} target="_blank" rel="noopener noreferrer">
+                  {file.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* B. HISTORY */}
+      <div className="card mt-3">
+        <div className="card-header text-start">B. HISTORY</div>
+        <div className="card-body">
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Position</th>
+                <th>Description</th>
+                <th>BY</th>
+              </tr>
+            </thead>
+            <tbody>
+              {proposal.history?.map((item) => (
+              <tr key={item.id_history}>
+                <td>{item.transdate}</td>
+                <td>{item.status_position}</td>
+                <td>{item.description}</td>
+                <td>{item.name}</td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* C. OTORITOR */}
+      <div className="card mt-3">
+        <div className="card-header text-start">C. OTORITOR</div>
+        <div className="card-body">
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Urutan No. Level</th>
+                <th>EMPLID</th>
+                <th>Otorisasi</th>
+              </tr>
+            </thead>
+            <tbody>
+            {proposal.otoritas?.map((item) => (
+              <tr key={item.id_otorisasi}>
+                <td>{item.urutan}</td>
+                <td>{item.emplid +" " + item.name}</td>
+                <td>{item.status}</td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
   );
 };
 

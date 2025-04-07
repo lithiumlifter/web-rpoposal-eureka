@@ -22,7 +22,7 @@ const updateStatusPusatServices = {
     approveProposalPusat: async (id_proposal) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`${BASE_URL}/master/update-status-pusat?id_proposal=${id_proposal}&status=Approve`, {}, {
+            const response = await axios.post(`${BASE_URL}/master/approve-proposal-pusat?id_proposal=${id_proposal}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -38,7 +38,7 @@ const updateStatusPusatServices = {
     cancelProposalPusat: async (id_proposal) => {
         try {
             const token = localStorage.getItem('token')
-            const response = await axios.post(`${BASE_URL}/master/update-status-pusat?id_proposal=${id_proposal}&status=Cancel`, {}, {
+            const response = await axios.post(`${BASE_URL}/master/cancel-proposal-pusat?id_proposal=${id_proposal}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -49,7 +49,22 @@ const updateStatusPusatServices = {
             console.error(`Gagal cancel proposal ID ${id_proposal}:`, error.response?.data || error.message);
             throw error;
         }
-    } 
+    },
+    closeProposalPusat: async (id_proposal) => {
+        try {
+            const token = localStorage.getItem('token')
+            const response = await axios.post(`${BASE_URL}/master/update-status-pusat?id_proposal=${id_proposal}&status=Approve`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(`Proposal dengan ID ${id_proposal} berhasil di-close`, response.data);
+            return response.data;
+        } catch (error) {
+            console.error(`Gagal close proposal ID ${id_proposal}:`, error.response?.data || error.message);
+            throw error;
+        }
+    }  
 };
 
 export default updateStatusPusatServices;

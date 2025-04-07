@@ -313,6 +313,7 @@ import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 import inboxCabangServices from "../../services/admin/inboxCabangServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import CustomTable from "../../components/table/customTable";
 
 const InboxCabang = () => {
     const navigate = useNavigate();
@@ -477,7 +478,7 @@ const InboxCabang = () => {
                     />
                 </div>
 
-                <DataTable
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     progressPending={loading}
@@ -486,6 +487,11 @@ const InboxCabang = () => {
                     striped
                     responsive
                     persistTableHead
+                /> */}
+                <CustomTable
+                    columns={columns}
+                    data={filteredData}
+                    loading={loading}
                 />
             </div>
 

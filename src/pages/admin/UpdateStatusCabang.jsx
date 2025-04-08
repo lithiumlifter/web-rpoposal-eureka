@@ -589,7 +589,7 @@ const UpdateStatusCabang = () => {
                 onConfirm={handleConfirm}
                 title="Konfirmasi Aksi"
                 message={`Apakah Anda yakin ingin mengonfirmasi item dengan ID ${selectedItem?.id}?`}
-                confirmText="Ya, Konfirmasi"
+                confirmText="Ya, Cancel"
                 cancelText="Batal"
                 theme="success"
             />

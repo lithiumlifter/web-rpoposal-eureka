@@ -8,9 +8,15 @@ export const login = async (username, password) => {
         username,
         password,
       });
+
+      const { token, role } = response.data.data;
+
+    // Simpan ke localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
   
-      console.log("Data dari API:", response.data); // Debugging
-      return response.data; // Pastikan response ini memiliki `token`
+      console.log("Data dari API:", response.data);
+      return response.data; 
     } catch (error) {
       console.error("Error API:", error.response ? error.response.data : error);
       throw error.response ? error.response.data : error;

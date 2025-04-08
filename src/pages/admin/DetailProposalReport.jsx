@@ -190,12 +190,25 @@
 
 // export default DetailProposalCabang;
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,  useRef } from "react";
 import { useParams } from "react-router-dom";
 import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
 
 const DetailProposalReport = () => {
+  
+  const printRef = useRef();
+
+  const handlePrint = () => {
+    const originalContents = document.body.innerHTML;
+    const printContents = printRef.current.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); // untuk reload kembali page ke state normal
+  }
+
   const [categories, setCategories] = useState({
     bisnisUnit: [],
     ruangLingkup: [],
@@ -208,8 +221,8 @@ const DetailProposalReport = () => {
   const [proposal, setProposal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false); // State untuk mode edit
-  const [formData, setFormData] = useState({}); // State untuk menyimpan nilai input
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({});
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -260,230 +273,230 @@ const DetailProposalReport = () => {
     setIsEditing(!isEditing); // Toggle mode edit
   };
 
-  // COBA GAMBAR
-  const fileList = [
-    { id: 1, name: "file1.jpg", url: "/path/to/file1.jpg" },
-    { id: 2, name: "file2.png", url: "/path/to/file2.png" },
-  ];
-
   return (
     <>
-          <div className="card">
-      <div className="card-header text-start">Detail Proposal</div>
-      <div className="card-body">
-        <form id="validationform" data-parsley-validate noValidate>
-          {/* Tanggal Proposal */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="tgl_proposal"
-                className="form-control"
-                value={formData.tgl_proposal}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Proposal ID */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="kode_proposal"
-                className="form-control"
-                value={formData.kode_proposal}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Ruang Lingkup */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="ruang_lingkup"
-                className="form-control"
-                value={formData.ruang_lingkup}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div className="form-group row">
-              <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
-              <div className="col-12 col-sm-8 col-lg-8">
-                <select className="form-control" disabled={!isEditing}>
-                  {categories.bisnisUnit.map((item) => (
-                    <option key={item.value} value={item.value}>
-                      {item.name} - {item.wilayah}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group row">
-              <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
-              <div className="col-12 col-sm-8 col-lg-8">
-                <select className="form-control" disabled={!isEditing}>
-                  {categories.ruangLingkup.map((item) => (
-                    <option key={item.value} value={item.value}>{item.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group row">
-              <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
-              <div className="col-12 col-sm-8 col-lg-8">
-                <select className="form-control" disabled={!isEditing}>
-                  {categories.dataKategori.map((item) => (
-                    <option key={item.value} value={item.value}>{item.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-          {/* Kategori */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="kategori"
-                className="form-control"
-                value={formData.kategori}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Bisnis Unit */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Bisnis Unit:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="bisnis_unit"
-                className="form-control"
-                value={formData.bisnis_unit}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Judul Proposal */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="title"
-                className="form-control"
-                value={formData.title}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Deskripsi */}
-          {/* <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Deskripsi:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <textarea
-                name="description"
-                className="form-control"
-                value={formData.description}
-                readOnly={!isEditing}
-                onChange={handleChange}
-                rows={3}
-              />
-            </div>
-          </div> */}
-
-          {/* Status */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Status:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="status"
-                className="form-control"
-                value={formData.status}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Pemohon */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Pemohon:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="pemohon"
-                className="form-control"
-                value={formData.pemohon?.name}
-                readOnly
-              />
-            </div>
-          </div>
-
-          {/* Tanggal Pengajuan */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Pengajuan:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="tgl_pengajuan"
-                className="form-control"
-                value={formData.tgl_pengajuan}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Tombol Edit / Simpan */}
-          <div className="form-group row mt-3">
-            <div className="col-12 text-center">
-              {/* <button type="button" className="btn btn-primary" onClick={toggleEdit}>
-                {isEditing ? "Simpan" : "Edit"}
-              </button> */}
-            </div>
-          </div>
-        </form>
-      </div>
+    <div className="mb-3 text-end">
+      <button onClick={handlePrint} className="btn btn-success">
+        Print
+      </button>
     </div>
-    <div className="card mt-3">
-              <div className="card-header text-start">H. BIAYA LAIN-LAIN</div>
-              <div className="card-body">
+      <div ref={printRef}>
+      <div className="card">
+            <div className="card-header text-start">Detail Proposal</div>
+            <div className="card-body">
+              <form id="validationform" data-parsley-validate noValidate>
+                {/* Tanggal Proposal */}
                 <div className="form-group row">
-                  <label className="col-12 col-sm-3 col-form-label text-left">Biaya lain-lain(rp):</label>
+                  <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
                   <div className="col-12 col-sm-8 col-lg-8">
                     <input
-                      type="number"
+                      type="text"
+                      name="tgl_proposal"
                       className="form-control"
-                      value={formData.biaya_lain}
-                      readOnly
-                      // onChange={(e) => setCustomNumber(e.target.value)}
+                      value={formData.tgl_proposal}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
-              </div>
-      </div>
+
+                {/* Proposal ID */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="kode_proposal"
+                      className="form-control"
+                      value={formData.kode_proposal}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Ruang Lingkup */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="ruang_lingkup"
+                      className="form-control"
+                      value={formData.ruang_lingkup}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select className="form-control" disabled={!isEditing}>
+                        {categories.bisnisUnit.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.name} - {item.wilayah}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select className="form-control" disabled={!isEditing}>
+                        {categories.ruangLingkup.map((item) => (
+                          <option key={item.value} value={item.value}>{item.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select className="form-control" disabled={!isEditing}>
+                        {categories.dataKategori.map((item) => (
+                          <option key={item.value} value={item.value}>{item.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                {/* Kategori */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="kategori"
+                      className="form-control"
+                      value={formData.kategori}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Bisnis Unit */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Bisnis Unit:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="bisnis_unit"
+                      className="form-control"
+                      value={formData.bisnis_unit}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Judul Proposal */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="title"
+                      className="form-control"
+                      value={formData.title}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Deskripsi */}
+                {/* <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Deskripsi:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <textarea
+                      name="description"
+                      className="form-control"
+                      value={formData.description}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                      rows={3}
+                    />
+                  </div>
+                </div> */}
+
+                {/* Status */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Status:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="status"
+                      className="form-control"
+                      value={formData.status}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Pemohon */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Pemohon:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="pemohon"
+                      className="form-control"
+                      value={formData.pemohon?.name}
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                {/* Tanggal Pengajuan */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Pengajuan:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="tgl_pengajuan"
+                      className="form-control"
+                      value={formData.tgl_pengajuan}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Tombol Edit / Simpan */}
+                <div className="form-group row mt-3">
+                  <div className="col-12 text-center">
+                    {/* <button type="button" className="btn btn-primary" onClick={toggleEdit}>
+                      {isEditing ? "Simpan" : "Edit"}
+                    </button> */}
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="card mt-3">
+                    <div className="card-header text-start">H. BIAYA LAIN-LAIN</div>
+                    <div className="card-body">
+                      <div className="form-group row">
+                        <label className="col-12 col-sm-3 col-form-label text-left">Biaya lain-lain(rp):</label>
+                        <div className="col-12 col-sm-8 col-lg-8">
+                          <input
+                            type="number"
+                            className="form-control"
+                            value={formData.biaya_lain}
+                            readOnly
+                            // onChange={(e) => setCustomNumber(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+          </div>
 
       {/* F. CATATAN */}
       <div className="card mt-3">
@@ -500,20 +513,39 @@ const DetailProposalReport = () => {
       </div>
 
       {/* G. LAMPIRAN */}
-      <div className="card mt-3">
+     <div className="card mt-3">
         <div className="card-header text-start">G. LAMPIRAN</div>
         <div className="card-body">
-          <ul className="list-group">
-            {fileList.map((file) => (
-              <li key={file.id} className="list-group-item">
-                <a href={file.url} target="_blank" rel="noopener noreferrer">
-                  {file.name}
-                </a>
-              </li>
-            ))}
-          </ul>
+            {proposal.images && proposal.images.length > 0 ? (
+            <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
+                {proposal.images.map((image) => {
+                const fileName = image.link.split("/").pop();
+                return (
+                    <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
+                    <a href={image.link} target="_blank" rel="noopener noreferrer">
+                        <img
+                        src={image.link}
+                        alt={fileName}
+                        style={{
+                            width: '100%',
+                            height: '150px',
+                            objectFit: 'contain',
+                            border: '1px solid #ccc',
+                            borderRadius: '8px',
+                            padding: '5px',
+                            backgroundColor: '#f9f9f9'
+                        }}
+                        />
+                    </a>
+                    </div>
+                );
+                })}
+            </div>
+            ) : (
+            <p>Tidak ada lampiran.</p>
+            )}
         </div>
-      </div>
+        </div>
 
       {/* B. HISTORY */}
       <div className="card mt-3">
@@ -565,6 +597,7 @@ const DetailProposalReport = () => {
             </tbody>
           </table>
         </div>
+      </div>
       </div>
     </>
   );

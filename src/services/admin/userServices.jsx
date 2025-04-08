@@ -17,7 +17,22 @@ const userServices = {
             console.error('Error fetching user:', error.response?.data || error.message);
             throw error;
         }
-    }
+    },
+    getDetailUser: async (id_user) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${BASE_URL}/master/data-user-detail?id_user=${id_user}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log('Data detail user:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching detail user:', error.response?.data || error.message);
+            throw error;
+        }
+    },
 };
 
 export default userServices;

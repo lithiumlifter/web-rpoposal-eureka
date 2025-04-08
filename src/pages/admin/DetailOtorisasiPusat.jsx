@@ -1,0 +1,682 @@
+import React, { useEffect, useState,  useRef } from "react";
+import { useParams } from "react-router-dom";
+import DetailProposal from "../../services/admin/detailProposalServices";
+import CategoryService from "../../services/admin/categoryServices";
+import Modal from 'react-modal'; 
+import OtorisasiServices from "../../services/admin/otorisasiServices";
+
+Modal.setAppElement('#root');
+const DetailOtorisasiPusat = () => {
+    
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const printRef = useRef();
+  const [categories, setCategories] = useState({
+    bisnisUnit: [],
+    ruangLingkup: [],
+    dataKategori: [],
+    dataTipe: [],
+    dataOtorisasi: [],
+  });
+  const { id_proposal } = useParams();
+  const [proposal, setProposal] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [keterangan, setKeterangan] = useState('');
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await CategoryService.getCategories();
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (!id_proposal) return;
+
+    const fetchDetailProposal = async () => {
+      try {
+        setLoading(true);
+        const data = await DetailProposal.getDetailProposal(id_proposal);
+        setProposal(data.data);
+        setFormData(data.data); // Set nilai awal form
+      } catch (err) {
+        setError(err.response?.data || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDetailProposal();
+  }, [id_proposal]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {JSON.stringify(error)}</p>;
+  if (!proposal) return <p>Data tidak ditemukan</p>;
+
+  // Handler untuk mengubah nilai input saat mode edit
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+//  MODAL PREVIEW IMAGE
+
+  const openModal = (index) => {
+    setActiveIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => setIsModalOpen(false);
+
+  const nextImage = () => {
+    setActiveIndex((prev) => (prev + 1) % proposal.images.length);
+  };
+
+  const prevImage = () => {
+    setActiveIndex((prev) => (prev - 1 + proposal.images.length) % proposal.images.length);
+  };
+
+//   handle otorisasi
+const handleSubmit = async (statusValue) => {
+    const isConfirmed = window.confirm("Apakah kamu yakin ingin melanjutkan proses ini?");
+    if (!isConfirmed) return; // kalau user pilih "No", hentikan proses
+    const role = localStorage.getItem("role");
+    console.log("Role Pengguna:", role);
+  
+    const keterangan = "";
+  
+    if (role === "admin") {
+      const idOtorisasiList = proposal.otoritas.map(item => item.id_otorisasi);
+      console.log("ID Otorisasi untuk Admin:", idOtorisasiList);
+  
+      for (const idOtorisasi of idOtorisasiList) {
+        const bodyRequest = {
+          id_proposal: proposal.id_proposal,
+          id_otorisasi: idOtorisasi,
+          keterangan: keterangan,
+          status: statusValue
+        };
+  
+        try {
+          const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
+          console.log(`Sukses kirim untuk ID Otorisasi ${idOtorisasi}:`, result);
+        } catch (error) {
+          console.error(`Gagal kirim untuk ID Otorisasi ${idOtorisasi}:`, error);
+        }
+      }
+    } else {
+      // untuk role selain admin (misalnya otoritor)
+      const bodyRequest = {
+        id_proposal: proposal.id_proposal,
+        keterangan: keterangan,
+        status: statusValue,
+      };
+  
+      try {
+        const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
+        console.log('Sukses:', result);
+      } catch (error) {
+        console.error('Gagal:', error);
+      }
+    }
+};
+  
+
+  return (
+    <>
+    <div className="py-4 font-sans">
+    <h2 className="h5 fw-semibold mb-4">
+        {/* Proposal biaya pemesanan Japan Vs Indonesia World Cup Asian Qualifiers AFC Tiket - Bapak Raja D Manahara */}
+        {proposal.title}
+    </h2>
+    <div className="d-flex justify-content-between mb-4">
+        <button className="btn btn-primary">Info ARC</button>
+        <div className="btn-group">
+        <button className="btn btn-warning">« Sebelumnya ID: 8358</button>
+        <button className="btn btn-danger">Tutup jendela ini</button>
+        <button className="btn btn-warning">Selanjutnya ID: 8312 »</button>
+        </div>
+    </div>
+    <h6 className="mb-1">Penanggung Jawab Pelanggan</h6>
+    <table className="table table-bordered table-sm mb-4">
+        <thead className="table-danger text-center">
+        <tr>
+            <th>JABATAN</th>
+            <th>PIC</th>
+            <th>JABATAN</th>
+            <th>PIC</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Nama Pelanggan:</td>
+            <td>{proposal.pemohon.name}</td>
+            <td>GL:</td>
+            <td>,</td>
+        </tr>
+        <tr>
+            <td>BE:</td>
+            <td>,</td>
+            <td>ASM:</td>
+            <td>,</td>
+        </tr>
+        <tr>
+            <td>Salesman:</td>
+            <td>,</td>
+            <td>Manager:</td>
+            <td>,</td>
+        </tr>
+        </tbody>
+    </table>
+    <div className="row g-3">
+        <div className="col-md-6">
+          <textarea
+            className="form-control"
+            rows={7}
+            placeholder="Isi Rekomendasi Anda Disini."
+            value={keterangan}
+            onChange={(e) => setKeterangan(e.target.value)}
+          />
+        </div>
+        <div className="col-md-6">
+          <h5 className="fw-semibold mb-2">Nomor Reg : {proposal.id_proposal}</h5>
+          <div className="table-responsive">
+            <table className="table table-sm">
+              <thead className="table-success text-white bg-success">
+                <tr>
+                  <th>Date</th>
+                  <th>Position</th>
+                  <th>Description</th>
+                  <th>BY</th>
+                </tr>
+              </thead>
+              <tbody>
+                {proposal.history?.map((item) => (
+                  <tr key={item.id_history}>
+                    <td>{item.transdate}</td>
+                    <td>{item.status_position}</td>
+                    <td>{item.description}</td>
+                    <td>{item.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 d-flex gap-2 flex-wrap">
+        <button className="btn btn-success" onClick={() => handleSubmit('Approve')}>
+          ✔ Setuju
+        </button>
+        <button className="btn btn-warning text-white" onClick={() => handleSubmit('Pending')}>
+          ⚠ Pending
+        </button>
+        <button className="btn btn-danger" onClick={() => handleSubmit('Cancel')}>
+          ❌ Tidak Setuju
+        </button>
+      </div>
+    <div className="row row-cols-2 row-cols-md-6 g-2 mt-4">
+    <div className="card-body">
+      {proposal.images && proposal.images.length > 0 ? (
+        <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
+          {proposal.images.map((image, index) => {
+            const fileName = image.link.split("/").pop();
+            return (
+              <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
+                <img
+                  src={image.link}
+                  alt={fileName}
+                  onClick={() => openModal(index)}
+                  style={{
+                    width: '100%',
+                    height: '150px',
+                    objectFit: 'contain',
+                    border: '1px solid #ccc',
+                    borderRadius: '8px',
+                    padding: '5px',
+                    backgroundColor: '#f9f9f9',
+                    cursor: 'pointer',
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p>Tidak ada lampiran.</p>
+      )}
+
+      {/* Modal Slideshow */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Image Slideshow"
+        style={{
+          content: {
+            inset: '10%',
+            padding: '20px',
+            background: '#fff',
+            borderRadius: '10px',
+            textAlign: 'center',
+          },
+        }}
+      >
+        <h3>Preview Gambar</h3>
+        {proposal.images.length > 0 && (
+          <div>
+            <img
+              src={proposal.images[activeIndex].link}
+              alt={`Image ${activeIndex + 1}`}
+              style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }}
+            />
+            <div style={{ marginTop: '10px' }}>
+              <button onClick={prevImage} className="btn btn-secondary me-2">⏮ Sebelumnya</button>
+              <button onClick={nextImage} className="btn btn-secondary">⏭ Selanjutnya</button>
+            </div>
+          </div>
+        )}
+        <button onClick={closeModal} className="btn btn-danger mt-3">Tutup</button>
+      </Modal>
+    </div>
+    </div>
+    {/* <button className="btn btn-warning mt-3 text-white">📽 Slideshow</button> */}
+    </div>
+
+    <div className="mt-4">
+        <div className="card">
+            <div className="card-header fw-bold">I. PENANGGUNG JAWAB PELANGGAN</div>
+            <div className="card-body">
+            <div className="row">
+                {/* Kolom Kiri */}
+                <div className="col-md-6">
+                <table className="table table-bordered table-sm">
+                    <thead className="text-white" style={{backgroundColor: 'green'}}>
+                    <tr className="text-center">
+                        <th colSpan={2}>Penanggung Jawab Pelanggan</th>
+                    </tr>
+                    <tr className="text-center">
+                        <th>JABATAN</th>
+                        <th>PIC</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Nama Pelanggan:</td>
+                        <td>{proposal.pemohon.name}</td>
+                    </tr>
+                    <tr>
+                        <td>BE:</td>
+                        <td>,</td>
+                    </tr>
+                    <tr>
+                        <td>Salesman:</td>
+                        <td>,</td>
+                    </tr>
+                    <tr>
+                        <td>GL:</td>
+                        <td>,</td>
+                    </tr>
+                    <tr>
+                        <td>ASM:</td>
+                        <td>,</td>
+                    </tr>
+                    <tr>
+                        <td>Manager:</td>
+                        <td>,</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                {/* Kolom Kanan */}
+                <div className="col-md-6">
+                <table className="table table-bordered table-sm">
+                    <thead className="text-white" style={{backgroundColor: 'green'}}>
+                    <tr className="text-center">
+                        <th colSpan={4}><em>History Level 8357</em></th>
+                    </tr>
+                    <tr className="text-center">
+                        <th>URUTAN</th>
+                        <th>LEVEL</th>
+                        <th>EMPLID</th>
+                        <th>OTORISASI</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {proposal.otoritas.map((item) => (
+                        <tr className="table-success text-center">
+                            <td>{item.urutan}</td>
+                            <td>{item.jabatan}</td>
+                            <td>{item.emplid + " - " + item.name}</td>
+                            <td>
+                                <span className={`fw-semibold ${item.status === null ? 'text-danger' : ''}`}>
+                                    {item.status === null ? 'Belum Otorisasi' : item.status}
+                                </span>
+                            </td>
+                        </tr>   
+                    ))}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    {/* G. LAMPIRAN */}
+    {/* <div className="card mt-3">
+        <div className="card-header text-start">G. LAMPIRAN</div>
+        <div className="card-body">
+            {proposal.images && proposal.images.length > 0 ? (
+            <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
+                {proposal.images.map((image) => {
+                const fileName = image.link.split("/").pop();
+                return (
+                    <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
+                    <a href={image.link} target="_blank" rel="noopener noreferrer">
+                        <img
+                        src={image.link}
+                        alt={fileName}
+                        style={{
+                            width: '100%',
+                            height: '150px',
+                            objectFit: 'contain',
+                            border: '1px solid #ccc',
+                            borderRadius: '8px',
+                            padding: '5px',
+                            backgroundColor: '#f9f9f9'
+                        }}
+                        />
+                    </a>
+                    </div>
+                );
+                })}
+            </div>
+            ) : (
+            <p>Tidak ada lampiran.</p>
+            )}
+        </div>
+        </div> */}
+
+      <div ref={printRef}>
+      <div className="card">
+            <div className="card-header text-start">Detail Proposal</div>
+            <div className="card-body">
+              <form id="validationform" data-parsley-validate noValidate>
+                {/* Tanggal Proposal */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="tgl_proposal"
+                      className="form-control"
+                      value={formData.tgl_proposal}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Proposal ID */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="kode_proposal"
+                      className="form-control"
+                      value={formData.kode_proposal}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Ruang Lingkup */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="ruang_lingkup"
+                      className="form-control"
+                      value={formData.ruang_lingkup}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select className="form-control" disabled={!isEditing}>
+                        {categories.bisnisUnit.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.name} - {item.wilayah}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select className="form-control" disabled={!isEditing}>
+                        {categories.ruangLingkup.map((item) => (
+                          <option key={item.value} value={item.value}>{item.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select className="form-control" disabled={!isEditing}>
+                        {categories.dataKategori.map((item) => (
+                          <option key={item.value} value={item.value}>{item.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                {/* Kategori */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="kategori"
+                      className="form-control"
+                      value={formData.kategori}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Bisnis Unit */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Bisnis Unit:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="bisnis_unit"
+                      className="form-control"
+                      value={formData.bisnis_unit}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Judul Proposal */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="title"
+                      className="form-control"
+                      value={formData.title}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Status */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Status:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="status"
+                      className="form-control"
+                      value={formData.status}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Pemohon */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Pemohon:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="pemohon"
+                      className="form-control"
+                      value={formData.pemohon?.name}
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                {/* Tanggal Pengajuan */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Pengajuan:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="tgl_pengajuan"
+                      className="form-control"
+                      value={formData.tgl_pengajuan}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Tombol Edit / Simpan */}
+                <div className="form-group row mt-3">
+                  <div className="col-12 text-center">
+                    {/* <button type="button" className="btn btn-primary" onClick={toggleEdit}>
+                      {isEditing ? "Simpan" : "Edit"}
+                    </button> */}
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="card mt-3">
+                    <div className="card-header text-start">H. BIAYA LAIN-LAIN</div>
+                    <div className="card-body">
+                      <div className="form-group row">
+                        <label className="col-12 col-sm-3 col-form-label text-left">Biaya lain-lain(rp):</label>
+                        <div className="col-12 col-sm-8 col-lg-8">
+                          <input
+                            type="number"
+                            className="form-control"
+                            value={formData.biaya_lain}
+                            readOnly
+                            // onChange={(e) => setCustomNumber(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+          </div>
+
+      {/* F. CATATAN */}
+      <div className="card mt-3">
+        <div className="card-header text-start">F. CATATAN</div>
+        <div className="card-body">
+          <textarea
+            className="form-control"
+            rows="4"
+            placeholder="Masukkan catatan..."
+            value={formData.description}
+            readOnly
+          ></textarea>
+        </div>
+      </div>
+
+      {/* B. HISTORY */}
+      <div className="card mt-3">
+        <div className="card-header text-start">B. HISTORY</div>
+        <div className="card-body">
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Position</th>
+                <th>Description</th>
+                <th>BY</th>
+              </tr>
+            </thead>
+            <tbody>
+              {proposal.history?.map((item) => (
+              <tr key={item.id_history}>
+                <td>{item.transdate}</td>
+                <td>{item.status_position}</td>
+                <td>{item.description}</td>
+                <td>{item.name}</td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* C. OTORITOR */}
+      <div className="card mt-3">
+        <div className="card-header text-start">C. OTORITOR</div>
+        <div className="card-body">
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Urutan No. Level</th>
+                <th>EMPLID</th>
+                <th>Otorisasi</th>
+              </tr>
+            </thead>
+            <tbody>
+            {proposal.otoritas?.map((item) => (
+              <tr key={item.id_otorisasi}>
+                <td>{item.urutan}</td>
+                <td>{item.emplid +" " + item.name}</td>
+                <td>{item.status}</td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </div>
+    </>
+  );
+};
+
+export default DetailOtorisasiPusat;
+

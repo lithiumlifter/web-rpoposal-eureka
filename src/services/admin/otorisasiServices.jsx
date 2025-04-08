@@ -96,7 +96,26 @@ const OtorisasiServices = {
             console.error("Error deleting data konfigurasi otorisasi:", error.response?.data || error.message);
             throw error;
         }
-    }
+    },
+    otorisasiProposal: async (body) => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await axios.post(`${BASE_URL}/master/otorisasi-proposal`,body, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("Data otorisasi proposal successfully:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error("Error post data otorisasi proposal:", error.response?.data || error.message);
+            throw error;
+        }
+    },
+
     
 };
 

@@ -35,6 +35,8 @@ import DetailProposalCabang from "./pages/admin/DetailProposalCabang";
 import InputAnggaran from "./pages/admin/InputAnggaran";
 import DetailProposalReport from "./pages/admin/DetailProposalReport";
 import DetailLevelOtorisasi from "./pages/admin/DetailLevelOtorisasi";
+import DetailRegistrasiUser from "./pages/admin/detailRegistrasiUser";
+import DetailOtorisasiPusat from "./pages/admin/DetailOtorisasiPusat";
 
 function App() {
   return (
@@ -72,6 +74,9 @@ function App() {
           <Route path="updateanggaran/:id_proposal" element={<InputAnggaran />} />
           <Route path="proposalreport/:id_proposal" element={<DetailProposalReport />} />
           <Route path="detailotorisasi/:id_otorisasi" element={<DetailLevelOtorisasi />} />
+          <Route path="detailregistrasiuser/:id_user" element={<DetailRegistrasiUser />} />
+          <Route path="detailotorisasipusat/:id_proposal" element={<DetailOtorisasiPusat />} />
+
 
 
           <Route path="registrasiuser" element={<RegistrasiUser />} />

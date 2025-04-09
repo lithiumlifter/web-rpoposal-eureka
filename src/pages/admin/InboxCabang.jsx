@@ -1,313 +1,3 @@
-// const InboxCabang = () => {
-//     return (
-//          <>
-//               <div className="card">
-//                     {/* <h5 className="card-header">Update Anggaran</h5> */}
-//                     <div className="card-body">
-//                         <div className="table-responsive">
-//                         <table className="table table-striped table-bordered first">
-//                             <thead>
-//                             <tr>
-//                                 <th>ID</th>
-//                                 <th>BU</th>
-//                                 <th>PRO DATE</th>
-//                                 <th>TITLE</th>
-//                                 <th>TYPE</th>
-//                                 <th>PROCESS</th>
-//                                 <th>DELETE</th>
-//                                 <th>VIEW</th>
-//                             </tr>
-//                             </thead>
-//                             <tbody>
-//                             <tr>
-//                                KOSONG
-//                             </tr>
-//                             </tbody>
-//                         </table>
-//                         </div>
-//                     </div>
-//                     </div>
-
-//         </>
-//     );
-// }
-
-// export default InboxCabang;
-
-// import { useState } from "react";
-
-// const InboxCabang = () => {
-//     const [selectedBU, setSelectedBU] = useState("");
-//     const [searchTitle, setSearchTitle] = useState("");
-
-//     const data = [];
-
-//     const filteredData = data.filter(item =>
-//         (selectedBU === "" || item.bu === selectedBU) &&
-//         (searchTitle === "" || item.title.toLowerCase().includes(searchTitle.toLowerCase()))
-//     );
-
-//     return (
-//         <>
-//             <div className="card">
-//                 <div className="card-body">
-//                     <div className="d-flex gap-2 mb-3 align-items-center">
-//                         <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
-//                             <option value="">Semua BU</option>
-//                             <option value="50">BU 50</option>
-//                             <option value="51">BU 51</option>
-//                         </select>
-//                         <input type="text" className="form-control w-auto" placeholder="Cari Title..." value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
-//                         <button className="btn btn-primary">Tampilkan</button>
-//                     </div>
-//                     <div className="table-responsive">
-//                         <table className="table table-striped table-bordered first">
-//                             <thead>
-//                                 <tr>
-//                                     <th>ID</th>
-//                                     <th>BU</th>
-//                                     <th>PRO DATE</th>
-//                                     <th>TITLE</th>
-//                                     <th>TYPE</th>
-//                                     <th>PROCESS</th>
-//                                     <th>DELETE</th>
-//                                     <th>VIEW</th>
-//                                 </tr>
-//                             </thead>
-//                             <tbody>
-//                                 {filteredData.length > 0 ? (
-//                                     filteredData.map((item, index) => (
-//                                         <tr key={index}>
-//                                             <td>{item.id}</td>
-//                                             <td>{item.bu}</td>
-//                                             <td>{item.proDate}</td>
-//                                             <td>{item.title}</td>
-//                                             <td>{item.type}</td>
-//                                             <td><button className="btn btn-success">Process</button></td>
-//                                             <td><button className="btn btn-danger">Delete</button></td>
-//                                             <td><button className="btn btn-info">View</button></td>
-//                                         </tr>
-//                                     ))
-//                                 ) : (
-//                                     <tr>
-//                                         <td colSpan="8" className="text-center">KOSONG</td>
-//                                     </tr>
-//                                 )}
-//                             </tbody>
-//                         </table>
-//                     </div>
-//                 </div>
-//             </div>
-//         </>
-//     );
-// }
-
-// export default InboxCabang;
-
-
-// import { useState, useEffect } from "react";
-// import inboxCabangServices from "../../services/admin/inboxCabangServices";
-
-// const InboxCabang = () => {
-//     const [data, setData] = useState([]);
-//     const [selectedBU, setSelectedBU] = useState("");
-//     const [searchTitle, setSearchTitle] = useState("");
-//     const [loading, setLoading] = useState(true);
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const response = await inboxCabangServices.getInboxCabang();
-//                 setData(response.data.data); // Menyesuaikan dengan struktur JSON
-//             } catch (error) {
-//                 console.error("Error fetching data:", error);
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
-//         fetchData();
-//     }, []);
-
-//     // Filter data berdasarkan Business Unit dan Title
-//     const filteredData = data.filter(item =>
-//         (selectedBU === "" || item.bisnis_unit.toString() === selectedBU) &&
-//         (searchTitle === "" || item.title.toLowerCase().includes(searchTitle.toLowerCase()))
-//     );
-
-//     return (
-//         <>
-//             <div className="card">
-//                 <div className="card-body">
-//                     <div className="d-flex gap-2 mb-3 align-items-center">
-//                         <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
-//                             <option value="">Semua BU</option>
-//                             <option value="50">BU 50</option>
-//                             <option value="51">BU 51</option>
-//                         </select>
-//                         <input
-//                             type="text"
-//                             className="form-control w-auto"
-//                             placeholder="Cari Title..."
-//                             value={searchTitle}
-//                             onChange={(e) => setSearchTitle(e.target.value)}
-//                         />
-//                     </div>
-
-//                     <div className="table-responsive">
-//                         <table className="table table-striped table-bordered first">
-//                             <thead>
-//                                 <tr>
-//                                     <th>ID</th>
-//                                     <th>BU</th>
-//                                     <th>PRO DATE</th>
-//                                     <th>TITLE</th>
-//                                     <th>TYPE</th>
-//                                     <th>PROCESS</th>
-//                                     <th>DELETE</th>
-//                                     <th>VIEW</th>
-//                                 </tr>
-//                             </thead>
-//                             <tbody>
-//                                 {loading ? (
-//                                     <tr>
-//                                         <td colSpan="8" className="text-center">Loading...</td>
-//                                     </tr>
-//                                 ) : filteredData.length > 0 ? (
-//                                     filteredData.map((item) => (
-//                                         <tr key={item.id}>
-//                                             <td>{item.id}</td>
-//                                             <td>{item.bisnis_unit}</td>
-//                                             <td>{item.tgl_pengajuan}</td>
-//                                             <td>{item.title}</td>
-//                                             <td>{item.type}</td>
-//                                             <td>
-//                                                 <button className="btn btn-success">Process</button>
-//                                             </td>
-//                                             <td>
-//                                                 <button className="btn btn-danger">Delete</button>
-//                                             </td>
-//                                             <td>
-//                                                 <button className="btn btn-info">View</button>
-//                                             </td>
-//                                         </tr>
-//                                     ))
-//                                 ) : (
-//                                     <tr>
-//                                         <td colSpan="8" className="text-center">KOSONG</td>
-//                                     </tr>
-//                                 )}
-//                             </tbody>
-//                         </table>
-//                     </div>
-//                 </div>
-//             </div>
-//         </>
-//     );
-// };
-
-// export default InboxCabang;
-
-// import { useState, useEffect } from "react";
-// import DataTable from "react-data-table-component";
-// import inboxCabangServices from "../../services/admin/inboxCabangServices";
-
-// const InboxCabang = () => {
-//     const [data, setData] = useState([]);
-//     const [selectedBU, setSelectedBU] = useState("");
-//     const [searchText, setSearchText] = useState("");
-//     const [loading, setLoading] = useState(true);
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const response = await inboxCabangServices.getInboxCabang();
-//                 setData(response.data.data); // Sesuaikan dengan struktur JSON dari API
-//             } catch (error) {
-//                 console.error("Error fetching data:", error);
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
-//         fetchData();
-//     }, []);
-
-//     // Filter data berdasarkan Business Unit dan pencarian global
-//     const filteredData = data.filter(item =>
-//         (selectedBU === "" || item.bisnis_unit.toString() === selectedBU) &&
-//         (searchText === "" ||
-//             item.title.toLowerCase().includes(searchText.toLowerCase()) ||
-//             item.type.toLowerCase().includes(searchText.toLowerCase()))
-//     );
-
-//     // Definisi kolom untuk DataTable
-//     const columns = [
-//         { name: "ID", selector: row => row.id, sortable: true },
-//         { name: "BU", selector: row => row.bisnis_unit, sortable: true },
-//         { name: "PRO DATE", selector: row => row.tgl_pengajuan, sortable: true },
-//         { name: "TITLE", selector: row => row.title, sortable: true },
-//         { name: "TYPE", selector: row => row.type, sortable: true },
-//         {
-//             name: "PROCESS",
-//             cell: () => <button className="btn btn-success"><i className=" fas fa-arrow-right" /></button>,
-//             ignoreRowClick: true,
-//             allowOverflow: true,
-//             button: true
-//         },
-//         {
-//             name: "DELETE",
-//             cell: () => <button className="btn btn-danger"><i className="fas fa-trash-alt" /></button>,
-//             ignoreRowClick: true,
-//             allowOverflow: true,
-//             button: true
-//         },
-//         {
-//             name: "VIEW",
-//             cell: () => <button className="btn btn-info"><i className="fas fa-eye" /></button>, 
-//             ignoreRowClick: true,
-//             allowOverflow: true,
-//             button: true
-//         }
-//     ];
-    
-
-//     return (
-//         <>
-//             <div className="card">
-//                 <div className="card-body">
-//                     <div className="d-flex gap-2 mb-3 align-items-center">
-//                         <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
-//                             <option value="">Semua BU</option>
-//                             <option value="50">BU 50</option>
-//                             <option value="51">BU 51</option>
-//                         </select>
-//                         <input
-//                             type="text"
-//                             className="form-control w-auto"
-//                             placeholder="Cari Title / Type..."
-//                             value={searchText}
-//                             onChange={(e) => setSearchText(e.target.value)}
-//                         />
-//                     </div>
-
-//                     {/* DataTable dari react-data-table-component */}
-//                     <DataTable
-//                         columns={columns}
-//                         data={filteredData}
-//                         progressPending={loading}
-//                         pagination
-//                         highlightOnHover
-//                         striped
-//                         responsive
-//                         persistTableHead
-//                     />
-//                 </div>
-//             </div>
-//         </>
-//     );
-// };
-
-// export default InboxCabang;
-
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
@@ -396,16 +86,25 @@ const InboxCabang = () => {
     );
 
     const columns = [
-        { name: "ID", selector: row => row.id, sortable: true },
-        { name: "BU", selector: row => row.bisnis_unit, sortable: true },
-        { name: "PRO DATE", selector: row => row.tgl_pengajuan, sortable: true },
-        { name: "TITLE", selector: row => row.title, sortable: true },
-        { name: "TYPE", selector: row => row.type, sortable: true },
+        { name: "ID", selector: row => row.id, sortable: true, maxWidth: "80px" },
+        { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "80px" },
+        { name: "PRO DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },
+        {
+            name: "TITLE",
+            selector: row => row.title,
+            sortable: true,
+            wrap: true, // agar teks bisa turun ke baris bawah kalau kepanjangan
+            grow: 3,    // kasih proporsi lebar lebih besar dari kolom lain
+            style: {
+                whiteSpace: 'normal' // ini biar teks tidak jadi '...'
+            }
+        },
+        { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },
         {
             name: "PROCESS",
             cell: row => (
                 <button
-                    className="btn btn-success"
+                    className="btn btn-success btn-sm"
                     onClick={() => handleOpenModal(row)}
                     disabled={processingId === row.id}
                 >
@@ -418,13 +117,14 @@ const InboxCabang = () => {
             ),
             ignoreRowClick: true,
             allowOverflow: true,
-            button: true
+            button: true,
+            maxWidth: "90px"
         },
         {
             name: "DELETE",
             cell: row => (
                 <button
-                    className="btn btn-danger"
+                    className="btn btn-danger btn-sm"
                     onClick={() => handleOpenDeleteModal(row)}
                     disabled={processingId === row.id}
                 >
@@ -437,28 +137,29 @@ const InboxCabang = () => {
             ),
             ignoreRowClick: true,
             allowOverflow: true,
-            button: true
+            button: true,
+            maxWidth: "90px"
         },
         {
             name: "VIEW",
-            cell: (row) => {
-              return (
+            cell: (row) => (
                 <button
-                  className="btn btn-info"
-                  onClick={() => {
-                    console.log("ID yang dikirim ke detail:", row.id);
-                    navigate(`/admin/inboxcabang/${row.id}`);
-                  }}
+                    className="btn btn-info btn-sm"
+                    onClick={() => {
+                        console.log("ID yang dikirim ke detail:", row.id);
+                        navigate(`/admin/inboxcabang/${row.id}`);
+                    }}
                 >
-                  <i className="fas fa-eye" />
+                    <i className="fas fa-eye" />
                 </button>
-              );
-            },
+            ),
             ignoreRowClick: true,
             allowOverflow: true,
             button: true,
-          },
+            maxWidth: "90px"
+        },
     ];
+    
 
     return (
         <div className="card">
@@ -501,7 +202,7 @@ const InboxCabang = () => {
                 onConfirm={handleApprove}
                 title="Konfirmasi Kirim"
                 message={`Apakah Anda yakin ingin menyetujui proposal dengan ID ${selectedItem?.id}?`}
-                confirmText="Ya, Kirim"
+                confirmText="Ya, Proses"
                 cancelText="Batal"
                 theme="success"
             />

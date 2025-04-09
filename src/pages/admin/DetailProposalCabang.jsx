@@ -1,108 +1,32 @@
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-
-// const BASE_URL = import.meta.env.VITE_BASE_URL;
-
-// const DetailProposalCabang = ({ id_proposal }) => {
-//   const [proposal, setProposal] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const fetchDetailProposal = async () => {
-//       try {
-//         const token = localStorage.getItem('token');
-//         const response = await axios.get(`${BASE_URL}/master/detail-proposal?id_proposal=${id_proposal}`, {
-//           headers: {
-//             Authorization: `Bearer ${token}`
-//           }
-//         });
-//         setProposal(response.data.data);
-//       } catch (err) {
-//         setError(err.response?.data || err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchDetailProposal();
-//   }, [id_proposal]);
-
-//   if (loading) return <p>Loading...</p>;
-//   if (error) return <p>Error: {JSON.stringify(error)}</p>;
-
-//   return (
-//     <>
-//       <div className="card">
-//         <div className="card-header text-start">Master</div>
-//         <div className="card-body">
-//           <form id="validationform" data-parsley-validate noValidate>
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <input type="text" className="form-control" value={proposal?.tgl_proposal || ''} readOnly />
-//               </div>
-//             </div>
-
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <input type="text" className="form-control" value={proposal?.kode_proposal || ''} readOnly />
-//               </div>
-//             </div>
-
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <input type="text" className="form-control" value={proposal?.title || ''} readOnly />
-//               </div>
-//             </div>
-
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">Pemohon:</label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <input type="text" className="form-control" value={proposal?.pemohon?.name || ''} readOnly />
-//               </div>
-//             </div>
-
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">Status:</label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <input type="text" className="form-control" value={proposal?.status || ''} readOnly />
-//               </div>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default DetailProposalCabang;
-
 // import React, { useEffect, useState } from "react";
 // import { useParams } from "react-router-dom";
 // import DetailProposal from "../../services/admin/detailProposalServices";
 // import CategoryService from "../../services/admin/categoryServices";
 
-
 // const DetailProposalCabang = () => {
+//   const [categories, setCategories] = useState({
+//     bisnisUnit: [],
+//     ruangLingkup: [],
+//     dataKategori: [],
+//     dataTipe: [],
+//     dataOtorisasi: [],
+//   });
+
 //   const { id_proposal } = useParams();
-//   const [categories, setCategories] = useState([]);
 //   const [proposal, setProposal] = useState(null);
 //   const [loading, setLoading] = useState(true);
 //   const [error, setError] = useState(null);
-
+//   const [isEditing, setIsEditing] = useState(false); // State untuk mode edit
+//   const [formData, setFormData] = useState({}); // State untuk menyimpan nilai input
 //   useEffect(() => {
 //     const fetchCategories = async () => {
 //       try {
 //         const response = await CategoryService.getCategories();
-//         setCategories(response.data.bisnisUnit); // Pastikan response sesuai dengan struktur data
-//       } catch (err) {
-//         console.error("Error fetching categories:", err);
+//         setCategories(response.data);
+//       } catch (error) {
+//         console.error("Error fetching categories:", error);
 //       }
 //     };
-
 //     fetchCategories();
 //   }, []);
 
@@ -114,6 +38,7 @@
 //         setLoading(true);
 //         const data = await DetailProposal.getDetailProposal(id_proposal);
 //         setProposal(data.data);
+//         setFormData(data.data); // Set nilai awal form
 //       } catch (err) {
 //         setError(err.response?.data || err.message);
 //       } finally {
@@ -126,60 +51,218 @@
 
 //   if (loading) return <p>Loading...</p>;
 //   if (error) return <p>Error: {JSON.stringify(error)}</p>;
+//   if (!proposal) return <p>Data tidak ditemukan</p>;
+
+//   // Handler untuk mengubah nilai input saat mode edit
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   // Handler untuk tombol Edit/Simpan
+//   const toggleEdit = () => {
+//     if (isEditing) {
+//       // Jika sedang dalam mode edit dan klik Simpan, update data ke state utama
+//       setProposal(formData);
+//     }
+//     setIsEditing(!isEditing); // Toggle mode edit
+//   };
 
 //   return (
 //     <div className="card">
-//       <div className="card-header text-start">Master</div>
+//       <div className="card-header text-start">Detail Proposal</div>
 //       <div className="card-body">
 //         <form id="validationform" data-parsley-validate noValidate>
+//           {/* Tanggal Proposal */}
 //           <div className="form-group row">
 //             <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
 //             <div className="col-12 col-sm-8 col-lg-8">
-//               <input type="text" className="form-control" value={proposal?.tgl_proposal || ""} readOnly />
+//               <input
+//                 type="text"
+//                 name="tgl_proposal"
+//                 className="form-control"
+//                 value={formData.tgl_proposal}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//               />
 //             </div>
 //           </div>
 
+//           {/* Proposal ID */}
 //           <div className="form-group row">
 //             <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
 //             <div className="col-12 col-sm-8 col-lg-8">
-//               <input type="text" className="form-control" value={proposal?.kode_proposal || ""} readOnly />
+//               <input
+//                 type="text"
+//                 name="kode_proposal"
+//                 className="form-control"
+//                 value={formData.kode_proposal}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//               />
 //             </div>
 //           </div>
 
-//           {/* BU */}
+//           {/* Ruang Lingkup */}
 //           <div className="form-group row">
-//             <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
+//             <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
 //             <div className="col-12 col-sm-8 col-lg-8">
-//               <select className="form-control" value={proposal?.bu || ""} readOnly>
-//                 <option value="">Pilih BU</option>
-//                 {categories.map((item) => (
-//                   <option key={item.value} value={item.value}>
-//                     {item.name} - {item.wilayah}
-//                   </option>
-//                 ))}
-//               </select>
+//               <input
+//                 type="text"
+//                 name="ruang_lingkup"
+//                 className="form-control"
+//                 value={formData.ruang_lingkup}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//               />
 //             </div>
 //           </div>
 
+//           <div className="form-group row">
+//               <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
+//               <div className="col-12 col-sm-8 col-lg-8">
+//                 <select className="form-control" disabled={!isEditing}>
+//                   {categories.bisnisUnit.map((item) => (
+//                     <option key={item.value} value={item.value}>
+//                       {item.name} - {item.wilayah}
+//                     </option>
+//                   ))}
+//                 </select>
+//               </div>
+//             </div>
 
+//             <div className="form-group row">
+//               <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
+//               <div className="col-12 col-sm-8 col-lg-8">
+//                 <select className="form-control" disabled={!isEditing}>
+//                   {categories.ruangLingkup.map((item) => (
+//                     <option key={item.value} value={item.value}>{item.name}</option>
+//                   ))}
+//                 </select>
+//               </div>
+//             </div>
+
+//             <div className="form-group row">
+//               <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
+//               <div className="col-12 col-sm-8 col-lg-8">
+//                 <select className="form-control" disabled={!isEditing}>
+//                   {categories.dataKategori.map((item) => (
+//                     <option key={item.value} value={item.value}>{item.name}</option>
+//                   ))}
+//                 </select>
+//               </div>
+//             </div>
+
+//           {/* Kategori */}
+//           <div className="form-group row">
+//             <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
+//             <div className="col-12 col-sm-8 col-lg-8">
+//               <input
+//                 type="text"
+//                 name="kategori"
+//                 className="form-control"
+//                 value={formData.kategori}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//               />
+//             </div>
+//           </div>
+
+//           {/* Bisnis Unit */}
+//           <div className="form-group row">
+//             <label className="col-12 col-sm-3 col-form-label text-left">Bisnis Unit:</label>
+//             <div className="col-12 col-sm-8 col-lg-8">
+//               <input
+//                 type="text"
+//                 name="bisnis_unit"
+//                 className="form-control"
+//                 value={formData.bisnis_unit}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//               />
+//             </div>
+//           </div>
+
+//           {/* Judul Proposal */}
 //           <div className="form-group row">
 //             <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
 //             <div className="col-12 col-sm-8 col-lg-8">
-//               <input type="text" className="form-control" value={proposal?.title || ""} readOnly />
+//               <input
+//                 type="text"
+//                 name="title"
+//                 className="form-control"
+//                 value={formData.title}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//               />
 //             </div>
 //           </div>
 
+//           {/* Deskripsi */}
 //           <div className="form-group row">
-//             <label className="col-12 col-sm-3 col-form-label text-left">Pemohon:</label>
+//             <label className="col-12 col-sm-3 col-form-label text-left">Deskripsi:</label>
 //             <div className="col-12 col-sm-8 col-lg-8">
-//               <input type="text" className="form-control" value={proposal?.pemohon?.name || ""} readOnly />
+//               <textarea
+//                 name="description"
+//                 className="form-control"
+//                 value={formData.description}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//                 rows={3}
+//               />
 //             </div>
 //           </div>
 
+//           {/* Status */}
 //           <div className="form-group row">
 //             <label className="col-12 col-sm-3 col-form-label text-left">Status:</label>
 //             <div className="col-12 col-sm-8 col-lg-8">
-//               <input type="text" className="form-control" value={proposal?.status || ""} readOnly />
+//               <input
+//                 type="text"
+//                 name="status"
+//                 className="form-control"
+//                 value={formData.status}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//               />
+//             </div>
+//           </div>
+
+//           {/* Pemohon */}
+//           <div className="form-group row">
+//             <label className="col-12 col-sm-3 col-form-label text-left">Pemohon:</label>
+//             <div className="col-12 col-sm-8 col-lg-8">
+//               <input
+//                 type="text"
+//                 name="pemohon"
+//                 className="form-control"
+//                 value={formData.pemohon?.name}
+//                 readOnly
+//               />
+//             </div>
+//           </div>
+
+//           {/* Tanggal Pengajuan */}
+//           <div className="form-group row">
+//             <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Pengajuan:</label>
+//             <div className="col-12 col-sm-8 col-lg-8">
+//               <input
+//                 type="text"
+//                 name="tgl_pengajuan"
+//                 className="form-control"
+//                 value={formData.tgl_pengajuan}
+//                 readOnly={!isEditing}
+//                 onChange={handleChange}
+//               />
+//             </div>
+//           </div>
+
+//           {/* Tombol Edit / Simpan */}
+//           <div className="form-group row mt-3">
+//             <div className="col-12 text-center">
+//               <button type="button" className="btn btn-primary" onClick={toggleEdit}>
+//                 {isEditing ? "Simpan" : "Edit"}
+//               </button>
 //             </div>
 //           </div>
 //         </form>
@@ -190,12 +273,26 @@
 
 // export default DetailProposalCabang;
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,  useRef } from "react";
 import { useParams } from "react-router-dom";
 import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
+import { useNavigate } from "react-router-dom";
+import allDataProposal from "../../services/admin/allDataProposal";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; 
 
 const DetailProposalCabang = () => {
+  
+  const printRef = useRef();
+  const navigate = useNavigate();
+  const [originalData, setOriginalData] = useState(null);
+  const [isEditingBiayaLain, setIsEditingBiayaLain] = useState(false);
+  const [editedBiayaLain, setEditedBiayaLain] = useState(null);
+  const [addedOtorisasi, setAddedOtorisasi] = useState([]);
+  const [selectedOtorisasi, setSelectedOtorisasi] = useState("");
+  const [catatan, setCatatan] = useState('');
+
   const [categories, setCategories] = useState({
     bisnisUnit: [],
     ruangLingkup: [],
@@ -208,8 +305,15 @@ const DetailProposalCabang = () => {
   const [proposal, setProposal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false); // State untuk mode edit
-  const [formData, setFormData] = useState({}); // State untuk menyimpan nilai input
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    if (formData.description !== undefined) {
+      setCatatan(formData.description);
+    }
+  }, [formData.description]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -226,10 +330,23 @@ const DetailProposalCabang = () => {
     if (!id_proposal) return;
 
     const fetchDetailProposal = async () => {
+      if (!id_proposal || categories.dataOtorisasi.length === 0) return;
       try {
         setLoading(true);
         const data = await DetailProposal.getDetailProposal(id_proposal);
+        console.log("DATA DETAIL PROPOSAL:", data);
         setProposal(data.data);
+        if (categories.dataOtorisasi.length > 0) {
+          setAddedOtorisasi(
+            data.data.otoritas?.map((item) => {
+              const match = categories.dataOtorisasi.find((otor) =>
+                otor.name.startsWith(item.id_level + " :")
+              );
+              return match?.value ?? null;
+            }).filter(Boolean) || []
+          );
+        }
+        
         setFormData(data.data); // Set nilai awal form
       } catch (err) {
         setError(err.response?.data || err.message);
@@ -239,7 +356,15 @@ const DetailProposalCabang = () => {
     };
 
     fetchDetailProposal();
-  }, [id_proposal]);
+  }, [id_proposal,categories.dataOtorisasi]);
+
+  const handleAddOtorisasi = () => {
+    if (selectedOtorisasi && !addedOtorisasi.includes(selectedOtorisasi)) {
+      setAddedOtorisasi([...addedOtorisasi, selectedOtorisasi]);
+      setSelectedOtorisasi("");
+    }
+  };
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {JSON.stringify(error)}</p>;
@@ -260,410 +385,418 @@ const DetailProposalCabang = () => {
     setIsEditing(!isEditing); // Toggle mode edit
   };
 
+  const handleSubmitForm = async () => {
+    try {
+      const payload = {
+        id_proposal: proposal.id_proposal,
+        bisnis_unit: formData.bisnis_unit,
+        title: formData.title,
+        biayalainlain: formData.biaya_lain ?? 0,
+        description: catatan ?? "",
+        email1: "",
+        email2: "",
+        email3: "",
+        otorisasi: addedOtorisasi,
+      };
+  
+      await allDataProposal.editProposal(payload);
+  
+      alert("Data berhasil disimpan!");
+      setProposal({ ...proposal, ...payload });
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Gagal menyimpan data:", error);
+      alert("Gagal menyimpan data.");
+    }
+  };
+
   return (
-    <div className="card">
-      <div className="card-header text-start">Detail Proposal</div>
-      <div className="card-body">
-        <form id="validationform" data-parsley-validate noValidate>
-          {/* Tanggal Proposal */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="tgl_proposal"
-                className="form-control"
-                value={formData.tgl_proposal}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+    <>
+    <div className="mb-3 text-end">
+  <button
+    type="button"
+    className="btn btn-danger"
+    onClick={() => navigate(-1)}
+  >
+    Tutup Jendela
+  </button>
+</div>
 
-          {/* Proposal ID */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="kode_proposal"
-                className="form-control"
-                value={formData.kode_proposal}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Ruang Lingkup */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="ruang_lingkup"
-                className="form-control"
-                value={formData.ruang_lingkup}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div className="form-group row">
-              <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
-              <div className="col-12 col-sm-8 col-lg-8">
-                <select className="form-control" disabled={!isEditing}>
-                  {categories.bisnisUnit.map((item) => (
-                    <option key={item.value} value={item.value}>
-                      {item.name} - {item.wilayah}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group row">
-              <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
-              <div className="col-12 col-sm-8 col-lg-8">
-                <select className="form-control" disabled={!isEditing}>
-                  {categories.ruangLingkup.map((item) => (
-                    <option key={item.value} value={item.value}>{item.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group row">
-              <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
-              <div className="col-12 col-sm-8 col-lg-8">
-                <select className="form-control" disabled={!isEditing}>
-                  {categories.dataKategori.map((item) => (
-                    <option key={item.value} value={item.value}>{item.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-          {/* Kategori */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="kategori"
-                className="form-control"
-                value={formData.kategori}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Bisnis Unit */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Bisnis Unit:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="bisnis_unit"
-                className="form-control"
-                value={formData.bisnis_unit}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Judul Proposal */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="title"
-                className="form-control"
-                value={formData.title}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Deskripsi */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Deskripsi:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <textarea
-                name="description"
-                className="form-control"
-                value={formData.description}
-                readOnly={!isEditing}
-                onChange={handleChange}
-                rows={3}
-              />
-            </div>
-          </div>
-
-          {/* Status */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Status:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="status"
-                className="form-control"
-                value={formData.status}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Pemohon */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Pemohon:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="pemohon"
-                className="form-control"
-                value={formData.pemohon?.name}
-                readOnly
-              />
-            </div>
-          </div>
-
-          {/* Tanggal Pengajuan */}
-          <div className="form-group row">
-            <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Pengajuan:</label>
-            <div className="col-12 col-sm-8 col-lg-8">
-              <input
-                type="text"
-                name="tgl_pengajuan"
-                className="form-control"
-                value={formData.tgl_pengajuan}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Tombol Edit / Simpan */}
-          <div className="form-group row mt-3">
-            <div className="col-12 text-center">
-              <button type="button" className="btn btn-primary" onClick={toggleEdit}>
-                {isEditing ? "Simpan" : "Edit"}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+    <div className="mb-3 text-end">
     </div>
+      <div ref={printRef}>
+      <form id="validationform" data-parsley-validate noValidate>
+      <div className="card">
+            <div className="card-header text-start">Detail Proposal</div>
+            
+            <div className="card-body">
+                {/* Tanggal Proposal */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="tgl_proposal"
+                      className="form-control"
+                      value={formData.tgl_proposal}
+                      readOnly
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Proposal ID */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="kode_proposal"
+                      className="form-control"
+                      value={formData.kode_proposal}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                  {/* BU */}
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select
+                        className="form-control"
+                        name="bisnis_unit"
+                        value={formData.bisnis_unit || ""}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                      >
+                        <option value="">Pilih BU</option>
+                        {categories.bisnisUnit.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.name} - {item.wilayah}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Ruang Lingkup */}
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select
+                        className="form-control"
+                        name="ruang_lingkup"
+                        value={formData.ruang_lingkup || ""}
+                        onChange={handleChange}
+                        disabled
+                      >
+                        <option value="">Pilih Ruang Lingkup</option>
+                        {categories.ruangLingkup.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Kategori */}
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select
+                        className="form-control"
+                        name="kategori"
+                        value={formData.kategori || ""}
+                        onChange={handleChange}
+                        disabled
+                      >
+                        <option value="">Pilih Kategori</option>
+                        {categories.dataKategori.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                {/* Judul Proposal */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="title"
+                      className="form-control"
+                      value={formData.title}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Pemohon */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Pemohon:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="pemohon"
+                      className="form-control"
+                      value={formData.pemohon?.name}
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                {/* Tanggal Pengajuan */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Pengajuan:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="tgl_pengajuan"
+                      className="form-control"
+                      value={formData.tgl_pengajuan}
+                      readOnly
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                {/* Otorisasi */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Otorisasi:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    {isEditing ? (
+                      <>
+                        <div className="input-group mb-2">
+                          <select
+                            className="form-control"
+                            value={selectedOtorisasi}
+                            onChange={(e) => setSelectedOtorisasi(e.target.value)}
+                          >
+                            <option value="">Pilih Otorisasi</option>
+                            {categories.dataOtorisasi.map((item) => (
+                              <option key={item.value} value={item.value}>
+                                {item.name}
+                              </option>
+                            ))}
+                          </select>
+                          <button type="button" className="btn btn-primary" onClick={handleAddOtorisasi}>
+                            Add
+                          </button>
+                        </div>
+                        <ul className="list-group">
+                          {addedOtorisasi.map((otorisasi, index) => {
+                            const label = categories.dataOtorisasi.find((item) => String(item.value) === String(otorisasi))?.name || otorisasi;
+                            return (
+                              <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                                {label}
+                                <button
+                                  type="button"
+                                  className="btn btn-danger btn-sm"
+                                  onClick={() => setAddedOtorisasi(addedOtorisasi.filter((_, i) => i !== index))}
+                                >
+                                  Remove
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </>
+                    ) : (
+                      <ul className="list-group">
+                        {addedOtorisasi.map((otorisasi, index) => {
+                          const label = categories.dataOtorisasi.find((item) => item.value === otorisasi)?.name || otorisasi;
+                          return (
+                            <li key={index} className="list-group-item">
+                              {label}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+            </div>
+          </div>
+          {/* BIAYA LAIN-LAIN */}
+          <div className="card mt-3">
+            <div className="card-header text-start">H. BIAYA LAIN-LAIN</div>
+            <div className="card-body">
+              <div className="form-group row align-items-center">
+                <label className="col-12 col-sm-3 col-form-label text-left">
+                  Biaya lain-lain (Rp):
+                </label>
+                <div className="col-12 col-sm-6 col-lg-6">
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={
+                      isEditingBiayaLain
+                        ? editedBiayaLain ?? ""
+                        : formData.biaya_lain ?? ""
+                    }
+                    onChange={(e) => setEditedBiayaLain(e.target.value)}
+                    readOnly={!isEditing}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div className="card mt-3">
+          <div className="card-header text-start">F. CATATAN</div>
+          <div className="card-body">
+            <div className="form-group row">
+              <label className="col-12 col-sm-3 col-form-label text-left">
+                Masukkan Catatan:
+              </label>
+              <div className="col-12 col-sm-8 col-lg-8">
+                <ReactQuill 
+                  value={catatan} 
+                  onChange={setCatatan} 
+                  readOnly={!isEditing}
+                  theme={isEditing ? 'snow' : 'bubble'} // bubble untuk tampilan readonly
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tombol Edit / Simpan */}
+        <div className="form-group row mt-3">
+                  <div className="col-12 text-center">
+                    {isEditing ? (
+                      <>
+                      <button
+                        type="button"
+                        className="btn btn-success me-2"
+                        onClick={handleSubmitForm}
+                      >
+                        Simpan
+                      </button>
+
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={() => {
+                            setFormData(originalData); // Reset form
+                            setIsEditing(false); // Kembali ke mode view
+                          }}
+                        >
+                          Batal
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => {
+                          setOriginalData(formData); // Simpan data awal sebelum edit
+                          setIsEditing(true); // Aktifkan mode edit
+                        }}
+                      >
+                        Edit
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+        {/* G. LAMPIRAN */}
+        <div className="card mt-3">
+        <div className="card-header text-start">G. LAMPIRAN</div>
+        <div className="card-body">
+            {proposal.images && proposal.images.length > 0 ? (
+            <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
+                {proposal.images.map((image) => {
+                const fileName = image.link.split("/").pop();
+                return (
+                    <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
+                    <a href={image.link} target="_blank" rel="noopener noreferrer">
+                        <img
+                        src={image.link}
+                        alt={fileName}
+                        style={{
+                            width: '100%',
+                            height: '150px',
+                            objectFit: 'contain',
+                            border: '1px solid #ccc',
+                            borderRadius: '8px',
+                            padding: '5px',
+                            backgroundColor: '#f9f9f9'
+                        }}
+                        />
+                    </a>
+                    </div>
+                );
+                })}
+            </div>
+            ) : (
+            <p>Tidak ada lampiran.</p>
+            )}
+        </div>
+        </div>
+
+        {/* B. HISTORY */}
+        <div className="card mt-3">
+          <div className="card-header text-start">B. HISTORY</div>
+          <div className="card-body">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Position</th>
+                  <th>Description</th>
+                  <th>BY</th>
+                </tr>
+              </thead>
+              <tbody>
+                {proposal.history?.map((item) => (
+                <tr key={item.id_history}>
+                  <td>{item.transdate}</td>
+                  <td>{item.status_position}</td>
+                  <td>{item.description}</td>
+                  <td>{item.name}</td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* C. OTORITOR */}
+        <div className="card mt-3">
+          <div className="card-header text-start">C. OTORITOR</div>
+          <div className="card-body">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Urutan No. Level</th>
+                  <th>EMPLID</th>
+                  <th>Otorisasi</th>
+                </tr>
+              </thead>
+              <tbody>
+              {proposal.otoritas?.map((item) => (
+                <tr key={item.id_otorisasi}>
+                  <td>{item.urutan}</td>
+                  <td>{item.emplid +" " + item.name}</td>
+                  <td>{item.status}</td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+      </div>
+    </>
   );
 };
 
 export default DetailProposalCabang;
-
-// import { useEffect, useState } from "react";
-// import CategoryService from "../../services/admin/categoryServices";
-
-// const InputProposal = () => {
-//   const [categories, setCategories] = useState({
-//     bisnisUnit: [],
-//     ruangLingkup: [],
-//     dataKategori: [],
-//     dataTipe: [],
-//     dataOtorisasi: [],
-//   });
-
-//   const [isEditable, setIsEditable] = useState(false);
-
-//   useEffect(() => {
-//     const fetchCategories = async () => {
-//       try {
-//         const response = await CategoryService.getCategories();
-//         setCategories(response.data);
-//       } catch (error) {
-//         console.error("Error fetching categories:", error);
-//       }
-//     };
-//     fetchCategories();
-//   }, []);
-
-//   return (
-//     <>
-//       <div className="card">
-//         <div className="card-header text-start">Master</div>
-//         <div className="card-body">
-//           <form>
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">
-//                 Tanggal:
-//               </label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <input type="date" required className="form-control" disabled={!isEditable} />
-//               </div>
-//             </div>
-
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">
-//                 Proposal ID:
-//               </label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <input type="text" required className="form-control" disabled={!isEditable} />
-//               </div>
-//             </div>
-
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <select className="form-control" disabled={!isEditable}>
-//                   {categories.bisnisUnit.map((item) => (
-//                     <option key={item.value} value={item.value}>
-//                       {item.name} - {item.wilayah}
-//                     </option>
-//                   ))}
-//                 </select>
-//               </div>
-//             </div>
-
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <select className="form-control" disabled={!isEditable}>
-//                   {categories.ruangLingkup.map((item) => (
-//                     <option key={item.value} value={item.value}>{item.name}</option>
-//                   ))}
-//                 </select>
-//               </div>
-//             </div>
-
-//             <div className="form-group row">
-//               <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
-//               <div className="col-12 col-sm-8 col-lg-8">
-//                 <select className="form-control" disabled={!isEditable}>
-//                   {categories.dataKategori.map((item) => (
-//                     <option key={item.value} value={item.value}>{item.name}</option>
-//                   ))}
-//                 </select>
-//               </div>
-//             </div>
-//           </form>
-//           <button className="btn btn-secondary mt-3" onClick={() => setIsEditable(!isEditable)}>
-//             {isEditable ? "Simpan" : "Edit"}
-//           </button>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default InputProposal;
-
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-// import { jsPDF } from "jspdf"; // Import jsPDF
-// import DetailProposal from "../../services/admin/detailProposalServices";
-// import CategoryService from "../../services/admin/categoryServices";
-
-// const DetailProposalCabang = () => {
-//   const { id_proposal } = useParams();
-//   const [proposal, setProposal] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     if (!id_proposal) return;
-
-//     const fetchDetailProposal = async () => {
-//       try {
-//         setLoading(true);
-//         const data = await DetailProposal.getDetailProposal(id_proposal);
-//         setProposal(data.data);
-//       } catch (err) {
-//         setError(err.response?.data || err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchDetailProposal();
-//   }, [id_proposal]);
-
-//   if (loading) return <p>Loading...</p>;
-//   if (error) return <p>Error: {JSON.stringify(error)}</p>;
-//   if (!proposal) return <p>Data tidak ditemukan</p>;
-
-//   // 🔽 Fungsi untuk download PDF
-//   const handleDownloadPDF = () => {
-//     const doc = new jsPDF();
-//     doc.setFont("helvetica", "bold");
-//     doc.text("Detail Proposal", 20, 10);
-//     doc.setFont("helvetica", "normal");
-
-//     const content = [
-//       `Tanggal Proposal: ${proposal.tgl_proposal || "-"}`,
-//       `Proposal ID: ${proposal.kode_proposal || "-"}`,
-//       `Ruang Lingkup: ${proposal.ruang_lingkup || "-"}`,
-//       `Kategori: ${proposal.kategori || "-"}`,
-//       `Bisnis Unit: ${proposal.bisnis_unit || "-"}`,
-//       `Judul Proposal: ${proposal.title || "-"}`,
-//       `Deskripsi: ${proposal.description || "-"}`,
-//       `Status: ${proposal.status || "-"}`,
-//       `Pemohon: ${proposal.pemohon?.name || "-"}`,
-//       `Tanggal Pengajuan: ${proposal.tgl_pengajuan || "-"}`,
-//     ];
-
-//     let y = 20;
-//     content.forEach((line) => {
-//       doc.text(line, 20, y);
-//       y += 10;
-//     });
-
-//     doc.save(`Detail_Proposal_${id_proposal}.pdf`);
-//   };
-
-//   return (
-//     <div className="card">
-//       <div className="card-header text-start">Detail Proposal</div>
-//       <div className="card-body">
-//         <form>
-//           {/* Detail Data Proposal */}
-//           <div className="form-group row">
-//             <label className="col-12 col-sm-3 col-form-label text-left">Tanggal Proposal:</label>
-//             <div className="col-12 col-sm-8 col-lg-8">
-//               <input type="text" className="form-control" value={proposal.tgl_proposal || "-"} readOnly />
-//             </div>
-//           </div>
-
-//           <div className="form-group row">
-//             <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
-//             <div className="col-12 col-sm-8 col-lg-8">
-//               <input type="text" className="form-control" value={proposal.kode_proposal || "-"} readOnly />
-//             </div>
-//           </div>
-
-//           <div className="form-group row">
-//             <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
-//             <div className="col-12 col-sm-8 col-lg-8">
-//               <input type="text" className="form-control" value={proposal.title || "-"} readOnly />
-//             </div>
-//           </div>
-
-//           {/* Tombol Download PDF */}
-//           <div className="form-group row mt-3">
-//             <div className="col-12 text-center">
-//               <button type="button" className="btn btn-danger" onClick={handleDownloadPDF}>
-//                 Download PDF
-//               </button>
-//             </div>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default DetailProposalCabang;
-

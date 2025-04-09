@@ -4,10 +4,14 @@ import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
 import Modal from 'react-modal'; 
 import OtorisasiServices from "../../services/admin/otorisasiServices";
+import { useNavigate } from "react-router-dom";
+import allDataProposal from "../../services/admin/allDataProposal";
+
 
 Modal.setAppElement('#root');
 const DetailOtorisasiPusat = () => {
-    
+  const navigate = useNavigate();
+  const [proposalList, setProposalList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const printRef = useRef();
@@ -25,6 +29,33 @@ const DetailOtorisasiPusat = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [keterangan, setKeterangan] = useState('');
+
+  useEffect(() => {
+    const fetchDataProposal = async () => {
+      const response = await allDataProposal.getAllDataProposalPST();
+      if (response && response.success) {
+        const ids = response.data.data.map(item => item.id);
+        console.log("ID proposal PST:", ids);
+        setProposalList(ids);
+      }
+      setLoading(false);
+    };
+  
+    fetchDataProposal();
+  }, []);  
+
+  // fungsi navigasi proposal
+  const goToPrevNextProposal = (direction) => {
+    const currentIndex = proposalList.indexOf(Number(id_proposal));
+    if (currentIndex === -1) return;
+  
+    const newIndex = direction === 'prev' ? currentIndex - 1 : currentIndex + 1;
+  
+    if (newIndex >= 0 && newIndex < proposalList.length) {
+      const nextId = proposalList[newIndex];
+      navigate(`/admin/detailotorisasipusat/${nextId}`);
+    }
+  };
   
   useEffect(() => {
     const fetchCategories = async () => {
@@ -90,7 +121,7 @@ const handleSubmit = async (statusValue) => {
     const role = localStorage.getItem("role");
     console.log("Role Pengguna:", role);
   
-    const keterangan = "";
+    // const keterangan = "";
   
     if (role === "admin") {
       const idOtorisasiList = proposal.otoritas.map(item => item.id_otorisasi);
@@ -139,10 +170,28 @@ const handleSubmit = async (statusValue) => {
     <div className="d-flex justify-content-between mb-4">
         <button className="btn btn-primary">Info ARC</button>
         <div className="btn-group">
-        <button className="btn btn-warning">« Sebelumnya ID: 8358</button>
-        <button className="btn btn-danger">Tutup jendela ini</button>
-        <button className="btn btn-warning">Selanjutnya ID: 8312 »</button>
+          <button 
+            className="btn btn-warning" 
+            onClick={() => goToPrevNextProposal('prev')}
+            disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
+          >
+            « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
+          </button>
+          <button 
+            className="btn btn-danger" 
+            onClick={() => navigate('/admin/detailotorisasipusat')}
+          >
+            Tutup jendela ini
+          </button>
+          <button 
+            className="btn btn-warning" 
+            onClick={() => goToPrevNextProposal('next')}
+            disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
+          >
+            Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
+          </button>
         </div>
+
     </div>
     <h6 className="mb-1">Penanggung Jawab Pelanggan</h6>
     <table className="table table-bordered table-sm mb-4">
@@ -369,42 +418,6 @@ const handleSubmit = async (statusValue) => {
             </div>
         </div>
     </div>
-
-    {/* G. LAMPIRAN */}
-    {/* <div className="card mt-3">
-        <div className="card-header text-start">G. LAMPIRAN</div>
-        <div className="card-body">
-            {proposal.images && proposal.images.length > 0 ? (
-            <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
-                {proposal.images.map((image) => {
-                const fileName = image.link.split("/").pop();
-                return (
-                    <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
-                    <a href={image.link} target="_blank" rel="noopener noreferrer">
-                        <img
-                        src={image.link}
-                        alt={fileName}
-                        style={{
-                            width: '100%',
-                            height: '150px',
-                            objectFit: 'contain',
-                            border: '1px solid #ccc',
-                            borderRadius: '8px',
-                            padding: '5px',
-                            backgroundColor: '#f9f9f9'
-                        }}
-                        />
-                    </a>
-                    </div>
-                );
-                })}
-            </div>
-            ) : (
-            <p>Tidak ada lampiran.</p>
-            )}
-        </div>
-        </div> */}
-
       <div ref={printRef}>
       <div className="card">
             <div className="card-header text-start">Detail Proposal</div>

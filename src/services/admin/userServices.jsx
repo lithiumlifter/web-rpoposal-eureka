@@ -6,7 +6,7 @@ const userServices = {
     getUser: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-user?page=1&limit=10&username=&name=&bisnis_unit=`, {
+            const response = await axios.get(`${BASE_URL}/master/data-user?page=&limit=10&username=&name=&bisnis_unit=`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

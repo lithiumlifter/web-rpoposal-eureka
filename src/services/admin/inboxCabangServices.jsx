@@ -6,7 +6,7 @@ const inboxCabangServices = {
     getInboxCabang: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=1&limit=10&keyword=&status=Open`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=Open`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

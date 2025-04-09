@@ -6,7 +6,7 @@ const AnggaranServices = {
     getAnggaran: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-anggaran?page=1&limit=10&keyword=`, {
+            const response = await axios.get(`${BASE_URL}/master/data-anggaran?page=&limit=10&keyword=`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

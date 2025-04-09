@@ -6,7 +6,7 @@ const AllReportServices = {
     getReportKPI: async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${BASE_URL}/master/data-report-kpi?page=1&limit=10&keyword=&type=transdate&fromDate=2025-01-31&toDate=2025-03-31&level=&status=`, {
+        const response = await axios.get(`${BASE_URL}/master/data-report-kpi?page=&limit=10&keyword=&type=transdate&fromDate=2025-01-31&toDate=2025-03-31&level=&status=`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -38,7 +38,7 @@ const AllReportServices = {
       getReportCabang: async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get(`${BASE_URL}/master/data-report-cabang?page=1&limit=10&keyword=&type=transdate&fromDate=2025-01-31&toDate=2025-03-31&bisnis_unit=&ruang_lingkup=&status=`, {
+          const response = await axios.get(`${BASE_URL}/master/data-report-cabang?page=&limit=10&keyword=&type=transdate&fromDate=2025-01-31&toDate=2025-03-31&bisnis_unit=&ruang_lingkup=&status=`, {
             headers: {
               Authorization: `Bearer ${token}`
             }

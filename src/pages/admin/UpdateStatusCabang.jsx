@@ -469,7 +469,7 @@ const UpdateStatusCabang = () => {
 
     const handleConfirm = async () => {
         try {
-            await updateStatusCabangServices.approveProposalCabang(selectedItem?.id);
+            await updateStatusCabangServices.closeProposalCabang(selectedItem?.id);
             alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-approve.`);
             setDataCabang(prev => prev.filter(item => item.id !== selectedItem?.id));
         } catch (error) {
@@ -506,48 +506,142 @@ const UpdateStatusCabang = () => {
     );
 
     const columns = [
-        { name: "RL", selector: row => row.ruang_lingkup, sortable: true },
-        { name: "REG 1", selector: row => row.reg || "-", sortable: true },
-        { name: "REG 2", selector: row => row.reg_branch || "-", sortable: true },
-        { name: "ID", selector: row => row.kode_proposal, sortable: true },
-        { name: "BU", selector: row => row.bisnis_unit, sortable: true },
-        { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true },
-        { name: "TITLE", selector: row => row.title, sortable: true },
-        { name: "TYPE", selector: row => row.type, sortable: true },
         {
-                        name: "EDIT/VIEW",
-                        cell: row => (
-                            <div className="flex space-x-2">
-                                {/* <button className="btn btn-primary">
-                                    <i className="fas fa-edit" />
-                                </button> */}
-                                <button className="btn btn-warning" onClick={() => {
-                                    console.log("ID yang dikirim ke detail:", row.id);
-                                    navigate(`/admin/updatestatuscabang/${row.id}`);
-                                }}>
-                                    <i className="fas fa-edit" />
-                                </button>
-                            </div>
-                        )
+          name: "RL",
+          selector: row => row.ruang_lingkup,
+          sortable: true,
+          wrap: true,
+          width: "60px",
+          style: {
+            whiteSpace: "normal",
+            overflow: "visible",
+            textOverflow: "clip",
+            fontSize: "12px",
+            padding: "4px",
+          }
         },
         {
-            name: "CANCEL",
-            cell: row => (
-                <button className="btn btn-danger" onClick={() => handleCloseModal(row)}>
-                    <i className="fas fa-times" />
-                </button>
-            )
+          name: "REG 1",
+          selector: row => row.reg || "-",
+          sortable: true,
+          wrap: true,
+          width: "70px",
+          style: {
+            whiteSpace: "normal",
+            overflow: "visible",
+            textOverflow: "clip",
+            fontSize: "12px",
+            padding: "4px",
+          }
         },
         {
-            name: "CLOSE",
-            cell: row => (
-                <button className="btn btn-success" onClick={() => handleOpenModal(row)}>
-                    {/* <i className="fas fa-check" /> */}
-                    Close
-                </button>
-            )
+          name: "REG 2",
+          selector: row => row.reg_branch || "-",
+          sortable: true,
+          wrap: true,
+          width: "70px",
+          style: {
+            whiteSpace: "normal",
+            overflow: "visible",
+            textOverflow: "clip",
+            fontSize: "12px",
+            padding: "4px",
+          }
         },
-    ];
+        {
+          name: "ID",
+          selector: row => row.kode_proposal,
+          sortable: true,
+          style: {
+            fontSize: "12px",
+            padding: "4px",
+          }
+        },
+        {
+          name: "BU",
+          selector: row => row.bisnis_unit,
+          sortable: true,
+          wrap: true,
+          width: "50px",
+          style: {
+            whiteSpace: "normal",
+            fontSize: "12px",
+            padding: "4px",
+          }
+        },
+        {
+          name: "DATE",
+          selector: row => row.tgl_pengajuan,
+          sortable: true,
+          wrap: true,
+          width: "80px",
+          style: {
+            whiteSpace: "normal",
+            fontSize: "12px",
+            padding: "4px",
+          }
+        },
+        {
+          name: "TITLE",
+          selector: row => row.title,
+          sortable: true,
+          style: {
+            fontSize: "12px",
+            padding: "4px",
+          }
+        },
+        {
+          name: "TYPE",
+          selector: row => row.type,
+          sortable: true,
+          wrap: true,
+          width: "100px",
+          style: {
+            whiteSpace: "normal",
+            fontSize: "12px",
+            padding: "4px",
+          }
+        },
+        {
+          name: "EDIT / VIEW",
+          cell: row => (
+            <button
+              className="btn btn-warning btn-sm"
+              onClick={() => navigate(`/admin/updatestatuscabang/${row.id}`)}
+            >
+              <i className="fas fa-edit" />
+            </button>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+          width: "90px"
+        },
+        {
+          name: "CANCEL",
+          cell: row => (
+            <button className="btn btn-danger btn-sm" onClick={() => handleCloseModal(row)}>
+              <i className="fas fa-times" />
+            </button>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+          width: "80px"
+        },
+        {
+          name: "To PST",
+          cell: row => (
+            <button className="btn btn-success btn-sm" onClick={() => handleOpenModal(row)}>
+              To PST
+            </button>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+          width: "80px"
+        },
+      ];      
 
     return (
         <div className="card">
@@ -589,7 +683,7 @@ const UpdateStatusCabang = () => {
                 onConfirm={handleConfirm}
                 title="Konfirmasi Aksi"
                 message={`Apakah Anda yakin ingin mengonfirmasi item dengan ID ${selectedItem?.id}?`}
-                confirmText="Ya, Cancel"
+                confirmText="Ya, Kirim"
                 cancelText="Batal"
                 theme="success"
             />

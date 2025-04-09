@@ -103,7 +103,7 @@ const UpdateStatusPst = () => {
 
     const handleConfirm = async () => {
         try {
-            await updateStatusPusatServices.approveProposalPusat(selectedItem?.id);
+            await updateStatusPusatServices.closeProposalPusat(selectedItem?.id);
             alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-approve.`);
             setDataPusat(prev => prev.filter(item => item.id !== selectedItem?.id));
         } catch (error) {

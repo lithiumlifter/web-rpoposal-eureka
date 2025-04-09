@@ -6,7 +6,7 @@ const updateStatusCabangServices = {
     getUpdateStatusCabangServices: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=1&limit=10&keyword=&status=RecievedBranch`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedBranch`, {
                 headers: {  
                     Authorization: `Bearer ${token}`
                 }

@@ -6,7 +6,7 @@ const updateStatusPusatServices = {
     getUpdateStatusPusatServices: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=1&limit=10&keyword=&status=RecievedPusat`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat`, {
                 headers: {  
                     Authorization: `Bearer ${token}`
                 }

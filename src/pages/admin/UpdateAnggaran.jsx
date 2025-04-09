@@ -158,30 +158,59 @@ const UpdateAnggaran = () => {
 
     const columns = [
         {
-            name: "VIEW",
-            cell: (row) => {
-              return (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    console.log("ID yang dikirim ke detail:", row.id);
-                    navigate(`/admin/updateanggaran/${row.id}`);
-                  }}
-                >
-                  <i className="fas fa-edit" />
-                </button>
-              );
-            },
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
+          name: "VIEW",
+          cell: (row) => (
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => {
+                console.log("ID yang dikirim ke detail:", row.id);
+                navigate(`/admin/updateanggaran/${row.id}`);
+              }}
+            >
+              <i className="fas fa-edit" />
+            </button>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+          width: "70px", // Lebar kecil
         },
-        { name: "ID", selector: row => row.id, sortable: true },
-        { name: "BU", selector: row => row.bisnis_unit, sortable: true },
-        { name: "PRO DATE", selector: row => row.tgl_pengajuan, sortable: true },
-        { name: "TITLE", selector: row => row.title, sortable: true },
-        { name: "TYPE", selector: row => row.type, sortable: true },
-    ];
+        {
+          name: "ID",
+          selector: row => row.id,
+          sortable: true,
+          width: "100px",
+        },
+        {
+          name: "BU",
+          selector: row => row.bisnis_unit,
+          sortable: true,
+          width: "80px",
+        },
+        {
+          name: "PRO DATE",
+          selector: row => row.tgl_pengajuan,
+          sortable: true,
+          width: "120px",
+        },
+        {
+          name: "TITLE",
+          selector: row => row.title,
+          sortable: true,
+          grow: 3, // Biarkan TITLE yang membesar
+          wrap: true, // Bungkus teks jika panjang
+          style: {
+            whiteSpace: "normal",
+          },
+        },
+        {
+          name: "TYPE",
+          selector: row => row.type,
+          sortable: true,
+          width: "120px",
+        },
+      ];
+      
 
     return (
         <div className="card">

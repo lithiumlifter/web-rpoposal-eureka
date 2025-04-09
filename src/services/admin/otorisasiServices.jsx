@@ -7,7 +7,7 @@ const OtorisasiServices = {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await axios.get(`${BASE_URL}/master/data-otorisasi?page=1&limit=10&keyword=`, {
+            const response = await axios.get(`${BASE_URL}/master/data-otorisasi?page=&limit=10&keyword=`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",

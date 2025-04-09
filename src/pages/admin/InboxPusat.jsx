@@ -207,53 +207,64 @@ const InboxPusat = () => {
     );
 
     const columns = [
-        { name: "ID", selector: row => row.id, sortable: true },
-        { name: "BU", selector: row => row.bisnis_unit, sortable: true },
-        { name: "PRO DATE", selector: row => row.tgl_pengajuan, sortable: true },
-        { name: "TITLE", selector: row => row.title, sortable: true },
-        { name: "TYPE", selector: row => row.type, sortable: true },
+        { name: "ID", selector: row => row.id, sortable: true, maxWidth: "80px" },
+        { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "80px" },
+        { name: "PRO DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },
+        {
+            name: "TITLE",
+            selector: row => row.title,
+            sortable: true,
+            wrap: true, // biar teks panjang bisa turun ke bawah
+            grow: 3,    // proporsi lebih besar biar lebar
+            style: {
+                whiteSpace: 'normal' // hilangkan ellipsis (...)
+            }
+        },
+        { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },
         {
             name: "PROCESS",
             cell: row => (
-                <button className="btn btn-success" onClick={() => handleOpenModal(row)} disabled={processingId === row.id}>
+                <button className="btn btn-success btn-sm" onClick={() => handleOpenModal(row)} disabled={processingId === row.id}>
                     {processingId === row.id ? <i className="fas fa-spinner fa-spin" /> : <i className="fas fa-arrow-right" />}
                 </button>
             ),
             ignoreRowClick: true,
             allowOverflow: true,
-            button: true
+            button: true,
+            maxWidth: "90px"
         },
         {
             name: "DELETE",
             cell: row => (
-                <button className="btn btn-danger" onClick={() => handleOpenDeleteModal(row)} disabled={processingId === row.id}>
+                <button className="btn btn-danger btn-sm" onClick={() => handleOpenDeleteModal(row)} disabled={processingId === row.id}>
                     {processingId === row.id ? <i className="fas fa-spinner fa-spin" /> : <i className="fas fa-trash-alt" />}
                 </button>
             ),
             ignoreRowClick: true,
             allowOverflow: true,
-            button: true
+            button: true,
+            maxWidth: "90px"
         },
         {
             name: "VIEW",
-            cell: (row) => {
-              return (
+            cell: (row) => (
                 <button
-                  className="btn btn-info"
-                  onClick={() => {
-                    console.log("ID yang dikirim ke detail:", row.id);
-                    navigate(`/admin/inboxcabang/${row.id}`);
-                  }}
+                    className="btn btn-info btn-sm"
+                    onClick={() => {
+                        console.log("ID yang dikirim ke detail:", row.id);
+                        navigate(`/admin/inboxcabang/${row.id}`);
+                    }}
                 >
-                  <i className="fas fa-eye" />
+                    <i className="fas fa-eye" />
                 </button>
-              );
-            },
+            ),
             ignoreRowClick: true,
             allowOverflow: true,
             button: true,
-          },
+            maxWidth: "90px"
+        },
     ];
+    
 
     return (
         <div className="card">

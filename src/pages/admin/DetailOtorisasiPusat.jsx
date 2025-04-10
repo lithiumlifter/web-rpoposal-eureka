@@ -179,7 +179,7 @@ const handleSubmit = async (statusValue) => {
           </button>
           <button 
             className="btn btn-danger" 
-            onClick={() => navigate('/admin/detailotorisasipusat')}
+            onClick={() => navigate('/admin/otorisasipusat')}
           >
             Tutup jendela ini
           </button>
@@ -625,13 +625,15 @@ const handleSubmit = async (statusValue) => {
       <div className="card mt-3">
         <div className="card-header text-start">F. CATATAN</div>
         <div className="card-body">
-          <textarea
-            className="form-control"
-            rows="4"
-            placeholder="Masukkan catatan..."
-            value={formData.description}
-            readOnly
-          ></textarea>
+              <div
+                className="p-3 ck-content"
+                style={{
+                  borderRadius: '6px',
+                  minHeight: '150px',
+                  textAlign: 'left'
+                }}
+                dangerouslySetInnerHTML={{ __html: formData.description }}
+              />
         </div>
       </div>
 

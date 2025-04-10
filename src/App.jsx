@@ -37,12 +37,15 @@ import DetailProposalReport from "./pages/admin/DetailProposalReport";
 import DetailLevelOtorisasi from "./pages/admin/DetailLevelOtorisasi";
 import DetailRegistrasiUser from "./pages/admin/detailRegistrasiUser";
 import DetailOtorisasiPusat from "./pages/admin/DetailOtorisasiPusat";
+import PrintView from "./pages/print/PrintView";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        {/* Route printview dipindah keluar dari AdminPanel */}
+        <Route path="/printview" element={<PrintView />} />
         {/* AdminPanel sebagai layout */}
         <Route path="/admin" element={<AdminPanel />}>
           {/* Menampilkan Home sebagai halaman default */}
@@ -76,8 +79,7 @@ function App() {
           <Route path="detailotorisasi/:id_otorisasi" element={<DetailLevelOtorisasi />} />
           <Route path="detailregistrasiuser/:id_user" element={<DetailRegistrasiUser />} />
           <Route path="detailotorisasipusat/:id_proposal" element={<DetailOtorisasiPusat />} />
-
-
+          {/* <Route path="printview" element={<PrintView />} /> */}
 
           <Route path="registrasiuser" element={<RegistrasiUser />} />
           <Route path="setupuser" element={<SetupUser />} />

@@ -1,0 +1,79 @@
+@media print {
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  
+    #print-section {
+      width: 100%;
+      padding: 2cm;
+      font-family: 'Arial', sans-serif;
+      color: black;
+    }
+  
+    .proposal-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  
+    .proposal-info, .proposal-body {
+      margin-bottom: 1.2rem;
+    }
+  
+    .proposal-info table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+  
+    .proposal-info td {
+      padding: 4px 8px;
+    }
+  
+    .proposal-body p {
+      margin: 0.5rem 0;
+      font-size: 14px;
+    }
+  
+    .signature {
+      margin-top: 3rem;
+    }
+  
+    .lampiran-scroll {
+      display: block !important;
+      overflow: visible !important;
+      margin-top: 2rem;
+    }
+  
+    .lampiran-scroll img {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+      page-break-inside: avoid;
+    }
+
+    .print-container .ck-content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+  
+    .print-container .ck-content table th,
+    .print-container .ck-content table td {
+      border: 1px solid black !important;
+      padding: 6px 8px;
+      text-align: left;
+    }
+  
+    .print-container .ck-content tr:nth-child(even) {
+      background-color: #e6f4ea !important;
+    }
+  
+    .print-container .ck-content th {
+      background-color: #b2d8c4 !important;
+    }
+  }
+  

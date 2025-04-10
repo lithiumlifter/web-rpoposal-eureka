@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
+import EditorCatatan from "../../components/EditorCatatan";
 import CategoryService from "../../services/admin/categoryServices";
 import "../../assets/styles/UploadFile.css";
 import Select from "react-select";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import InputProposalServices from "../../services/admin/inputProposalServices";
-import "../../assets/styles/LoadingOverlay.css"
+import "../../assets/styles/LoadingOverlay.css";
 
 const InputProposal = () => {
   const [tanggal_pengajuan, setTanggalPengajuan] = useState(new Date().toISOString().split("T")[0]);
@@ -21,8 +22,6 @@ const InputProposal = () => {
   const [selectedKategori, setSelectedKategori] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: '', message: '' });
-
-
 
   const [categories, setCategories] = useState({
     bisnisUnit: [],
@@ -81,6 +80,7 @@ const InputProposal = () => {
 
   // catatan
   const [catatan, setCatatan] = useState("");
+
   
   // fetch category
   const optionBisnisunit = categories.bisnisUnit.map((item) => ({
@@ -210,7 +210,6 @@ const InputProposal = () => {
                     value={tanggal_pengajuan} 
                     onChange={(e) => setTanggalPengajuan(e.target.value)}
                 />
-
                 </div>
               </div>
 
@@ -411,17 +410,23 @@ const InputProposal = () => {
                   </div>
                 </div>
 
-                <div className="card mt-3">
+                <EditorCatatan 
+                        value={catatan} 
+                        onChange={setCatatan} 
+                        // readOnly={!isEditing}
+                      />
+                {/* <div className="card mt-3">
                   <div className="card-header text-start">F. CATATAN</div>
                   <div className="card-body">
                     <div className="form-group row">
                       <label className="col-12 col-sm-3 col-form-label text-left">Masukkan Catatan:</label>
                       <div className="col-12 col-sm-8 col-lg-8">
-                        <ReactQuill value={catatan} onChange={setCatatan} />
+                      
+
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 </>
           )}
 

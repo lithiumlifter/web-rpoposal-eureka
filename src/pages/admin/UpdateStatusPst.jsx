@@ -269,8 +269,8 @@ const UpdateStatusPst = () => {
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleConfirm}
                 title="Konfirmasi Aksi"
-                message={`Apakah Anda yakin ingin mengonfirmasi item dengan ID ${selectedItem?.id}?`}
-                confirmText="Ya, Konfirmasi"
+                message={`Apakah Anda yakin ingin close item dengan ID ${selectedItem?.id}?`}
+                confirmText="Ya, Close"
                 cancelText="Batal"
                 theme="success"
             />

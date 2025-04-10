@@ -2,20 +2,23 @@ import React, { useEffect, useState,  useRef } from "react";
 import { useParams } from "react-router-dom";
 import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
+import { useNavigate } from "react-router-dom";
+
 
 const DetailProposalReport = () => {
   
-  const printRef = useRef();
+const printRef = useRef();
 
-  const handlePrint = () => {
-    const originalContents = document.body.innerHTML;
-    const printContents = printRef.current.innerHTML;
+const navigate = useNavigate();
 
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-    window.location.reload(); // untuk reload kembali page ke state normal
-  }
+const handlePrint = () => {
+  navigate('/printview', {
+    state: {
+      proposal,
+      formData
+    }
+  });
+};
 
   const [categories, setCategories] = useState({
     bisnisUnit: [],
@@ -51,7 +54,7 @@ const DetailProposalReport = () => {
         setLoading(true);
         const data = await DetailProposal.getDetailProposal(id_proposal);
         setProposal(data.data);
-        setFormData(data.data); // Set nilai awal form
+        setFormData(data.data);
       } catch (err) {
         setError(err.response?.data || err.message);
       } finally {
@@ -78,7 +81,7 @@ const DetailProposalReport = () => {
       // Jika sedang dalam mode edit dan klik Simpan, update data ke state utama
       setProposal(formData);
     }
-    setIsEditing(!isEditing); // Toggle mode edit
+    setIsEditing(!isEditing);
   };
 
   return (
@@ -88,7 +91,7 @@ const DetailProposalReport = () => {
         Print
       </button>
     </div>
-      <div ref={printRef}>
+      <div ref={printRef} id="print-section">
       <div className="card">
             <div className="card-header text-start">Detail Proposal</div>
             <div className="card-body">
@@ -310,13 +313,15 @@ const DetailProposalReport = () => {
       <div className="card mt-3">
         <div className="card-header text-start">F. CATATAN</div>
         <div className="card-body">
-          <textarea
-            className="form-control"
-            rows="4"
-            placeholder="Masukkan catatan..."
-            value={formData.description}
-            readOnly
-          ></textarea>
+        <div
+                className="p-3 ck-content"
+                style={{
+                  borderRadius: '6px',
+                  minHeight: '150px',
+                  textAlign: 'left'
+                }}
+                dangerouslySetInnerHTML={{ __html: formData.description }}
+              />
         </div>
       </div>
 
@@ -325,7 +330,7 @@ const DetailProposalReport = () => {
         <div className="card-header text-start">G. LAMPIRAN</div>
         <div className="card-body">
             {proposal.images && proposal.images.length > 0 ? (
-            <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
+            <div className="lampiran-scroll" style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
                 {proposal.images.map((image) => {
                 const fileName = image.link.split("/").pop();
                 return (

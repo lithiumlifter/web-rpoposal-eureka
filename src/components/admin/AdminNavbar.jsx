@@ -18,7 +18,15 @@ const Navbar = ({toggleSidebar}) => {
     return(
        <>
          <div className="dashboard-header">
-            <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: "#14489e" }}>
+            <nav className="navbar navbar-expand-lg fixed-top"
+                style={{ 
+                backgroundImage: 'url("/images/banner-proposal.jpg")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                height: "50px"
+            }}
+             >
                 <button 
                     className="btn ml-3"
                     onClick={toggleSidebar}
@@ -26,23 +34,90 @@ const Navbar = ({toggleSidebar}) => {
                 >
                     <i className="fas fa-bars text-white" />
                 </button>
+                {/* <a 
+                    className="navbar-brand" 
+                    href="#" 
+                    style={{ 
+                        // backgroundColor: "white", 
+                        padding: "8px 25px",           
+                        marginLeft: "24px",
+                        marginTop: "8px",           
+                        marginBottom: "8px",     
+                        borderRadius: "10px",   
+                        display: "flex", 
+                        alignItems: "center",
+                        gap: "15px"
+                    }}
+                    >
+                    <img 
+                        src="../../../public/images/logo-eurekalogistics.png" 
+                        alt="Eureka Logistics" 
+                        style={{ 
+                        width: 100, 
+                        height: "auto", 
+                        borderRadius: "12px",
+                        }} 
+                    />
+                    <img 
+                        src="../../../public/images/karakter.png" 
+                        alt="Karakter" 
+                        style={{ 
+                        width: 50, 
+                        height: "auto", 
+                        borderRadius: "50%", 
+                        objectFit: "cover" 
+                        }} 
+                    />
+                </a> */}
+
                 <a 
                     className="navbar-brand" 
                     href="#" 
                     style={{ 
-                        backgroundColor: "white", 
-                        padding: "10px 25px", 
+                        //backgroundColor: "white", 
+                        padding: "8px 25px",           
                         marginLeft: "24px",
-                        height: "100%", 
+                        marginTop: "8px",           
+                        marginBottom: "8px",     
+                        borderRadius: "10px",   
                         display: "flex", 
-                        alignItems: "center"
+                        alignItems: "center",
+                        gap: "15px"
                     }}
-                >
+                    >
+                    {/* Logo Eureka */}
                     <img 
                         src="../../../public/images/logo-eurekalogistics.png" 
                         alt="Eureka Logistics" 
-                        style={{ width: 100, height: "auto" }} 
+                        style={{ 
+                        width: 100, 
+                        height: "auto", 
+                        borderRadius: "12px",
+                        }} 
                     />
+                    
+                    {/* Logo Karakter */}
+                    <img 
+                        src="../../../public/images/karakter.png" 
+                        alt="Karakter" 
+                        style={{ 
+                        width: 40, 
+                        height: 40, 
+                        borderRadius: "50%", 
+                        objectFit: "cover" 
+                        }} 
+                    />
+
+                    {/* Teks di sebelah logo */}
+                    <span style={{ 
+                        marginLeft: "180px",
+                        fontWeight: "bold", 
+                        fontSize: "16px", 
+                        whiteSpace: "nowrap", 
+                        color: "white" 
+                    }}>
+                        Innovation & Collaboration to Reach Solid Victory!
+                    </span>
                 </a>
 
                 <button 
@@ -65,12 +140,7 @@ const Navbar = ({toggleSidebar}) => {
                             </a>
                             <div className="dropdown-menu dropdown-menu-right nav-user-dropdown" 
                                 aria-labelledby="navbarDropdownMenuLink2" 
-                                style={{ left: '-20px' }}>
-                                {/* <div className="nav-user-info">
-                                    <h5 className="mb-0 text-white nav-user-name">
-                                        John Abraham
-                                    </h5>
-                                </div> */}
+                                style={{ left: '-50%' }}>
                                 <Link className="dropdown-item" to="/admin/ubahpassword">
                                     <i className="fas fa-cog mr-2" />Ubah Password
                                 </Link>

@@ -27,7 +27,6 @@ import UpdateStatusPst from "./pages/admin/UpdateStatusPst";
 import OtorisasiPusat from "./pages/admin/OtorisasiPusat";
 import OtorisasiBandingPusat from "./pages/admin/OtorisasiBandingPusat";
 import ProposalReport from "./pages/admin/ProposalReport";
-import ReportBanding from "./pages/admin/ReportBanding";
 import OtorisationNotCompleted from "./pages/admin/OtorisationNotCompleted";
 import OtorisasiPending from "./pages/admin/OtorisasiPending";
 import ReportKpi from "./pages/admin/ReportKpi";
@@ -38,6 +37,8 @@ import DetailLevelOtorisasi from "./pages/admin/DetailLevelOtorisasi";
 import DetailRegistrasiUser from "./pages/admin/detailRegistrasiUser";
 import DetailOtorisasiPusat from "./pages/admin/DetailOtorisasiPusat";
 import PrintView from "./pages/print/PrintView";
+import ReportToCabang from "./pages/admin/ReportToCabang";
+import PrintReportCabang from "./pages/print/PrintReportToCabangView";
 
 function App() {
   return (
@@ -46,6 +47,8 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         {/* Route printview dipindah keluar dari AdminPanel */}
         <Route path="/printview" element={<PrintView />} />
+        <Route path="/print-report-cabang" element={<PrintReportCabang />} />
+
         {/* AdminPanel sebagai layout */}
         <Route path="/admin" element={<AdminPanel />}>
           {/* Menampilkan Home sebagai halaman default */}
@@ -66,7 +69,7 @@ function App() {
           <Route path="otorisasipusat" element={<OtorisasiPusat />} />
           <Route path="otorisasibandingpst" element={<OtorisasiBandingPusat />} />
           <Route path="proposalreport" element={<ProposalReport />} />
-          <Route path="reportbanding" element={<ReportBanding />} />
+          <Route path="reporttocabang" element={<ReportToCabang />} />
           <Route path="otorisationnotcompleted" element={<OtorisationNotCompleted />} />
           <Route path="otorisationpending" element={<OtorisasiPending />} />
           <Route path="reportkpi" element={<ReportKpi />} />

@@ -205,6 +205,7 @@ const pageTitles = {
   "/admin/otorisasibandingpst": "Otorisasi Banding Pusat",
   "/admin/proposalreport": "Proposal Report",
   "/admin/reportbanding": "Report Banding",
+  "/admin/reporttocabang": "Rekap Persetujuan Pusat",
   "/admin/otorisationnotcompleted": "Otorisasi Not Completed",
   "/admin/otorisationpending": "Otorisasi Pending",
   "/admin/reportkpi": "Report KPI",

@@ -150,6 +150,11 @@ const Sidebar = ({ isOpen }) => {
               </Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link" to="/admin/reporttocabang">
+                <i className="fas fa-file"></i> <span  className="menu-text">Report To Cabang</span>
+              </Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link" to="/admin/proposalreport">
                 <i className="fas fa-file"></i> <span  className="menu-text">Proposal Report</span>
               </Link>

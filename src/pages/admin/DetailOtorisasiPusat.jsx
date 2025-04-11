@@ -126,7 +126,7 @@ const handleSubmit = async (statusValue) => {
     if (role === "admin") {
       const idOtorisasiList = proposal.otoritas.map(item => item.id_otorisasi);
       console.log("ID Otorisasi untuk Admin:", idOtorisasiList);
-  
+      
       for (const idOtorisasi of idOtorisasiList) {
         const bodyRequest = {
           id_proposal: proposal.id_proposal,

@@ -178,8 +178,29 @@ const PrintView = () => {
     user-select: text;
     }
 
+  .print-container .ck-content table,
+``.print-container .ck-content table * {
+  border: 1px solid black !important;
+  border-collapse: collapse !important;
+}
+
+.print-container .ck-content td,
+.print-container .ck-content th {
+  padding: 6px 8px !important;
+  text-align: left !important;
+}
+
+.print-container .ck-content th {
+  background-color: #b2d8c4 !important;
+}
+
+.print-container .ck-content tr:nth-child(even) {
+  background-color: #e6f4ea !important;
+}
+
+
   }
-`}</style>
+      `}</style>
 
 
       {/* === Mulai tampilan cetak mirip screenshot pertama === */}

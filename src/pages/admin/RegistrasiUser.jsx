@@ -40,7 +40,7 @@ const RegistrasiUser = () => {
                 <button
                     className="btn btn-info"
                     type="button"
-                    onClick={() => navigate(`/detailregistrasiuser/${row.id_user}`)}
+                    onClick={() => navigate(`/admin/detailregistrasiuser/${row.id_user}`)}
                 >
                     <i className="fas fa-edit" />
                 </button>

@@ -38,7 +38,7 @@ const updateStatusCabangServices = {
     cancelProposalCabang: async (id_proposal) => {
         try {
             const token = localStorage.getItem('token')
-            const response = await axios.post(`${BASE_URL}/master/cancel-proposal?id_proposal=${id_proposal}`, {}, {
+            const response = await axios.post(`${BASE_URL}/master/update-status-cabang?id_proposal=${id_proposal}&status=Cancel`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

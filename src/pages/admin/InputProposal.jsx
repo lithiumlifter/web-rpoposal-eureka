@@ -22,6 +22,7 @@ const InputProposal = () => {
   const [selectedKategori, setSelectedKategori] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: '', message: '' });
+  const name = localStorage.getItem("name");
 
   const [categories, setCategories] = useState({
     bisnisUnit: [],
@@ -321,7 +322,7 @@ const InputProposal = () => {
                   Pemohon:
                 </label>
                 <div className="col-12 col-sm-8 col-lg-8">
-                  <input type="text" className="form-control" value="P1362" readOnly />
+                  <input type="text" className="form-control" value={name} readOnly />
                 </div>
               </div>
 

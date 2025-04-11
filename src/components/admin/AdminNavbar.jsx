@@ -7,6 +7,10 @@ import ConfirmationModal from "../ConfirmationModal";
 const Navbar = ({toggleSidebar}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
+
+    const name = localStorage.getItem("name");
+    console.log("Role Pengguna:", name);
+  
   
     // Fungsi untuk logout
     const handleLogout = () => {
@@ -135,8 +139,8 @@ const Navbar = ({toggleSidebar}) => {
                     <ul className="navbar-nav ml-auto navbar-right-top">
                         <li className="nav-item dropdown nav-user d-flex align-items-center">
                             <a className="nav-link nav-user-img d-flex align-items-center" href="#" id="navbarDropdownMenuLink2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="../../images/avatar-1.jpg" alt className="user-avatar-md rounded-circle" />
-                                <span className="ms-2">P1362</span>
+                                <img src="../../../public/images/user.png" alt className="user-avatar-md rounded-circle" />
+                                <span className="ms-2 text-white">{name}</span>
                             </a>
                             <div className="dropdown-menu dropdown-menu-right nav-user-dropdown" 
                                 aria-labelledby="navbarDropdownMenuLink2" 

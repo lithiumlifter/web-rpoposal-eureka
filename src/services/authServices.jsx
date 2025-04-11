@@ -9,11 +9,13 @@ export const login = async (username, password) => {
         password,
       });
 
-      const { token, role } = response.data.data;
+      const { token, role, name } = response.data.data;
 
     // Simpan ke localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      localStorage.setItem("name", name);
+
   
       console.log("Data dari API:", response.data);
       return response.data; 

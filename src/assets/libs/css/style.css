@@ -6974,7 +6974,8 @@ html, body {
     position: fixed;
     left: 0;
     top: 60px;
-    height: 100vh;
+    /* height: 100vh; */
+    height: calc(100vh - 60px); /* ganti ini */
     background: #343a40;
     transition: width 0.3s ease-in-out;
     overflow-y: auto; /* biar bisa discroll vertikal */
@@ -7044,12 +7045,6 @@ html, body {
     display: inline;
     opacity: 1;
 }
-/*  */
-.nav-left-sidebar {
-    width: 80px; /* Lebar sidebar awal */
-    transition: width 0.3s ease-in-out;
-    overflow: hidden;
-}
 
 .nav-left-sidebar.expanded {
     width: 250px; /* Lebar sidebar saat diperluas */
@@ -7113,6 +7108,26 @@ html, body {
 }
 }
 
+/* scroll */
+.nav-left-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.nav-left-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nav-left-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.nav-left-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+
 /* Medium Devices, Desktops */
 
 @media only screen and (max-width:992px) {
@@ -7127,7 +7142,6 @@ html, body {
     }
 
 }
-
 
 /* Small Devices, Tablets */
 

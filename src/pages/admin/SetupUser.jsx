@@ -1,12 +1,34 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import userServices from "../../services/admin/userServices";
+import CategoryService from "../../services/admin/categoryServices";
 
 const SetupUser = () => {
     const [userData, setUserData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchText, setSearchText] = useState("");
+    const [categories, setCategories] = useState([]);
 
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await CategoryService.getCategories();
+                if (data?.success && data?.data) {
+                    setCategories({
+                        level: data.data.roleUser,
+                        wilayah: data.data.dataWil,
+                    });
+                } else {
+                    console.warn("Kategori tidak ditemukan");
+                }
+            } catch (error) {
+                console.error("Failed to fetch categories", error);
+            }
+        };
+    
+        fetchCategories();
+    }, []);
+    
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -28,12 +50,59 @@ const SetupUser = () => {
         fetchUsers();
     }, []);
 
+    const saveUserChanges = async (user) => {
+        const existingUser = userData.find(u => u.id_user === user.id_user);
+        const updatedUser = {
+            id_user: String(user.id_user),
+            status: user.status,
+            lihatsemua: user.lihat_semua,
+            wilid: user.wilayah || "",
+            hakproposal: user.role || "",
+            password: existingUser?.password || "password"
+        };
+    
+        try {
+            const response = await userServices.updateUser(updatedUser);
+            if (response.success) {
+                console.log("User updated:", updatedUser);
+            } else {
+                console.warn("Update gagal:", response);
+            }
+        } catch (error) {
+            console.error("Gagal update user:", error);
+        }
+    };
+
     const handleSwitchChange = (index, field) => {
-        setUserData(prevData => {
-            return prevData.map((user, i) =>
-                i === index ? { ...user, [field]: user[field] === 1 ? 0 : 1 } : user
-            );
-        });
+        const updatedUser = {
+            ...userData[index],
+            [field]: userData[index][field] === 1 ? 0 : 1
+        };
+    
+        const updatedData = userData.map((user, i) =>
+            i === index ? updatedUser : user
+        );
+    
+        setUserData(updatedData);
+        saveUserChanges(updatedUser);
+    };
+    
+    const handleLevelChange = (row, levelId) => {
+        const updatedUser = { ...row, role: levelId };
+        const updatedData = userData.map(user =>
+            user.id_user === row.id_user ? updatedUser : user
+        );
+        setUserData(updatedData);
+        saveUserChanges(updatedUser);
+    };
+    
+    const handleWilayahChange = (row, wilayahId) => {
+        const updatedUser = { ...row, wilayah: wilayahId };
+        const updatedData = userData.map(user =>
+            user.id_user === row.id_user ? updatedUser : user
+        );
+        setUserData(updatedData);
+        saveUserChanges(updatedUser);
     };
 
     const filteredData = userData.filter(user =>
@@ -94,9 +163,13 @@ const SetupUser = () => {
                         {row.role || "Pilih"}
                     </button>
                     <ul className="dropdown-menu">
-                        <li><a className="dropdown-item">Menu 1</a></li>
-                        <li><a className="dropdown-item">Menu 2</a></li>
-                        <li><a className="dropdown-item">Menu 3</a></li>
+                        {categories.level && categories.level.map((level) => (
+                            <li key={level.value}>
+                                <a className="dropdown-item" onClick={() => handleLevelChange(row, level.value)}>
+                                    {level.name}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             ),
@@ -110,9 +183,13 @@ const SetupUser = () => {
                         {row.wilayah || "Pilih"}
                     </button>
                     <ul className="dropdown-menu">
-                        <li><a className="dropdown-item">Wilayah 1</a></li>
-                        <li><a className="dropdown-item">Wilayah 2</a></li>
-                        <li><a className="dropdown-item">Wilayah 3</a></li>
+                        {categories.wilayah && categories.wilayah.map((wilayah) => (
+                            <li key={wilayah.value}>
+                                <a className="dropdown-item" onClick={() => handleWilayahChange(row, wilayah.value)}>
+                                    {wilayah.name}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             ),

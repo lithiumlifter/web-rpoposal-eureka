@@ -4,8 +4,9 @@ import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
 import { useNavigate } from "react-router-dom";
 import allDataProposal from "../../services/admin/allDataProposal";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; 
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 const DetailProposalCabang = () => {
   
@@ -105,12 +106,34 @@ const DetailProposalCabang = () => {
     if (isEditing) {
       // Jika sedang dalam mode edit dan klik Simpan, update data ke state utama
       setProposal(formData);
+    } else {
+      // saat masuk mode edit, set nilai awal biaya lain-lain
+      setEditedBiayaLain(formData.biaya_lain ?? "");
     }
     setIsEditing(!isEditing); // Toggle mode edit
   };
+  
 
   const handleSubmitForm = async () => {
     try {
+      // Persiapan data otorisasi awal (dari proposal sebelumnya)
+    const initialOtorisasi = proposal.otoritas?.map((item) => {
+      const match = categories.dataOtorisasi.find((otor) =>
+        otor.name.startsWith(item.id_level + " :")
+      );
+      return match?.value ?? null;
+    }).filter(Boolean) || [];
+
+    // Cari yang ditambahkan (ada di addedOtorisasi tapi tidak di initial)
+    const newlyAdded = addedOtorisasi.filter(x => !initialOtorisasi.includes(x));
+
+    // Cari yang dihapus (ada di initial tapi tidak di addedOtorisasi)
+    const removed = initialOtorisasi.filter(x => !addedOtorisasi.includes(x));
+
+    // Tampilkan log perubahan (bisa juga dikirim ke backend kalau perlu)
+    console.log("Otorisasi ditambahkan:", newlyAdded);
+    console.log("Otorisasi dihapus:", removed);
+      setFormData({ ...formData, biaya_lain: editedBiayaLain });
       const payload = {
         id_proposal: proposal.id_proposal,
         bisnis_unit: formData.bisnis_unit,
@@ -177,7 +200,7 @@ const DetailProposalCabang = () => {
                       name="kode_proposal"
                       className="form-control"
                       value={formData.kode_proposal}
-                      readOnly={!isEditing}
+                      readOnly
                       onChange={handleChange}
                     />
                   </div>
@@ -315,27 +338,43 @@ const DetailProposalCabang = () => {
                         </button>
                       )}
                     </div>
-                    <ul className="list-group">
-                      {addedOtorisasi.map((otorisasi, index) => {
-                        const label = categories.dataOtorisasi.find((item) => String(item.value) === String(otorisasi))?.name || otorisasi;
+                    {/* LIST OTORITAS YG ADA */}
+                    <div className="list-group">
+                      {[...(proposal?.otoritas || []), ...addedOtorisasi].map((item, index) => {
+                        // Cek apakah item ini dari 'addedOtorisasi' (biasanya berupa string value)
+                        const isNew = typeof item === 'string' || typeof item === 'number';
+
+                        const label = isNew
+                          ? categories.dataOtorisasi.find((cat) => String(cat.value) === String(item))?.name || item
+                          : item.name || item.jabatan || 'Tanpa Nama';
+
                         return (
-                          <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                            {label}
+                          <div key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                            <div>{label}</div>
                             {isEditing && (
                               <button
                                 type="button"
                                 className="btn btn-danger btn-sm"
-                                onClick={() => setAddedOtorisasi(addedOtorisasi.filter((_, i) => i !== index))}
+                                onClick={() => {
+                                  if (isNew) {
+                                    // Hapus dari addedOtorisasi
+                                    setAddedOtorisasi(addedOtorisasi.filter((_, i) => i !== index - (proposal?.otoritas?.length || 0)));
+                                  } else {
+                                    // Hapus dari proposal.otoritas
+                                    const updated = [...proposal.otoritas];
+                                    updated.splice(index, 1);
+                                    setProposal({ ...proposal, otoritas: updated });
+                                  }
+                                }}
                               >
                                 Remove
                               </button>
                             )}
-                          </li>
+                          </div>
                         );
                       })}
-                    </ul>
+                    </div>
                   </>
-
                   </div>
                 </div>
             </div>
@@ -349,40 +388,49 @@ const DetailProposalCabang = () => {
                   Biaya lain-lain (Rp):
                 </label>
                 <div className="col-12 col-sm-6 col-lg-6">
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={
-                      isEditingBiayaLain
-                        ? editedBiayaLain ?? ""
-                        : formData.biaya_lain ?? ""
-                    }
-                    onChange={(e) => setEditedBiayaLain(e.target.value)}
-                    readOnly={!isEditing}
-                  />
+                <input
+  type="number"
+  name="biaya_lain"
+  className="form-control"
+  value={formData.biaya_lain ?? ""}
+  onChange={handleChange}
+  readOnly={!isEditing}
+/>
+
                 </div>
               </div>
             </div>
           </div>
 
-        <div className="card mt-3">
-          <div className="card-header text-start">F. CATATAN</div>
-          <div className="card-body">
-            <div className="form-group row">
-              <div className="col-12">
-              <div
-                className="p-3 ck-content"
-                style={{
-                  borderRadius: '6px',
-                  minHeight: '150px',
-                  textAlign: 'left'
-                }}
-                dangerouslySetInnerHTML={{ __html: formData.description }}
-              />
+          <div className="card mt-3">
+            <div className="card-header text-start">F. CATATAN</div>
+            <div className="card-body">
+              <div className="form-group row">
+                <div className="col-12">
+                  {isEditing ? (
+                    <CKEditor
+                      editor={ClassicEditor}
+                      data={catatan}
+                      onChange={(event, editor) => {
+                        const data = editor.getData();
+                        setCatatan(data);
+                      }}
+                    />
+                  ) : (
+                    <div
+                      className="p-3 ck-content"
+                      style={{
+                        borderRadius: '6px',
+                        minHeight: '150px',
+                        textAlign: 'left'
+                      }}
+                      dangerouslySetInnerHTML={{ __html: formData.description }}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
         {/* Tombol Edit / Simpan */}
         <div className="form-group row mt-3">

@@ -33,6 +33,22 @@ const userServices = {
             throw error;
         }
     },
+    updateUser: async (userData) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.post(`${BASE_URL}/master/update-user`, userData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('Update user response:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error updating user:', error.response?.data || error.message);
+            throw error;
+        }
+    }
 };
 
 export default userServices;

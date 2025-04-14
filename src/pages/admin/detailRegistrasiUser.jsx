@@ -108,11 +108,35 @@ const DetailRegistrasiUser = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Submit data:", formData);
-        // tambahkan logic simpan data di sini
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const bodyRequest = {
+        id_user: formData.idLevel,
+        emplid: formData.emplid,
+        name: formData.name,
+        bisnis_unit: formData.bisnis_unit,
+        wilid: formData.wilid,
+        phone: formData.phone,
+        email: formData.email,
+        hakproposal: formData.hakproposal,
+        username: formData.user,
+        password: formData.password,
     };
+
+    console.log("ISI:", formData);
+
+    try {
+        const response = await userServices.updateUser(bodyRequest);
+        console.log("Berhasil update:", response.data);
+        alert("Data berhasil disimpan");
+        setIsEditMode(false);
+    } catch (err) {
+        console.error("Gagal update:", err);
+        alert("Gagal menyimpan data");
+    }
+};
+
 
     return (
          <>
@@ -124,7 +148,7 @@ const DetailRegistrasiUser = () => {
                     <div className="form-group row">
                         <label className="col-12 col-sm-3 col-form-label text-left">Employ ID (5 Digit)</label>
                         <div className="col-12 col-sm-8 col-lg-8">
-                        <input type="text" name="idLevel" value={formData.idLevel} onChange={handleChange} required className="form-control" readOnly />
+                        <input type="text" name="emplid" value={formData.emplid} onChange={handleChange} required className="form-control" readOnly />
                         </div>
                     </div>
                     

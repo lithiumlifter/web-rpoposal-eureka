@@ -82,7 +82,7 @@ function App() {
           <Route path="detailotorisasi/:id_otorisasi" element={<DetailLevelOtorisasi />} />
           <Route path="detailregistrasiuser/:id_user" element={<DetailRegistrasiUser />} />
           <Route path="detailotorisasipusat/:id_proposal" element={<DetailOtorisasiPusat />} />
-          {/* <Route path="printview" element={<PrintView />} /> */}
+          <Route path="printview" element={<PrintView />} />
 
           <Route path="registrasiuser" element={<RegistrasiUser />} />
           <Route path="setupuser" element={<SetupUser />} />

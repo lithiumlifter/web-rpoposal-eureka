@@ -4,6 +4,7 @@ import { Link, useLocation  } from "react-router-dom";
 const Sidebar = ({ isOpen }) => {
     const [isHovered, setIsHovered] = useState(false);
     const location = useLocation();
+    const [masterOpen, setMasterOpen] = useState(false);
     const currentPath = location.pathname;
     const isActive = (path) => currentPath.startsWith(path);
 
@@ -89,29 +90,23 @@ const Sidebar = ({ isOpen }) => {
                   </Link>
                 </li>
 
-                <li className={`nav-item ${isActive("/admin/otorisationnotcompleted") ? "active" : ""}`}>
-                  <Link className="nav-link" to="/admin/otorisationnotcompleted">
-                    <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Completed</span>
-                  </Link>
-                </li>
-
-                <li className={`nav-item ${isActive("/admin/otorisationpending") ? "active" : ""}`}>
-                  <Link className="nav-link" to="/admin/otorisationpending">
-                    <i className="fas fa-file"></i> <span className="menu-text">Otorisation Pending</span>
-                  </Link>
-                </li>
-
-                <li className={`nav-item ${isActive("/admin/levelotorisasi") ? "active" : ""}`}>
-                  <Link className="nav-link" to="/admin/levelotorisasi">
-                    <i className="fas fa-th-list"></i> <span className="menu-text">Level Otorisasi</span>
-                  </Link>
-                </li>
-
                 <li className={`nav-item ${isActive("/admin/validasiotorisasi") ? "active" : ""}`}>
                   <Link className="nav-link" to="/admin/validasiotorisasi">
                     <i className="fas fa-wrench"></i> <span className="menu-text">Validasi Otorisasi</span>
                   </Link>
                 </li>
+
+                <li className={`nav-item ${isActive("/admin/otorisationnotcompleted") ? "active" : ""}`}>
+                        <Link className="nav-link" to="/admin/otorisationnotcompleted">
+                          <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Completed</span>
+                        </Link>
+                      </li>
+
+                      <li className={`nav-item ${isActive("/admin/otorisationpending") ? "active" : ""}`}>
+                        <Link className="nav-link" to="/admin/otorisationpending">
+                          <i className="fas fa-file"></i> <span className="menu-text">Otorisation Pending</span>
+                        </Link>
+                      </li>
 
                 <li className={`nav-item ${isActive("/admin/rubahruanglingkup") ? "active" : ""}`}>
                   <Link className="nav-link" to="/admin/rubahruanglingkup">
@@ -119,18 +114,39 @@ const Sidebar = ({ isOpen }) => {
                   </Link>
                 </li>
 
-                <li className={`nav-item ${isActive("/admin/setupuser") ? "active" : ""}`}>
-                  <Link className="nav-link" to="/admin/setupuser">
-                    <i className="fas fa-wrench"></i> <span className="menu-text">Setup User</span>
-                  </Link>
-                </li>
+                {/* Submenu Master */}
+                <li className="nav-item">
+                  <span
+                    className="nav-link"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setMasterOpen(!masterOpen)}
+                  >
+                    <i className="fas fa-cogs"></i> <span className="menu-text">Master</span>
+                    {/* <i className={`fas fa-chevron-${masterOpen ? "down" : "right"} float-end`} style={{ float: "right" }}></i> */}
+                  </span>
 
-                <li className={`nav-item ${isActive("/admin/registrasiuser") ? "active" : ""}`}>
-                  <Link className="nav-link" to="/admin/registrasiuser">
-                    <i className="fas fa-wrench"></i> <span className="menu-text">Registrasi User</span>
-                  </Link>
-                </li>
+                  {masterOpen && (
+                    <ul className="navbar-nav flex-column ms-3">
+                      <li className={`nav-item ${isActive("/admin/levelotorisasi") ? "active" : ""}`}>
+                        <Link className="nav-link" to="/admin/levelotorisasi">
+                          <i className="fas fa-th-list"></i> <span className="menu-text">Level Otorisasi</span>
+                        </Link>
+                      </li>
 
+                      <li className={`nav-item ${isActive("/admin/setupuser") ? "active" : ""}`}>
+                        <Link className="nav-link" to="/admin/setupuser">
+                          <i className="fas fa-wrench"></i> <span className="menu-text">Setup User</span>
+                        </Link>
+                      </li>
+
+                      <li className={`nav-item ${isActive("/admin/registrasiuser") ? "active" : ""}`}>
+                        <Link className="nav-link" to="/admin/registrasiuser">
+                          <i className="fas fa-wrench"></i> <span className="menu-text">Registrasi User</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  )}
+                </li>
               </ul>
             </nav>
           </div>

@@ -416,18 +416,6 @@ const InputProposal = () => {
                         onChange={setCatatan} 
                         // readOnly={!isEditing}
                       />
-                {/* <div className="card mt-3">
-                  <div className="card-header text-start">F. CATATAN</div>
-                  <div className="card-body">
-                    <div className="form-group row">
-                      <label className="col-12 col-sm-3 col-form-label text-left">Masukkan Catatan:</label>
-                      <div className="col-12 col-sm-8 col-lg-8">
-                      
-
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
                 </>
           )}
 

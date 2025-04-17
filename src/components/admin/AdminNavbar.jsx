@@ -11,12 +11,11 @@ const Navbar = ({toggleSidebar}) => {
     const name = localStorage.getItem("name");
     console.log("Role Pengguna:", name);
   
-  
     // Fungsi untuk logout
     const handleLogout = () => {
-        localStorage.removeItem("token"); // Hapus token dari localStorage
-        setIsModalOpen(false); // Tutup modal
-        navigate("/"); // Redirect ke halaman login
+        localStorage.removeItem("token");
+        setIsModalOpen(false);
+        navigate("/");
     };
 
     return(
@@ -38,42 +37,6 @@ const Navbar = ({toggleSidebar}) => {
                 >
                     <i className="fas fa-bars text-white" />
                 </button>
-                {/* <a 
-                    className="navbar-brand" 
-                    href="#" 
-                    style={{ 
-                        // backgroundColor: "white", 
-                        padding: "8px 25px",           
-                        marginLeft: "24px",
-                        marginTop: "8px",           
-                        marginBottom: "8px",     
-                        borderRadius: "10px",   
-                        display: "flex", 
-                        alignItems: "center",
-                        gap: "15px"
-                    }}
-                    >
-                    <img 
-                        src="../../../public/images/logo-eurekalogistics.png" 
-                        alt="Eureka Logistics" 
-                        style={{ 
-                        width: 100, 
-                        height: "auto", 
-                        borderRadius: "12px",
-                        }} 
-                    />
-                    <img 
-                        src="../../../public/images/karakter.png" 
-                        alt="Karakter" 
-                        style={{ 
-                        width: 50, 
-                        height: "auto", 
-                        borderRadius: "50%", 
-                        objectFit: "cover" 
-                        }} 
-                    />
-                </a> */}
-
                 <a 
                     className="navbar-brand" 
                     href="#" 

@@ -8,8 +8,8 @@ const CustomTable = ({ columns, data, loading, ...rest }) => {
       data={data}
       progressPending={loading}
       pagination
-      paginationPerPage={10} // default: 10 rows per page
-      paginationRowsPerPageOptions={[10, 25, 50, 100]} // pilihan jumlah rows
+      paginationPerPage={10}
+      paginationRowsPerPageOptions={[10, 25, 50, 100]}
       highlightOnHover
       striped
       responsive

@@ -264,7 +264,7 @@ const InboxPusat = () => {
             maxWidth: "90px"
         },
     ];
-    
+
 
     return (
         <div className="card">

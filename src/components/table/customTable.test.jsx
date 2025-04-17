@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import CustomTable from './customTable';
 import '@testing-library/jest-dom';
 
-// Dummy data dan kolom
 const columns = [
   { name: 'Nama', selector: row => row.name, sortable: true },
   { name: 'Umur', selector: row => row.age },

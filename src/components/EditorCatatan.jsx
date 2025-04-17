@@ -8,7 +8,6 @@ const EditorCatatan = ({ value, onChange, readOnly }) => {
       <div className="card-header text-start">F. CATATAN</div>
       <div className="card-body">
         <div className="form-group row">
-          {/* <label className="col-12 col-sm-3 col-form-label text-left">Masukkan Catatan:</label> */}
           <div className="col-12">
                 <CKEditor
                 editor={ClassicEditor}

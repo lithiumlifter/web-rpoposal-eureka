@@ -12,7 +12,7 @@ const DetailProposalCabang = () => {
   
   const navigate = useNavigate();
   const [originalData, setOriginalData] = useState(null);
-  const [isEditingBiayaLain, setIsEditingBiayaLain] = useState(false);
+  // const [isEditingBiayaLain, setIsEditingBiayaLain] = useState(false);
   const [editedBiayaLain, setEditedBiayaLain] = useState(null);
   const [addedOtorisasi, setAddedOtorisasi] = useState([]);
   const [selectedOtorisasi, setSelectedOtorisasi] = useState("");

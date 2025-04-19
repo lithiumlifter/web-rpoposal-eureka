@@ -97,16 +97,16 @@ const Sidebar = ({ isOpen }) => {
                 </li>
 
                 <li className={`nav-item ${isActive("/admin/otorisationnotcompleted") ? "active" : ""}`}>
-                        <Link className="nav-link" to="/admin/otorisationnotcompleted">
-                          <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Completed</span>
-                        </Link>
-                      </li>
+                    <Link className="nav-link" to="/admin/otorisationnotcompleted">
+                        <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Completed</span>
+                    </Link>
+                </li>
 
-                      <li className={`nav-item ${isActive("/admin/otorisationpending") ? "active" : ""}`}>
-                        <Link className="nav-link" to="/admin/otorisationpending">
-                          <i className="fas fa-file"></i> <span className="menu-text">Otorisation Pending</span>
-                        </Link>
-                      </li>
+                <li className={`nav-item ${isActive("/admin/otorisationpending") ? "active" : ""}`}>
+                    <Link className="nav-link" to="/admin/otorisationpending">
+                        <i className="fas fa-file"></i> <span className="menu-text">Otorisation Pending</span>
+                    </Link>
+                </li>
 
                 <li className={`nav-item ${isActive("/admin/rubahruanglingkup") ? "active" : ""}`}>
                   <Link className="nav-link" to="/admin/rubahruanglingkup">

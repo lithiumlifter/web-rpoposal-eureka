@@ -1,66 +1,3 @@
-// const OtorisationNotCompleted = () => {
-//     return(
-//         <>
-//            <div className="card">
-//                 <div className="card-body">
-//                     <div className="table-responsive">
-//                     <table className="table table-striped table-bordered first">
-//                         <thead>
-//                         <tr>
-//                             <th>NO.REG</th>
-//                             <th>ID</th>
-//                             <th>BU</th>
-//                             <th>DATE</th>
-//                             <th>TITLE</th>
-//                             <th>TYPE</th>
-//                             <th>STATUS</th>
-//                             <th>VIEW</th>
-//                             <th>RECIEV PST</th>
-//                             <th>AKT PST</th>
-//                         </tr>
-//                         </thead>
-//                         <tbody>
-//                         <tr>
-//                             <td></td>
-//                             <td></td>
-//                             <td></td>
-//                             <td>
-//                             </td>
-//                             <td>
-//                             </td>
-//                             <td></td>
-//                             <td></td>
-//                             <td></td>
-//                             <td></td>
-//                             <td>
-//                             </td>
-//                         </tr>
-//                         <tr>
-//                             <td></td>
-//                             <td></td>
-//                             <td></td>
-//                             <td>
-//                             </td>
-//                             <td>
-//                             </td>
-//                             <td></td>
-//                             <td></td>
-//                             <td></td>
-//                             <td></td>
-//                             <td>
-//                             </td>
-//                         </tr>
-//                         </tbody>
-//                     </table>
-//                     </div>
-//                 </div>
-//             </div>       
-//         </>
-//     );
-// }
-
-// export default OtorisationNotCompleted;
-
 import { useState } from "react";
 
 const OtorisasiPending = () => {
@@ -131,7 +68,7 @@ const OtorisasiPending = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredData.map((item, index) => (
+                                {/* {filteredData.map((item, index) => (
                                     <tr key={index}>
                                         <td>{item.noReg}</td>
                                         <td>{item.id}</td>
@@ -144,7 +81,10 @@ const OtorisasiPending = () => {
                                         <td>{item.recPst}</td>
                                         <td>{item.aktPst}</td>
                                     </tr>
-                                ))}
+                                ))} */}
+                                <tr>
+                                     <td colSpan="10" className="text-center">TIDAK ADA DATA</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

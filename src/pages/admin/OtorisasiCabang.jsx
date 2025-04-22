@@ -18,7 +18,7 @@ const OtorisasiCabang = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    {/* <tr>
                         <td>PST</td>
                         <td>RB-8078</td>
                         <td>RB-8083</td>
@@ -37,7 +37,10 @@ const OtorisasiCabang = () => {
                         <td>2025-03-10 11:21:12</td>
                         <td>Permohonan Biaya Pembayaran Vendor PT.PLATINDO KARYA PRIMA No. Invoice:IVS250200076</td>
                         <td>99.LAIN-LAIN</td>
-                    </tr>
+                    </tr> */}
+                    <tr>
+                                     <td colSpan="10" className="text-center">TIDAK ADA DATA</td>
+                                </tr>
                     </tbody>
                 </table>
                 </div>

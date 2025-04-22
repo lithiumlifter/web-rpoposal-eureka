@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
 import { useNavigate } from "react-router-dom";
+import CustomTable from "../../components/table/customTable";
 
 
 const DetailProposalReport = () => {
@@ -83,6 +84,22 @@ const handlePrint = () => {
     }
     setIsEditing(!isEditing);
   };
+
+  
+  // DataTable columns untuk History
+  const historyColumns = [
+    { name: "Date", selector: (row) => row.transdate, sortable: true },
+    { name: "Position", selector: (row) => row.status_position, sortable: true },
+    { name: "Description", selector: (row) => row.description, sortable: true },
+    { name: "BY", selector: (row) => row.name, sortable: true },
+  ];
+
+  // DataTable columns untuk Otoritor
+  const otoritasColumns = [
+    { name: "Urutan No. Level", selector: (row) => row.urutan, sortable: true },
+    { name: "EMPLID", selector: (row) => `${row.emplid} ${row.name}`, sortable: true },
+    { name: "Otorisasi", selector: (row) => row.status, sortable: true },
+  ];
 
   return (
     <>
@@ -221,21 +238,6 @@ const handlePrint = () => {
                   </div>
                 </div>
 
-                {/* Deskripsi */}
-                {/* <div className="form-group row">
-                  <label className="col-12 col-sm-3 col-form-label text-left">Deskripsi:</label>
-                  <div className="col-12 col-sm-8 col-lg-8">
-                    <textarea
-                      name="description"
-                      className="form-control"
-                      value={formData.description}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      rows={3}
-                    />
-                  </div>
-                </div> */}
-
                 {/* Status */}
                 <div className="form-group row">
                   <label className="col-12 col-sm-3 col-form-label text-left">Status:</label>
@@ -364,26 +366,13 @@ const handlePrint = () => {
       <div className="card mt-3">
         <div className="card-header text-start">B. HISTORY</div>
         <div className="card-body">
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Position</th>
-                <th>Description</th>
-                <th>BY</th>
-              </tr>
-            </thead>
-            <tbody>
-              {proposal.history?.map((item) => (
-              <tr key={item.id_history}>
-                <td>{item.transdate}</td>
-                <td>{item.status_position}</td>
-                <td>{item.description}</td>
-                <td>{item.name}</td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
+        <CustomTable
+          columns={historyColumns}
+          data={proposal.history || []}
+          loading={loading}
+          noHeader
+          pagination={false}
+        />
         </div>
       </div>
 
@@ -391,24 +380,13 @@ const handlePrint = () => {
       <div className="card mt-3">
         <div className="card-header text-start">C. OTORITOR</div>
         <div className="card-body">
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Urutan No. Level</th>
-                <th>EMPLID</th>
-                <th>Otorisasi</th>
-              </tr>
-            </thead>
-            <tbody>
-            {proposal.otoritas?.map((item) => (
-              <tr key={item.id_otorisasi}>
-                <td>{item.urutan}</td>
-                <td>{item.emplid +" " + item.name}</td>
-                <td>{item.status}</td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
+        <CustomTable
+          columns={otoritasColumns}
+          data={proposal.otoritas || []}
+          loading={loading}
+          noHeader
+          pagination={false}
+        />
         </div>
       </div>
       </div>

@@ -23,7 +23,7 @@ const Sidebar = ({ isOpen }) => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <div className="menu-list" style={{ backgroundColor: "#003366" }}>
+          <div className="menu-list" style={{ backgroundColor: "#003366", minHeight: "100vh" }}>
             <nav className="navbar navbar-expand-lg navbar-light">
               <ul className="navbar-nav flex-column">
 

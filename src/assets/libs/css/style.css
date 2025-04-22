@@ -6948,7 +6948,7 @@ Media Query
 }
 
 
-@media only screen and (min-width: 1401px) {
+@media only screen and (min-width: 240px) {
    /* Layout Utama */
 html, body {
     overflow-x: hidden;

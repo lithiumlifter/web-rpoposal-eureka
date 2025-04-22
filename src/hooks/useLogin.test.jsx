@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { useLogin } from './useLogin'; // ganti dengan path sesuai proyek kamu
+import { useLogin } from './useLogin';
 import * as authServices from '../services/authServices';
 
 describe('useLogin', () => {
@@ -13,8 +13,7 @@ describe('useLogin', () => {
 
   it('berhasil login dan menyimpan token ke localStorage', async () => {
     const fakeToken = 'fake-token-123';
-
-    // Mock service login
+    
     vi.spyOn(authServices, 'login').mockResolvedValue({
       data: { token: fakeToken },
     });

@@ -6,9 +6,8 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/vendor/bootstrap/css/bootstrap.min.css";
 import "./assets/vendor/fonts/circular-std/style.css";
-// import "./assets/libs/css/style.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import Home from "./pages/admin/home"; 
+import Home from "./pages/admin/Home"; 
 import AxDimension from "./pages/admin/axdimension";
 import AxCustomer from "./pages/admin/axcustomer";
 import UpdateAnggaran from "./pages/admin/UpdateAnggaran";
@@ -45,13 +44,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        {/* Route printview dipindah keluar dari AdminPanel */}
         <Route path="/printview" element={<PrintView />} />
         <Route path="/print-report-cabang" element={<PrintReportCabang />} />
-
-        {/* AdminPanel sebagai layout */}
         <Route path="/admin" element={<AdminPanel />}>
-          {/* Menampilkan Home sebagai halaman default */}
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
           <Route path="axdimension" element={<AxDimension />} />
@@ -73,7 +68,6 @@ function App() {
           <Route path="otorisationnotcompleted" element={<OtorisationNotCompleted />} />
           <Route path="otorisationpending" element={<OtorisasiPending />} />
           <Route path="reportkpi" element={<ReportKpi />} />
-          {/* <Route path="inboxcabang/:id" element={<DetailProposalCabang />} /> */}
           <Route path="inboxcabang/:id_proposal" element={<DetailProposalCabang />} />
           <Route path="updatestatuscabang/:id_proposal" element={<DetailProposalCabang />} />
           <Route path="updatestatuspusat/:id_proposal" element={<DetailProposalCabang />} />
@@ -83,11 +77,9 @@ function App() {
           <Route path="detailregistrasiuser/:id_user" element={<DetailRegistrasiUser />} />
           <Route path="detailotorisasipusat/:id_proposal" element={<DetailOtorisasiPusat />} />
           <Route path="printview" element={<PrintView />} />
-
           <Route path="registrasiuser" element={<RegistrasiUser />} />
           <Route path="setupuser" element={<SetupUser />} />
           <Route path="ubahpassword" element={<UbahPassword />} />
-          
         </Route>
       </Routes>
     </Router>

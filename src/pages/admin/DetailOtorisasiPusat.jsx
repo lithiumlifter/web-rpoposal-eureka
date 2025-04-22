@@ -2,14 +2,12 @@ import React, { useEffect, useState,  useRef } from "react";
 import { useParams } from "react-router-dom";
 import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
-import Modal from 'react-modal'; 
 import OtorisasiServices from "../../services/admin/otorisasiServices";
 import { useNavigate } from "react-router-dom";
 import allDataProposal from "../../services/admin/allDataProposal";
 import CustomTable from "../../components/table/customTable";
+import ImagePreviewModal from "../../components/ImagePreviewModal";
 
-
-Modal.setAppElement('#root');
 const DetailOtorisasiPusat = () => {
   const navigate = useNavigate();
   const [proposalList, setProposalList] = useState([]);
@@ -99,7 +97,6 @@ const DetailOtorisasiPusat = () => {
     setFormData({ ...formData, [name]: value });
   };
 //  MODAL PREVIEW IMAGE
-
   const openModal = (index) => {
     setActiveIndex(index);
     setIsModalOpen(true);
@@ -107,22 +104,13 @@ const DetailOtorisasiPusat = () => {
 
   const closeModal = () => setIsModalOpen(false);
 
-  const nextImage = () => {
-    setActiveIndex((prev) => (prev + 1) % proposal.images.length);
-  };
-
-  const prevImage = () => {
-    setActiveIndex((prev) => (prev - 1 + proposal.images.length) % proposal.images.length);
-  };
-
-//   handle otorisasi
-const handleSubmit = async (statusValue) => {
+  // handle otorisasi
+  const handleSubmit = async (statusValue) => {
     const isConfirmed = window.confirm("Apakah kamu yakin ingin melanjutkan proses ini?");
-    if (!isConfirmed) return; // kalau user pilih "No", hentikan proses
+    if (!isConfirmed) return;
     const role = localStorage.getItem("role");
     console.log("Role Pengguna:", role);
-  
-    // const keterangan = "";
+
   
     if (role === "admin") {
       const idOtorisasiList = proposal.otoritas.map(item => item.id_otorisasi);
@@ -316,36 +304,14 @@ const handleSubmit = async (statusValue) => {
       )}
 
       {/* Modal Slideshow */}
-      <Modal
+      <ImagePreviewModal 
         isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Image Slideshow"
-        style={{
-          content: {
-            inset: '10%',
-            padding: '20px',
-            background: '#fff',
-            borderRadius: '10px',
-            textAlign: 'center',
-          },
-        }}
-      >
-        <h3>Preview Gambar</h3>
-        {proposal.images.length > 0 && (
-          <div>
-            <img
-              src={proposal.images[activeIndex].link}
-              alt={`Image ${activeIndex + 1}`}
-              style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }}
-            />
-            <div style={{ marginTop: '10px' }}>
-              <button onClick={prevImage} className="btn btn-secondary me-2">⏮ Sebelumnya</button>
-              <button onClick={nextImage} className="btn btn-secondary">⏭ Selanjutnya</button>
-            </div>
-          </div>
-        )}
-        <button onClick={closeModal} className="btn btn-danger mt-3">Tutup</button>
-      </Modal>
+        onClose={closeModal}
+        images={proposal.images}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+      />
+
     </div>
     </div>
     {/* <button className="btn btn-warning mt-3 text-white">📽 Slideshow</button> */}
@@ -514,21 +480,6 @@ const handleSubmit = async (statusValue) => {
                       </select>
                     </div>
                   </div>
-
-                {/* Kategori */}
-                <div className="form-group row">
-                  <label className="col-12 col-sm-3 col-form-label text-left">Kategori:</label>
-                  <div className="col-12 col-sm-8 col-lg-8">
-                    <input
-                      type="text"
-                      name="kategori"
-                      className="form-control"
-                      value={formData.kategori}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
 
                 {/* Bisnis Unit */}
                 <div className="form-group row">

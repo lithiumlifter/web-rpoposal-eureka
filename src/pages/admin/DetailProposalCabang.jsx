@@ -7,7 +7,7 @@ import allDataProposal from "../../services/admin/allDataProposal";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CustomTable from "../../components/table/customTable";
-
+import ImagePreviewModal from "../../components/ImagePreviewModal";
 
 const DetailProposalCabang = () => {
   
@@ -18,6 +18,18 @@ const DetailProposalCabang = () => {
   const [addedOtorisasi, setAddedOtorisasi] = useState([]);
   const [selectedOtorisasi, setSelectedOtorisasi] = useState("");
   const [catatan, setCatatan] = useState('');
+
+  //OPENMODAL IMAGE
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const openModal = (index) => {
+    setActiveIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => setIsModalOpen(false);
+
 
   const [categories, setCategories] = useState({
     bisnisUnit: [],
@@ -73,7 +85,7 @@ const DetailProposalCabang = () => {
           );
         }
         
-        setFormData(data.data); // Set nilai awal form
+        setFormData(data.data);
       } catch (err) {
         setError(err.response?.data || err.message);
       } finally {
@@ -405,14 +417,13 @@ const DetailProposalCabang = () => {
                 </label>
                 <div className="col-12 col-sm-6 col-lg-6">
                 <input
-  type="number"
-  name="biaya_lain"
-  className="form-control"
-  value={formData.biaya_lain ?? ""}
-  onChange={handleChange}
-  readOnly={!isEditing}
-/>
-
+                  type="number"
+                  name="biaya_lain"
+                  className="form-control"
+                  value={formData.biaya_lain ?? ""}
+                  onChange={handleChange}
+                  readOnly={!isEditing}
+                />
                 </div>
               </div>
             </div>
@@ -491,35 +502,44 @@ const DetailProposalCabang = () => {
         <div className="card mt-3">
         <div className="card-header text-start">G. LAMPIRAN</div>
         <div className="card-body">
-            {proposal.images && proposal.images.length > 0 ? (
+          {proposal.images && proposal.images.length > 0 ? (
             <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
-                {proposal.images.map((image) => {
+              {proposal.images.map((image, index) => {
                 const fileName = image.link.split("/").pop();
                 return (
-                    <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
-                    <a href={image.link} target="_blank" rel="noopener noreferrer">
-                        <img
-                        src={image.link}
-                        alt={fileName}
-                        style={{
-                            width: '100%',
-                            height: '150px',
-                            objectFit: 'contain',
-                            border: '1px solid #ccc',
-                            borderRadius: '8px',
-                            padding: '5px',
-                            backgroundColor: '#f9f9f9'
-                        }}
-                        />
-                    </a>
-                    </div>
+                  <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
+                    <img
+                      src={image.link}
+                      alt={fileName}
+                      onClick={() => openModal(index)}
+                      style={{
+                        width: '100%',
+                        height: '150px',
+                        objectFit: 'contain',
+                        border: '1px solid #ccc',
+                        borderRadius: '8px',
+                        padding: '5px',
+                        backgroundColor: '#f9f9f9',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  </div>
                 );
-                })}
+              })}
             </div>
-            ) : (
+          ) : (
             <p>Tidak ada lampiran.</p>
-            )}
+          )}
+
+          <ImagePreviewModal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            images={proposal.images}
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
+          />
         </div>
+
         </div>
 
         {/* B. HISTORY */}

@@ -1,17 +1,13 @@
-import React, { useEffect, useState,  useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
 import { useNavigate } from "react-router-dom";
 import CustomTable from "../../components/table/customTable";
-
+import ImagePreviewModal from "../../components/ImagePreviewModal";
 
 const DetailProposalReport = () => {
-  
-const printRef = useRef();
-
 const navigate = useNavigate();
-
 const handlePrint = () => {
   navigate('/printview', {
     state: {
@@ -20,7 +16,6 @@ const handlePrint = () => {
     }
   });
 };
-
   const [categories, setCategories] = useState({
     bisnisUnit: [],
     ruangLingkup: [],
@@ -35,6 +30,15 @@ const handlePrint = () => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+const openModal = (index) => {
+  setActiveIndex(index);
+  setIsModalOpen(true);
+};
+const closeModal = () => setIsModalOpen(false);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -75,16 +79,6 @@ const handlePrint = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  // Handler untuk tombol Edit/Simpan
-  const toggleEdit = () => {
-    if (isEditing) {
-      // Jika sedang dalam mode edit dan klik Simpan, update data ke state utama
-      setProposal(formData);
-    }
-    setIsEditing(!isEditing);
-  };
-
   
   // DataTable columns untuk History
   const historyColumns = [
@@ -108,7 +102,7 @@ const handlePrint = () => {
         Print
       </button>
     </div>
-      <div ref={printRef} id="print-section">
+      <div id="print-section">
       <div className="card">
             <div className="card-header text-start">Detail Proposal</div>
             <div className="card-body">
@@ -331,35 +325,43 @@ const handlePrint = () => {
      <div className="card mt-3">
         <div className="card-header text-start">G. LAMPIRAN</div>
         <div className="card-body">
-            {proposal.images && proposal.images.length > 0 ? (
-            <div className="lampiran-scroll" style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
-                {proposal.images.map((image) => {
-                const fileName = image.link.split("/").pop();
-                return (
+           {proposal.images && proposal.images.length > 0 ? (
+              <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
+                {proposal.images.map((image, index) => {
+                  const fileName = image.link.split("/").pop();
+                  return (
                     <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
-                    <a href={image.link} target="_blank" rel="noopener noreferrer">
-                        <img
+                      <img
                         src={image.link}
                         alt={fileName}
+                        onClick={() => openModal(index)}
                         style={{
-                            width: '100%',
-                            height: '150px',
-                            objectFit: 'contain',
-                            border: '1px solid #ccc',
-                            borderRadius: '8px',
-                            padding: '5px',
-                            backgroundColor: '#f9f9f9'
+                          width: '100%',
+                          height: '150px',
+                          objectFit: 'contain',
+                          border: '1px solid #ccc',
+                          borderRadius: '8px',
+                          padding: '5px',
+                          backgroundColor: '#f9f9f9',
+                          cursor: 'pointer',
                         }}
-                        />
-                    </a>
+                      />
                     </div>
-                );
+                  );
                 })}
-            </div>
+              </div>
             ) : (
-            <p>Tidak ada lampiran.</p>
+              <p>Tidak ada lampiran.</p>
             )}
-        </div>
+
+            <ImagePreviewModal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              images={proposal.images}
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+            />
+          </div>
         </div>
 
       {/* B. HISTORY */}

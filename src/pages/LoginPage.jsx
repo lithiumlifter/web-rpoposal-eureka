@@ -11,11 +11,27 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const { handleLogin, error } = useLogin(() => navigate("/admin"));
+  const [inputError, setInputError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const { handleLogin, error } = useLogin(() => {
+    setLoading(false);
+    navigate("/admin");
+  });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleLogin(username, password);
+
+    if (username.includes(" ") || password.includes(" ")) {
+      setInputError("Username dan Password tidak boleh mengandung spasi.");
+      return;
+    }
+
+    setInputError("");
+    setLoading(true);
+
+    await handleLogin(username, password);
+    setLoading(false);
   };
 
   return (
@@ -29,6 +45,7 @@ const Login = () => {
             <span className="splash-description">Let's Reach Our Super Victory!!</span>
           </div>
           <div className="card-body">
+            {inputError && <div className="alert alert-danger">{inputError}</div>}
             {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleSubmit}>
               <div className="form-group">
@@ -57,8 +74,12 @@ const Login = () => {
                   <i className={passwordVisible ? "fas fa-eye" : "fas fa-eye-slash"}></i>
                 </button>
               </div>
-              <button type="submit" className="btn btn-primary btn-lg btn-block">
-                Login
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg btn-block"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Login"}
               </button>
             </form>
           </div>

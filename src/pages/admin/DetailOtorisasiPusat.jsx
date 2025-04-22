@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import OtorisasiServices from "../../services/admin/otorisasiServices";
 import { useNavigate } from "react-router-dom";
 import allDataProposal from "../../services/admin/allDataProposal";
+import CustomTable from "../../components/table/customTable";
 
 
 Modal.setAppElement('#root');
@@ -159,7 +160,18 @@ const handleSubmit = async (statusValue) => {
     }
 };
   
+  const historyColumns = [
+    { name: "Date", selector: (row) => row.transdate, sortable: true },
+    { name: "Position", selector: (row) => row.status_position, sortable: true },
+    { name: "Description", selector: (row) => row.description, sortable: true },
+    { name: "BY", selector: (row) => row.name, sortable: true },
+  ];
 
+  const otoritasColumns = [
+    { name: "Urutan No. Level", selector: (row) => row.urutan, sortable: true },
+    { name: "EMPLID", selector: (row) => `${row.emplid} ${row.name}`, sortable: true },
+    { name: "Otorisasi", selector: (row) => row.status, sortable: true },
+  ];
   return (
     <>
     <div className="py-4 font-sans">
@@ -641,26 +653,13 @@ const handleSubmit = async (statusValue) => {
       <div className="card mt-3">
         <div className="card-header text-start">B. HISTORY</div>
         <div className="card-body">
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Position</th>
-                <th>Description</th>
-                <th>BY</th>
-              </tr>
-            </thead>
-            <tbody>
-              {proposal.history?.map((item) => (
-              <tr key={item.id_history}>
-                <td>{item.transdate}</td>
-                <td>{item.status_position}</td>
-                <td>{item.description}</td>
-                <td>{item.name}</td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
+        <CustomTable
+          columns={historyColumns}
+          data={proposal.history || []}
+          loading={loading}
+          noHeader
+          pagination={false}
+        />
         </div>
       </div>
 
@@ -668,24 +667,13 @@ const handleSubmit = async (statusValue) => {
       <div className="card mt-3">
         <div className="card-header text-start">C. OTORITOR</div>
         <div className="card-body">
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Urutan No. Level</th>
-                <th>EMPLID</th>
-                <th>Otorisasi</th>
-              </tr>
-            </thead>
-            <tbody>
-            {proposal.otoritas?.map((item) => (
-              <tr key={item.id_otorisasi}>
-                <td>{item.urutan}</td>
-                <td>{item.emplid +" " + item.name}</td>
-                <td>{item.status}</td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
+        <CustomTable
+          columns={otoritasColumns}
+          data={proposal.otoritas || []}
+          loading={loading}
+          noHeader
+          pagination={false}
+        />
         </div>
       </div>
       </div>

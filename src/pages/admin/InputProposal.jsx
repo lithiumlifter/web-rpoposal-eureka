@@ -4,8 +4,6 @@ import EditorCatatan from "../../components/EditorCatatan";
 import CategoryService from "../../services/admin/categoryServices";
 import "../../assets/styles/UploadFile.css";
 import Select from "react-select";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import InputProposalServices from "../../services/admin/inputProposalServices";
 import "../../assets/styles/LoadingOverlay.css";
 

@@ -38,6 +38,8 @@ import DetailOtorisasiPusat from "./pages/admin/DetailOtorisasiPusat";
 import PrintView from "./pages/print/PrintView";
 import ReportToCabang from "./pages/admin/ReportToCabang";
 import PrintReportCabang from "./pages/print/PrintReportToCabangView";
+import Modal from 'react-modal';
+Modal.setAppElement('#root');
 
 function App() {
   return (

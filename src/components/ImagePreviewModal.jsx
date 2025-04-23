@@ -1,8 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
 
-Modal.setAppElement('#root');
-
 const ImagePreviewModal = ({ isOpen, onClose, images = [], activeIndex = 0, setActiveIndex }) => {
   const nextImage = () => {
     setActiveIndex((prev) => (prev + 1) % images.length);

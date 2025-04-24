@@ -1,0 +1,9 @@
+# ini function deploy branch live / production
+deploy_production:
+  stage: deploy
+  script:
+     - ssh -i $PRIV_KEY $USER_SSH@$IP_GCP_PROP "cd $FOLDER_PROP_EUR_GCP && git clone http://$USER_GIT:$PASS_GIT@devops.erlangga.id/P2171/frontend-proposal-eureka2025.git"
+     - ssh -i $PRIV_KEY $USER_SSH@$IP_GCP_PROP "cd $FOLDER_PROP_EUR_GCP/frontend-proposal-eureka2025 && chmod -R 0777 /$FOLDER_PROP_EUR_GCP/frontend-proposal-eureka2025"    
+    # - ssh -i $PRIV_KEY $USER_SSH@$IP_GCP_PROP "cd $FOLDER_PROP_EUR_GCP/frontend-proposal-eureka2025 && git stash && git pull origin main"
+  only:
+  - main

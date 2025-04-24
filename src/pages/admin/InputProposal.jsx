@@ -6,6 +6,7 @@ import "../../assets/styles/UploadFile.css";
 import Select from "react-select";
 import InputProposalServices from "../../services/admin/inputProposalServices";
 import "../../assets/styles/LoadingOverlay.css";
+import { showSuccessToast, showErrorToast } from "../../utils/toast";
 
 const InputProposal = () => {
   const [tanggal_pengajuan, setTanggalPengajuan] = useState(new Date().toISOString().split("T")[0]);
@@ -156,25 +157,21 @@ const InputProposal = () => {
     try {
       const response = await InputProposalServices.submitProposal(formData);
       console.log("ISI FORM DATA:", [...formData.entries()]);
-      // alert("Proposal berhasil dikirim!");
+
 
     // Delay biar alert sempat tampil
     setTimeout(() => {
-      window.location.reload(); // refresh halaman
+      window.location.reload();
     }, 1000);
-
-      // Tampilkan alert success
-      setAlert({ show: true, type: "success", message: "Proposal berhasil dikirim!" });
+      showSuccessToast("Proposal berhasil dikirim!");
+      window.location.reload();
       console.log(response);
     } catch (error) {
-      setAlert({
-        show: true,
-        type: "danger",
-        message: `Gagal mengirim proposal: ${error.response?.data?.message || error.message}`,
-      });
+      showErrorToast(
+        `Gagal mengirim proposal`
+      );
       console.error("Error submitting proposal:", error.response?.data || error.message);
       console.log("Full error object:", error);
-      // alert(`Gagal mengirim proposal: ${error.response?.data?.message || error.message}`);
     } finally {
       setIsLoading(false);
     }

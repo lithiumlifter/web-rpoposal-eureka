@@ -39,52 +39,56 @@ import PrintView from "./pages/print/PrintView";
 import ReportToCabang from "./pages/admin/ReportToCabang";
 import PrintReportCabang from "./pages/print/PrintReportToCabangView";
 import Modal from 'react-modal';
+import { ToastProvider } from "./utils/toast";
 Modal.setAppElement('#root');
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/printview" element={<PrintView />} />
-        <Route path="/print-report-cabang" element={<PrintReportCabang />} />
-        <Route path="/admin" element={<AdminPanel />}>
-          <Route index element={<Home />} />
-          <Route path="home" element={<Home />} />
-          <Route path="axdimension" element={<AxDimension />} />
-          <Route path="axcustomer" element={<AxCustomer />} />
-          <Route path="inputproposal" element={<InputProposal />} />
-          <Route path="updateanggaran" element={<UpdateAnggaran />} />
-          <Route path="inboxcabang" element={<InboxCabang />} />
-          <Route path="updatestatuscabang" element={<UpdateStatusCabang />} />
-          <Route path="otorisasicabang" element={<OtorisasiCabang />} />
-          <Route path="levelotorisasi" element={<LevelOtorisasi />} />
-          <Route path="validasiotorisasi" element={<ValidasiOtorisasi />} />
-          <Route path="rubahruanglingkup" element={<RubahRuangLingkup />} />
-          <Route path="inboxpusat" element={<InboxPusat />} />
-          <Route path="updatestatuspst" element={<UpdateStatusPst />} />
-          <Route path="otorisasipusat" element={<OtorisasiPusat />} />
-          <Route path="otorisasibandingpst" element={<OtorisasiBandingPusat />} />
-          <Route path="proposalreport" element={<ProposalReport />} />
-          <Route path="reporttocabang" element={<ReportToCabang />} />
-          <Route path="otorisationnotcompleted" element={<OtorisationNotCompleted />} />
-          <Route path="otorisationpending" element={<OtorisasiPending />} />
-          <Route path="reportkpi" element={<ReportKpi />} />
-          <Route path="inboxcabang/:id_proposal" element={<DetailProposalCabang />} />
-          <Route path="updatestatuscabang/:id_proposal" element={<DetailProposalCabang />} />
-          <Route path="updatestatuspusat/:id_proposal" element={<DetailProposalCabang />} />
-          <Route path="updateanggaran/:id_proposal" element={<InputAnggaran />} />
-          <Route path="proposalreport/:id_proposal" element={<DetailProposalReport />} />
-          <Route path="detailotorisasi/:id_otorisasi" element={<DetailLevelOtorisasi />} />
-          <Route path="detailregistrasiuser/:id_user" element={<DetailRegistrasiUser />} />
-          <Route path="detailotorisasipusat/:id_proposal" element={<DetailOtorisasiPusat />} />
-          <Route path="printview" element={<PrintView />} />
-          <Route path="registrasiuser" element={<RegistrasiUser />} />
-          <Route path="setupuser" element={<SetupUser />} />
-          <Route path="ubahpassword" element={<UbahPassword />} />
-        </Route>
-      </Routes>
-    </Router>
+   <>
+      <ToastProvider />
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/printview" element={<PrintView />} />
+          <Route path="/print-report-cabang" element={<PrintReportCabang />} />
+          <Route path="/admin" element={<AdminPanel />}>
+            <Route index element={<Home />} />
+            <Route path="home" element={<Home />} />
+            <Route path="axdimension" element={<AxDimension />} />
+            <Route path="axcustomer" element={<AxCustomer />} />
+            <Route path="inputproposal" element={<InputProposal />} />
+            <Route path="updateanggaran" element={<UpdateAnggaran />} />
+            <Route path="inboxcabang" element={<InboxCabang />} />
+            <Route path="updatestatuscabang" element={<UpdateStatusCabang />} />
+            <Route path="otorisasicabang" element={<OtorisasiCabang />} />
+            <Route path="levelotorisasi" element={<LevelOtorisasi />} />
+            <Route path="validasiotorisasi" element={<ValidasiOtorisasi />} />
+            <Route path="rubahruanglingkup" element={<RubahRuangLingkup />} />
+            <Route path="inboxpusat" element={<InboxPusat />} />
+            <Route path="updatestatuspusat" element={<UpdateStatusPst />} />
+            <Route path="otorisasipusat" element={<OtorisasiPusat />} />
+            <Route path="otorisasibandingpst" element={<OtorisasiBandingPusat />} />
+            <Route path="proposalreport" element={<ProposalReport />} />
+            <Route path="reporttocabang" element={<ReportToCabang />} />
+            <Route path="otorisationnotcompleted" element={<OtorisationNotCompleted />} />
+            <Route path="otorisationpending" element={<OtorisasiPending />} />
+            <Route path="reportkpi" element={<ReportKpi />} />
+            <Route path="inboxcabang/:id_proposal" element={<DetailProposalCabang />} />
+            <Route path="updatestatuscabang/:id_proposal" element={<DetailProposalCabang />} />
+            <Route path="updatestatuspusat/:id_proposal" element={<DetailProposalCabang />} />
+            <Route path="updateanggaran/:id_proposal" element={<InputAnggaran />} />
+            <Route path="proposalreport/:id_proposal" element={<DetailProposalReport />} />
+            <Route path="detailotorisasi/:id_otorisasi" element={<DetailLevelOtorisasi />} />
+            <Route path="detailregistrasiuser/:id_user" element={<DetailRegistrasiUser />} />
+            <Route path="detailotorisasipusat/:id_proposal" element={<DetailOtorisasiPusat />} />
+            <Route path="printview" element={<PrintView />} />
+            <Route path="registrasiuser" element={<RegistrasiUser />} />
+            <Route path="setupuser" element={<SetupUser />} />
+            <Route path="ubahpassword" element={<UbahPassword />} />
+          </Route>
+        </Routes>
+      </Router>
+   </>
   );
 }
 

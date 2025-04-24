@@ -72,8 +72,8 @@ const Sidebar = ({ isOpen }) => {
                 )}
 
                 {hasAccess(["admin","kontrol"]) && (
-                  <li className={`nav-item ${isActive("/admin/updatestatuspst") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/admin/updatestatuspst">
+                  <li className={`nav-item ${isActive("/admin/updatestatuspusat") ? "active" : ""}`}>
+                    <Link className="nav-link" to="/admin/updatestatuspusat">
                       <i className="fas fa-fw fa-edit"></i> <span className="menu-text">Update Status Pst</span>
                     </Link>
                   </li>

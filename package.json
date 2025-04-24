@@ -24,6 +24,7 @@
     "react-bootstrap": "^2.10.9",
     "react-data-table-component": "^7.7.0",
     "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.5.2",
     "react-modal": "^3.16.3",
     "react-router-dom": "^7.3.0",
     "react-select": "^5.10.1"

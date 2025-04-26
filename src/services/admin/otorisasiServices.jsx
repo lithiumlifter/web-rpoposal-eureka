@@ -115,8 +115,42 @@ const OtorisasiServices = {
             throw error;
         }
     },
+    getOtorisasiPending: async () => {
+        try {
+            const token = localStorage.getItem("token");
 
-    
+            const response = await axios.get(`${BASE_URL}/master/otorisasi-pending?page=&limit=10`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("Data otorisasi pending successfully:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error("Error post data otorisasi pending:", error.response?.data || error.message);
+            throw error;
+        }
+    },
+    getOtorisasiNotCompleted: async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await axios.get(`${BASE_URL}/master/otorisasi-not-complete?page=&limit=10`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("Data otorisasi not completed successfully:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error("Error get otorisasi not completed:", error.response?.data || error.message);
+            throw error;
+        }
+    },
 };
 
 export default OtorisasiServices;

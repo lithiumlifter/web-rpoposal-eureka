@@ -110,7 +110,7 @@ const PrintView = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div><img src="/barcode-placeholder.png" alt="Barcode" height="30" /></div>
           <div style={{ fontWeight: 'bold', textAlign: 'center', flexGrow: 1 }}>
-            PROPOSAL : {proposal.kategori} Print by : {userRole}
+            PROPOSAL : {proposal.tipe} ------ Print by : {userRole}
           </div>
         </div>
         <table style={{ width: '100%', marginTop: '10px', fontSize: '13px' }}>
@@ -126,7 +126,18 @@ const PrintView = () => {
             </tr>
             <tr>
               <td><strong>Register:</strong></td>
-              <td>Tgl : {formData.tgl_proposal}</td>
+              <td>
+                    {
+                      proposal.history?.findLast((item) => item.reg && item.reg_branch) ? (
+                        <>
+                          {proposal.history.findLast((item) => item.reg && item.reg_branch).reg_branch}/
+                          {proposal.history.findLast((item) => item.reg && item.reg_branch).reg}
+                        </>
+                      ) : (
+                        'Belum tersedia'
+                      )
+                    } - Tgl : {formData.tgl_proposal}
+              </td>
               <td><strong>Jml Siswa</strong></td>
               <td>{formData.jumlah_siswa || 0}</td>
             </tr>
@@ -153,8 +164,9 @@ const PrintView = () => {
       </div>
 
       {/* Konten Surat */}
-      <div className="card mb-4">
-        <div className="card-body">
+      <div className="card mb-4 p-0">
+        <div className="card-body p-0">
+        <h5 className="card-header mb-3 text-start" style={{backgroundColor: 'white'}}>Biaya: {formData.biaya_lain}</h5>
         <div
             className="p-3 ck-content"
             style={{
@@ -171,15 +183,28 @@ const PrintView = () => {
       </div>
 
       {/* B. HISTORY */}
-      <div className="card mt-3">
-        <div className="card-body">
+      <div className="card mt-3 p-0">
+        <div className="card-body p-0">
+        <h1 className="card-header mb-2 text-start"  style={{backgroundColor: 'white',}}>
+            Nomor Reg.:{' '}
+          {
+            proposal.history?.findLast((item) => item.reg && item.reg_branch) ? (
+              <>
+                {proposal.history.findLast((item) => item.reg && item.reg_branch).reg_branch}/
+                {proposal.history.findLast((item) => item.reg && item.reg).reg}
+              </>
+            ) : (
+              'Belum tersedia'
+            )
+          }
+        </h1>
           <table className="table table-bordered">
             <thead>
               <tr>
-                <th>Tanggal</th>
-                <th>Posisi</th>
-                <th>Deskripsi</th>
-                <th>Oleh</th>
+                <th>Date</th>
+                <th>Position</th>
+                <th>Description</th>
+                <th>By</th>
               </tr>
             </thead>
             <tbody>

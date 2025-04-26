@@ -1,44 +1,3 @@
-// // pages/PrintReportCabang.jsx
-// import { useLocation } from "react-router-dom";
-
-// const PrintReportCabang = () => {
-//     const location = useLocation();
-//     const data = location.state?.data || [];
-
-//     return (
-//         <div>
-//             <h2>Print Report to Cabang</h2>
-//             <table border="1" cellPadding="5">
-//                 <thead>
-//                     <tr>
-//                         <th>No</th>
-//                         <th>Tanggal</th>
-//                         <th>ID</th>
-//                         <th>Title</th>
-//                         <th>Status</th>
-//                         {/* Tambahkan kolom sesuai kebutuhan */}
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {data.map((item, idx) => (
-//                         <tr key={idx}>
-//                             <td>{idx + 1}</td>
-//                             <td>{item.date?.receive_cabang || "-"}</td>
-//                             <td>{item.kode_proposal || "-"}</td>
-//                             <td>{item.title || "-"}</td>
-//                             <td>{item.status || "-"}</td>
-//                         </tr>
-//                     ))}
-//                 </tbody>
-//             </table>
-
-//             <button onClick={() => window.print()}>Print</button>
-//         </div>
-//     );
-// };
-
-// export default PrintReportCabang;
-
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -57,75 +16,104 @@ const PrintReportCabang = () => {
     <div>
       {/* Styling langsung di dalam komponen */}
       <style>{`
-        @media print {
-          @page {
-            margin: 1.5cm;
-            size: A4 portrait;
-          }
-        }
+  @media print {
+    @page {
+      margin: 1.5cm;
+      size: A4 portrait;
+    }
 
-        body, html {
-          margin: 0;
-          padding: 0;
-          font-family: Arial, sans-serif;
-        }
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: auto;
+      background: white !important;
+    }
 
-        .print-wrapper {
-          padding: 20px;
-          color: #000;
-        }
+    body * {
+      visibility: hidden;
+    }
 
-        .header {
-          text-align: center;
-          margin-bottom: 20px;
-        }
+    .print-area,
+    .print-area * {
+      visibility: visible;
+    }
 
-        .header-info {
-          display: flex;
-          justify-content: space-between;
-          font-size: 12px;
-          margin-bottom: 5px;
-        }
+    .print-area {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #000;
+      background-color: #fff !important;
+    }
+  }
 
-        .header h1 {
-          margin: 5px 0;
-          font-size: 20px;
-        }
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
 
-        .periode {
-          font-size: 14px;
-          margin-bottom: 10px;
-        }
+  .print-wrapper {
+    padding: 20px;
+    color: #000;
+  }
 
-        .rekap-table {
-          width: 100%;
-          border-collapse: collapse;
-          font-size: 12px;
-        }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-        .rekap-table th,
-        .rekap-table td {
-          border: 1px solid #aaa;
-          padding: 4px 6px;
-          text-align: left;
-          vertical-align: top;
-        }
+  .header-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
 
-        .rekap-table th {
-          background-color: #f0f0f0;
-        }
+  .header h1 {
+    margin: 5px 0;
+    font-size: 20px;
+  }
 
-        .footer {
-          display: flex;
-          justify-content: space-between;
-          font-size: 10px;
-          margin-top: 40px;
-          border-top: 1px solid #ddd;
-          padding-top: 5px;
-        }
-      `}</style>
+  .periode {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
 
-      <div className="print-wrapper">
+  .rekap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .rekap-table th,
+  .rekap-table td {
+    border: 1px solid #aaa;
+    padding: 4px 6px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .rekap-table th {
+    background-color: #f0f0f0;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    margin-top: 40px;
+    border-top: 1px solid #ddd;
+    padding-top: 5px;
+  }
+`}</style>
+
+
+      <div className="print-wrapper print-area">
         <div className="header">
           <div className="header-info">
             <span>{new Date().toLocaleString()}</span>

@@ -22,7 +22,7 @@ const AllReportServices = {
     getProposalReport: async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get(`${BASE_URL}/master/data-report?page=&limit=10&keyword=&type=transdate&fromDate=2025-01-31&toDate=2025-03-31&bisnis_unit=&ruang_lingkup=&status=`, {
+          const response = await axios.get(`${BASE_URL}/master/data-report?page=&limit=10&keyword=&type=transdate&fromDate=&toDate=&bisnis_unit=&ruang_lingkup=&status=`, {
             headers: {
               Authorization: `Bearer ${token}`
             }

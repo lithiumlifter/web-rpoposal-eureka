@@ -6,6 +6,8 @@ const Sidebar = ({ isOpen }) => {
     const [isHovered, setIsHovered] = useState(false);
     const location = useLocation();
     const [masterOpen, setMasterOpen] = useState(false);
+    const [lainLain, setLainLain] = useState(false);
+
     const currentPath = location.pathname;
     const isActive = (path) => currentPath.startsWith(path);
     const { categories } = useCategories();
@@ -87,7 +89,25 @@ const Sidebar = ({ isOpen }) => {
                   </li>
                 )}
 
-                {hasAccess(["admin","otoritor"]) && (
+                <li className={`nav-item ${isActive("/admin/proposalreport") ? "active" : ""}`}>
+                  <Link className="nav-link" to="/admin/proposalreport">
+                    <i className="fas fa-file"></i> <span className="menu-text">Proposal Report</span>
+                  </Link>
+                </li>
+
+                {/* LAIN-LAIN */}
+                  <li className="nav-item">
+                  <span
+                    className="nav-link"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setLainLain(!lainLain)}
+                  >
+                    <i className="fas fa-cogs"></i> <span className="menu-text">Lain-lain</span>
+                    {/* <i className={`fas fa-chevron-${lainLain ? "down" : "right"} float-end`} style={{ float: "right" }}></i> */}
+                  </span>
+                  {lainLain && (
+                    <ul className="navbar-nav flex-column ms-3">
+                    {hasAccess(["admin","otoritor"]) && (
                   <li className={`nav-item ${isActive("/admin/updateanggaran") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/updateanggaran">
                       <i className="fas fa-fw fa-edit"></i> <span className="menu-text">Update Anggaran</span>
@@ -111,16 +131,10 @@ const Sidebar = ({ isOpen }) => {
                   </li>
                 )}
 
-                <li className={`nav-item ${isActive("/admin/proposalreport") ? "active" : ""}`}>
-                  <Link className="nav-link" to="/admin/proposalreport">
-                    <i className="fas fa-file"></i> <span className="menu-text">Proposal Report</span>
-                  </Link>
-                </li>
-
                 {hasAccess(["admin","kontrol","kontrol cabang"]) && (
                   <li className={`nav-item ${isActive("/admin/otorisationnotcompleted") ? "active" : ""}`}>
                       <Link className="nav-link" to="/admin/otorisationnotcompleted">
-                          <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Completed</span>
+                          <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Complete</span>
                       </Link>
                   </li>
                 )}
@@ -132,6 +146,9 @@ const Sidebar = ({ isOpen }) => {
                       </Link>
                   </li>
                 )}
+                    </ul>
+                  )}
+                </li>
 
                 {/* Submenu Master */}
                 {hasAccess(["admin","kontrol","kontrol cabang"]) && (

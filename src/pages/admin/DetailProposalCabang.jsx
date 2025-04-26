@@ -188,21 +188,21 @@ const DetailProposalCabang = () => {
   return (
     <>
     <div className="mb-3 text-end">
-  <button
-    type="button"
-    className="btn btn-danger"
-    onClick={() => navigate(-1)}
-  >
-    Tutup Jendela
-  </button>
-</div>
-
-    <div className="mb-3 text-end">
     </div>
     <form id="validationform" data-parsley-validate noValidate>
       <div className="card">
-            <div className="card-header text-start">Detail Proposal</div>
-            
+            <div className="card-header d-flex justify-content-between align-items-center">
+              <div>Detail Proposal</div>
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => navigate(-1)}
+                >
+                  Tutup Jendela
+                </button>
+              </div>
+            </div>
             <div className="card-body">
                 {/* Tanggal Proposal */}
                 <div className="form-group row">

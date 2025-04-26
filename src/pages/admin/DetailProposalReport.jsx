@@ -98,13 +98,24 @@ const closeModal = () => setIsModalOpen(false);
   return (
     <>
     <div className="mb-3 text-end">
-      <button onClick={handlePrint} className="btn btn-success">
-        Print
-      </button>
     </div>
       <div id="print-section">
       <div className="card">
-            <div className="card-header text-start">Detail Proposal</div>
+            <div className="card-header d-flex justify-content-between align-items-center">
+              <div>Detail Proposal</div>
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-danger mr-2"
+                  onClick={() => navigate(-1)}
+                >
+                  Tutup Jendela
+                </button>
+                <button onClick={handlePrint} className="btn btn-warning">
+                   <i className="fas fa-print"></i> Print
+                </button>
+              </div>
+            </div>
             <div className="card-body">
               <form id="validationform" data-parsley-validate noValidate>
                 {/* Tanggal Proposal */}

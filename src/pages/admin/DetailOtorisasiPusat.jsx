@@ -208,19 +208,19 @@ const DetailOtorisasiPusat = () => {
             <td>Nama Pelanggan:</td>
             <td>{proposal.pemohon.name}</td>
             <td>GL:</td>
-            <td>,</td>
+            <td></td>
         </tr>
         <tr>
             <td>BE:</td>
-            <td>,</td>
+            <td></td>
             <td>ASM:</td>
-            <td>,</td>
+            <td></td>
         </tr>
         <tr>
             <td>Salesman:</td>
-            <td>,</td>
+            <td></td>
             <td>Manager:</td>
-            <td>,</td>
+            <td></td>
         </tr>
         </tbody>
     </table>
@@ -262,14 +262,16 @@ const DetailOtorisasiPusat = () => {
       </div>
 
       <div className="mt-4 d-flex gap-2 flex-wrap">
-        <button className="btn btn-success" onClick={() => handleSubmit('Approve')}>
-          ✔ Setuju
+        <button className="btn btn-success text-white" onClick={() => handleSubmit('Approve')}>
+          <i className="fas fa-check-circle"></i> Setuju
         </button>
+
         <button className="btn btn-warning text-white" onClick={() => handleSubmit('Pending')}>
-          ⚠ Pending
+          <i className="fas fa-exclamation-circle"></i> Pending
         </button>
-        <button className="btn btn-danger" onClick={() => handleSubmit('Cancel')}>
-          ❌ Tidak Setuju
+
+        <button className="btn btn-danger text-white" onClick={() => handleSubmit('Cancel')}>
+          <i className="fas fa-times-circle"></i> Tidak Setuju
         </button>
       </div>
     <div className="row row-cols-2 row-cols-md-6 g-2 mt-4">
@@ -341,23 +343,23 @@ const DetailOtorisasiPusat = () => {
                     </tr>
                     <tr>
                         <td>BE:</td>
-                        <td>,</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Salesman:</td>
-                        <td>,</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>GL:</td>
-                        <td>,</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>ASM:</td>
-                        <td>,</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Manager:</td>
-                        <td>,</td>
+                        <td></td>
                     </tr>
                     </tbody>
                 </table>

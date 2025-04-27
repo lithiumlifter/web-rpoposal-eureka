@@ -1,16 +1,25 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const PrintReportCabang = () => {
-  const location = useLocation();
-  const data = location.state?.data || [];
+  const [data, setData] = useState([]);
 
   const fromDate = data[0]?.date?.receive_cabang || "-";
   const toDate = data[data.length - 1]?.date?.receive_cabang || "-";
 
   useEffect(() => {
-    setTimeout(() => window.print(), 500);
+    const storedData = localStorage.getItem("print-data-cabang");
+    if (storedData) {
+      setData(JSON.parse(storedData));
+    }
+
+    // Otomatis print setelah data kebaca
+    setTimeout(() => {
+      window.print();
+      // Bersihkan localStorage setelah print
+      localStorage.removeItem("print-data-cabang");
+    }, 500);
   }, []);
+  
 
   return (
     <div>

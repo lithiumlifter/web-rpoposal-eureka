@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import AllReportServices from "../../services/admin/allReportServices";
-import DataTable from "react-data-table-component";
 import CustomTable from "../../components/table/customTable";
-import { useNavigate } from "react-router-dom";
 
 const ReportToCabang = () => {
-    const navigate = useNavigate();
     const [searchText, setSearchText] = useState("");
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
@@ -13,8 +10,10 @@ const ReportToCabang = () => {
     const [loading, setLoading] = useState(true);
 
     const handlePrint = () => {
-        navigate("/print-report-cabang", { state: { data: filteredData } });
+        localStorage.setItem("print-data-cabang", JSON.stringify(filteredData));
+        window.open("/print-report-cabang", "_blank");
     };
+      
 
     useEffect(() => {
         const fetchData = async () => {

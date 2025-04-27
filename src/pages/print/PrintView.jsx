@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react';
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
 import Barcode from 'react-barcode';
 
 const PrintView = () => {
-  const { state } = useLocation();
-  const { proposal, formData } = state || {};
+  const [proposal, setProposal] = useState(null);
+  const [formData, setFormData] = useState(null);
   const userRole = localStorage.getItem("name");
 
   useEffect(() => {
-    document.title = `Proposal - ${formData?.title || 'Print'}`;
+    // Ambil dari localStorage
+    const storedData = JSON.parse(localStorage.getItem('printData'));
+    if (storedData) {
+      setProposal(storedData.proposal);
+      setFormData(storedData.formData);
+    }
+    document.title = `Proposal - ${storedData?.formData?.title || 'Print'}`;
     setTimeout(() => window.print(), 500);
   }, []);
   

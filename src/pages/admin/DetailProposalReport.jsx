@@ -9,13 +9,13 @@ import ImagePreviewModal from "../../components/ImagePreviewModal";
 const DetailProposalReport = () => {
 const navigate = useNavigate();
 const handlePrint = () => {
-  navigate('/printview', {
-    state: {
-      proposal,
-      formData
-    }
-  });
+  const printWindow = window.open('/printview', '_blank');
+  if (printWindow) {
+    // Kalau mau kirim data (proposal, formData) kamu bisa pakai localStorage/sessionStorage dulu
+    localStorage.setItem('printData', JSON.stringify({ proposal, formData }));
+  }
 };
+
   const [categories, setCategories] = useState({
     bisnisUnit: [],
     ruangLingkup: [],

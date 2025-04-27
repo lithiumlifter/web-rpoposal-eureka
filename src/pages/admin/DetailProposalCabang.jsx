@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import DetailProposal from "../../services/admin/detailProposalServices";
 import CategoryService from "../../services/admin/categoryServices";
@@ -8,6 +8,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CustomTable from "../../components/table/customTable";
 import ImagePreviewModal from "../../components/ImagePreviewModal";
+import Select from "react-select";
 
 const DetailProposalCabang = () => {
   
@@ -18,7 +19,72 @@ const DetailProposalCabang = () => {
   const [addedOtorisasi, setAddedOtorisasi] = useState([]);
   const [selectedOtorisasi, setSelectedOtorisasi] = useState("");
   const [catatan, setCatatan] = useState('');
+  const [selectedBUName, setSelectedBUName] = useState(null);
+  const [selectedBUWilayah, setSelectedBUWilayah] = useState(null);
+  const [categories, setCategories] = useState({
+    bisnisUnit: [],
+    ruangLingkup: [],
+    dataKategori: [],
+    dataTipe: [],
+    dataOtorisasi: [],
+  });
 
+
+  // Process BU names (Unique Names)
+  const buNames = useMemo(() => {
+    return categories.bisnisUnit.length
+      ? [...new Set(categories.bisnisUnit.map(item => item.name))] 
+      : [];
+  }, [categories.bisnisUnit]);
+
+  const optionsBUName = useMemo(() => {
+    return buNames.map(name => ({
+      value: name,
+      label: name,
+    }));
+  }, [buNames]);
+
+  const optionsBUWilayah = useMemo(() => {
+    return categories.bisnisUnit.length
+      ? categories.bisnisUnit
+          .filter(item => item.name === selectedBUName)
+          .map(item => ({
+            value: item.value,
+            label: item.wilayah,
+          }))
+      : [];
+  }, [categories.bisnisUnit, selectedBUName]);
+  
+  
+  
+
+    // custom style select search
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      textAlign: "left",
+    }),
+    singleValue: (base) => ({
+      ...base,
+      textAlign: "left",
+    }),
+    menu: (base) => ({
+      ...base,
+      textAlign: "left",
+    }),
+    option: (base) => ({
+      ...base,
+      textAlign: "left",
+    }),
+    placeholder: (base) => ({
+      ...base,
+      textAlign: "left",
+      color: "#aaa", // Warna placeholder bisa diubah
+    }),
+  };
+  console.log('selectedBUWilayah:', selectedBUWilayah);
+  console.log('optionsBUWilayah:', optionsBUWilayah);
+  
   //OPENMODAL IMAGE
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -29,16 +95,6 @@ const DetailProposalCabang = () => {
   };
 
   const closeModal = () => setIsModalOpen(false);
-
-
-  const [categories, setCategories] = useState({
-    bisnisUnit: [],
-    ruangLingkup: [],
-    dataKategori: [],
-    dataTipe: [],
-    dataOtorisasi: [],
-  });
-
   const { id_proposal } = useParams();
   const [proposal, setProposal] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -65,8 +121,23 @@ const DetailProposalCabang = () => {
   }, []);
 
   useEffect(() => {
-    if (!id_proposal) return;
+    if (proposal) {
+      const selectedBU = categories.bisnisUnit.find(
+        (bu) => bu.value === proposal.bisnis_unit
+      );
+      if (selectedBU) {
+        setSelectedBUName(selectedBU.name); // Set BU Name
+        setSelectedBUWilayah(selectedBU.wilayah); // Set BU Wilayah
+      }
+    }
+  }, [proposal, categories.bisnisUnit]);
+  
+  
+  
 
+  useEffect(() => {
+    if (!id_proposal) return;
+  
     const fetchDetailProposal = async () => {
       if (!id_proposal || categories.dataOtorisasi.length === 0) return;
       try {
@@ -74,27 +145,28 @@ const DetailProposalCabang = () => {
         const data = await DetailProposal.getDetailProposal(id_proposal);
         console.log("DATA DETAIL PROPOSAL:", data);
         setProposal(data.data);
-        if (categories.dataOtorisasi.length > 0) {
-          setAddedOtorisasi(
-            data.data.otoritas?.map((item) => {
-              const match = categories.dataOtorisasi.find((otor) =>
-                otor.name.startsWith(item.id_level + " :")
-              );
-              return match?.value ?? null;
-            }).filter(Boolean) || []
-          );
-        }
         
-        setFormData(data.data);
+        // Set bisnis_unit data (if available) based on the fetched proposal
+        const selectedBU = categories.bisnisUnit.find((bu) => bu.value === data.data.bisnis_unit);
+        setFormData({
+          ...data.data,
+          bu_name: selectedBU ? selectedBU.name : "",
+          bu_wilayah: selectedBU ? selectedBU.wilayah : "",
+        });
+  
+        // Update selected BU Name and Wilayah based on proposal data
+        setSelectedBUName(selectedBU ? selectedBU.name : "");
+        setSelectedBUWilayah(selectedBU ? selectedBU.wilayah : "");
+  
       } catch (err) {
         setError(err.response?.data || err.message);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchDetailProposal();
-  }, [id_proposal,categories.dataOtorisasi]);
+  }, [id_proposal, categories.dataOtorisasi]);
 
   const handleAddOtorisasi = () => {
     if (selectedOtorisasi && !addedOtorisasi.includes(selectedOtorisasi)) {
@@ -111,8 +183,24 @@ const DetailProposalCabang = () => {
   // Handler untuk mengubah nilai input saat mode edit
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  
+    if (name === "bisnis_unit") {
+      const selectedBU = categories.bisnisUnit.find((bu) => bu.value === value);
+      setFormData({
+        ...formData,
+        bisnis_unit: value,
+        bu_name: selectedBU ? selectedBU.name : "",
+        bu_wilayah: selectedBU ? selectedBU.wilayah : "",
+      });
+      setSelectedBUName(selectedBU ? selectedBU.name : "");
+      setSelectedBUWilayah(selectedBU ? selectedBU.wilayah : "");
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
+  
+  
+  
 
   // Handler untuk tombol Edit/Simpan
   const toggleEdit = () => {
@@ -129,6 +217,11 @@ const DetailProposalCabang = () => {
 
   const handleSubmitForm = async () => {
     try {
+      const updatedFormData = {
+        ...formData,
+        bu_name: selectedBUName,
+        bu_wilayah: selectedBUWilayah,
+      };
       // Persiapan data otorisasi awal (dari proposal sebelumnya)
     const initialOtorisasi = proposal.otoritas?.map((item) => {
       const match = categories.dataOtorisasi.find((otor) =>
@@ -149,7 +242,7 @@ const DetailProposalCabang = () => {
       setFormData({ ...formData, biaya_lain: editedBiayaLain });
       const payload = {
         id_proposal: proposal.id_proposal,
-        bisnis_unit: formData.bisnis_unit,
+        bisnis_unit: updatedFormData.bisnis_unit,
         title: formData.title,
         biayalainlain: formData.biaya_lain ?? 0,
         description: catatan ?? "",
@@ -193,15 +286,48 @@ const DetailProposalCabang = () => {
       <div className="card">
             <div className="card-header d-flex justify-content-between align-items-center">
               <div>Detail Proposal</div>
-              <div>
+              <div className="d-flex justify-content-center gap-2">
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => navigate(-1)}
+              >
+                Tutup Jendela
+              </button>
+
+              {isEditing ? (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={handleSubmitForm}
+                  >
+                    Simpan
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setFormData(originalData);
+                      setIsEditing(false);
+                    }}
+                  >
+                    Batal
+                  </button>
+                </>
+              ) : (
                 <button
                   type="button"
-                  className="btn btn-danger"
-                  onClick={() => navigate(-1)}
+                  className="btn btn-primary"
+                  onClick={() => {
+                    setOriginalData(formData);
+                    setIsEditing(true);
+                  }}
                 >
-                  Tutup Jendela
+                  Edit
                 </button>
-              </div>
+              )}
+            </div>
             </div>
             <div className="card-body">
                 {/* Tanggal Proposal */}
@@ -234,26 +360,63 @@ const DetailProposalCabang = () => {
                   </div>
                 </div>
 
-                  {/* BU */}
-                  <div className="form-group row">
-                    <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
-                    <div className="col-12 col-sm-8 col-lg-8">
-                      <select
-                        className="form-control"
-                        name="bisnis_unit"
-                        value={formData.bisnis_unit || ""}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                      >
-                        <option value="">Pilih BU</option>
-                        {categories.bisnisUnit.map((item) => (
-                          <option key={item.value} value={item.value}>
-                            {item.name} - {item.wilayah}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
+{/* BU Name */}
+<div className="form-group row">
+  <label className="col-12 col-sm-3 col-form-label text-left">
+    BU Name:
+  </label>
+  <div className="col-12 col-sm-8 col-lg-8">
+  <Select
+  options={optionsBUName}
+  placeholder="Pilih Nama BU"
+  className="basic-single"
+  classNamePrefix="select"
+  styles={customStyles}
+  value={optionsBUName.find(opt => opt.value === selectedBUName) || null}
+  onChange={(selectedOption) => {
+    if (isEditing) {
+      setSelectedBUName(selectedOption ? selectedOption.value : null);
+      setSelectedBUWilayah(null); // Reset wilayah after selecting new BU
+    }
+  }}
+  isDisabled={!isEditing} // Disable if not in edit mode
+/>
+
+
+  </div>
+</div>
+
+{/* BU Wilayah */}
+<div className="form-group row">
+  <label className="col-12 col-sm-3 col-form-label text-left">
+    BU Wilayah:
+  </label>
+  <div className="col-12 col-sm-8 col-lg-8">
+  <Select
+  options={optionsBUWilayah}
+  placeholder="Pilih Wilayah BU"
+  className="basic-single"
+  classNamePrefix="select"
+  styles={customStyles}
+  value={selectedBUWilayah 
+    ? optionsBUWilayah.find(option => option.label === selectedBUWilayah) 
+    : null}
+  onChange={(selectedOption) => {
+    if (isEditing) {
+      setSelectedBUWilayah(selectedOption ? selectedOption.value : null);
+      setFormData(prev => ({
+        ...prev,
+        bisnis_unit: selectedOption ? selectedOption.value : "",
+      }));
+    }
+  }}
+  isDisabled={!selectedBUName || !isEditing}
+/>
+
+  </div>
+</div>
+
+
 
                   {/* Ruang Lingkup */}
                   <div className="form-group row">
@@ -458,45 +621,6 @@ const DetailProposalCabang = () => {
               </div>
             </div>
           </div>
-
-        {/* Tombol Edit / Simpan */}
-        <div className="form-group row mt-3">
-                  <div className="col-12 text-center">
-                    {isEditing ? (
-                      <>
-                      <button
-                        type="button"
-                        className="btn btn-success me-2"
-                        onClick={handleSubmitForm}
-                      >
-                        Simpan
-                      </button>
-
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          onClick={() => {
-                            setFormData(originalData); // Reset form
-                            setIsEditing(false); // Kembali ke mode view
-                          }}
-                        >
-                          Batal
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => {
-                          setOriginalData(formData); // Simpan data awal sebelum edit
-                          setIsEditing(true); // Aktifkan mode edit
-                        }}
-                      >
-                        Edit
-                      </button>
-                    )}
-                  </div>
-                </div>
 
         {/* G. LAMPIRAN */}
         <div className="card mt-3">

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import EditorCatatan from "../../components/EditorCatatan";
 import CategoryService from "../../services/admin/categoryServices";
@@ -17,15 +17,16 @@ const InputProposal = () => {
   const [email1, setEmail1] = useState("");
   const [email2, setEmail2] = useState("");
   const [email3, setEmail3] = useState("");
-  const [selectedBisnisUnit, setSelectedBisnisUnit] = useState(null);
+  // const [selectedBisnisUnit, setSelectedBisnisUnit] = useState(null);
   const [selectedRuangLingkup, setSelectedRuangLingkup] = useState(null);
   const [selectedKategori, setSelectedKategori] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: '', message: '' });
   const name = localStorage.getItem("name");
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-
+  const [selectedBUName, setSelectedBUName] = useState(null);
+  const [selectedBUWilayah, setSelectedBUWilayah] = useState(null);
+  
   const [categories, setCategories] = useState({
     bisnisUnit: [],
     roleUser: [],
@@ -35,6 +36,31 @@ const InputProposal = () => {
     dataTipe: [],
     dataOtorisasi: [],
   });
+// BU Names (Nama BU)
+const buNames = useMemo(() => {
+  return categories.bisnisUnit.length
+    ? [...new Set(categories.bisnisUnit.map(item => item.name))]
+    : [];
+}, [categories.bisnisUnit]);
+
+const optionsBUName = useMemo(() => {
+  return buNames.map(name => ({
+    value: name,
+    label: name,
+  }));
+}, [buNames]);
+
+// BU Wilayah
+const optionsBUWilayah = useMemo(() => {
+  return categories.bisnisUnit.length
+    ? categories.bisnisUnit
+        .filter(item => item.name === selectedBUName)
+        .map(item => ({
+          value: item.value, // value tetap id atau kode
+          label: item.wilayah,
+        }))
+    : [];
+}, [categories.bisnisUnit, selectedBUName]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -86,10 +112,10 @@ const InputProposal = () => {
 
   
   // fetch category
-  const optionBisnisunit = categories.bisnisUnit.map((item) => ({
-    value: item.value,
-    label: `${item.name} - ${item.wilayah}`,
-  }));
+  // const optionBisnisunit = categories.bisnisUnit.map((item) => ({
+  //   value: item.value,
+  //   label: `${item.name} - ${item.wilayah}`,
+  // }));
 
   const optionsRuangLingkup = categories.ruangLingkup.map((item) => ({
     value: item.value,
@@ -136,7 +162,7 @@ const InputProposal = () => {
 
     const formData = new FormData();
     formData.append("tanggal_pengajuan", tanggal_pengajuan);
-    formData.append("bisnis_unit", selectedBisnisUnit);
+    formData.append("bisnis_unit", selectedBUWilayah);
     formData.append("proposalid", proposalid);
     formData.append("ruanglingkup", selectedRuangLingkup);
     formData.append("kategori", selectedKategori);
@@ -224,7 +250,7 @@ const InputProposal = () => {
                   <input
                     type="text"
                     required
-                    placeholder="Nomor Surat Proposal cabang/Pusat"
+                    placeholder="Nomor Surat Proposal Cabang/Pusat"
                     className="form-control"
                     value={proposalid}
                     onChange={(e) => setProposalId(e.target.value)}
@@ -232,23 +258,46 @@ const InputProposal = () => {
                 </div>
               </div>
 
-              {/* BU */}
-            <div className="form-group row">
-                <label className="col-12 col-sm-3 col-form-label text-left">
-                  BU:
-                </label>
-                <div className="col-12 col-sm-8 col-lg-8">
-                <Select
-                  options={optionBisnisunit}
-                  placeholder="Pilih BU"
-                  className="basic-single"
-                  classNamePrefix="select"
-                  styles={customStyles}
-                  value={optionBisnisunit.find(opt => opt.value === selectedBisnisUnit) || null}
-                  onChange={(selectedOption) => setSelectedBisnisUnit(selectedOption ? selectedOption.value : null)}
-                />
-                </div>
-              </div>
+             {/* BU Name */}
+<div className="form-group row">
+  <label className="col-12 col-sm-3 col-form-label text-left">
+    BU Name:
+  </label>
+  <div className="col-12 col-sm-8 col-lg-8">
+    <Select
+      options={optionsBUName}
+      placeholder="Pilih Nama BU"
+      className="basic-single"
+      classNamePrefix="select"
+      styles={customStyles}
+      value={optionsBUName.find(opt => opt.value === selectedBUName) || null}
+      onChange={(selectedOption) => {
+        setSelectedBUName(selectedOption ? selectedOption.value : null);
+        setSelectedBUWilayah(null); // Reset wilayah setelah pilih nama baru
+      }}
+    />
+  </div>
+</div>
+
+{/* BU Wilayah */}
+<div className="form-group row">
+  <label className="col-12 col-sm-3 col-form-label text-left">
+    BU Wilayah:
+  </label>
+  <div className="col-12 col-sm-8 col-lg-8">
+    <Select
+      options={optionsBUWilayah}
+      placeholder="Pilih Wilayah BU"
+      className="basic-single"
+      classNamePrefix="select"
+      styles={customStyles}
+      value={optionsBUWilayah.find(opt => opt.value === selectedBUWilayah) || null}
+      onChange={(selectedOption) => setSelectedBUWilayah(selectedOption ? selectedOption.value : null)}
+      isDisabled={!selectedBUName} // disable kalau nama belum dipilih
+    />
+  </div>
+</div>
+
 
               {/* Ruang Lingkup */}
               <div className="form-group row">

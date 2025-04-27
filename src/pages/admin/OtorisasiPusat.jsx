@@ -48,6 +48,8 @@ const OtorisasiPusat = () => {
     {
       name: "ID",
       selector: (row) => row.kode_proposal,
+      wrap: true,
+      style: { textAlign: "left", whiteSpace: "normal" }
     },
     {
       name: "BU",
@@ -63,6 +65,7 @@ const OtorisasiPusat = () => {
       selector: (row) => row.title,
       wrap: true,
       grow: 3, // biar lebar dan gak kena ellipsis
+      style: { textAlign: "left", whiteSpace: "normal" }
     },
     {
       name: "TYPE",

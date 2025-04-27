@@ -140,57 +140,74 @@ const UpdateStatusPst = () => {
     );
 
     // const columns = [
-    //     { name: "RL", selector: row => row.ruang_lingkup, sortable: true },
-    //     { name: "CAB", selector: row => row.reg_branch || "-", sortable: true },
-    //     { name: "PST", selector: row => row.reg || "-", sortable: true },
-    //     { name: "ID", selector: row => row.kode_proposal, sortable: true },
-    //     { name: "BU", selector: row => row.bisnis_unit, sortable: true },
-    //     { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true },
-    //     { name: "TITLE", selector: row => row.title, sortable: true },
-    //     { name: "TYPE", selector: row => row.type, sortable: true },
+    //     { name: "RL", selector: row => row.ruang_lingkup, sortable: true, maxWidth: "80px" },
+    //     { name: "CAB", selector: row => row.reg_branch || "-", sortable: true, maxWidth: "80px" },
+    //     { name: "PST", selector: row => row.reg || "-", sortable: true, maxWidth: "80px" },
+    //     { name: "ID", selector: row => row.kode_proposal, sortable: true, maxWidth: "100px" },
+    //     { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "70px" },
+    //     { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },
+    //     { name: "TITLE", selector: row => row.title, sortable: true, grow: 2 },
+    //     { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },
     //     {
     //         name: "EDIT/VIEW",
     //         cell: row => (
-    //             <div className="flex space-x-2">
-    //                 {/* <button className="btn btn-primary">
-    //                     <i className="fas fa-edit" />
-    //                 </button> */}
-    //                 <button className="btn btn-warning" onClick={() => {
-    //                     console.log("ID yang dikirim ke detail:", row.id);
-    //                     navigate(`/admin/updatestatuspusat/${row.id}`);
-    //                 }}>
-    //                     <i className="fas fa-edit" />
-    //                 </button>
-    //             </div>
-    //         )
+    //             <button className="btn btn-warning btn-sm" onClick={() => navigate(`/admin/updatestatuspusat/${row.id}`)}>
+    //                 <i className="fas fa-edit" />
+    //             </button>
+    //         ),
+    //         ignoreRowClick: true,
+    //         allowOverflow: true,
+    //         button: true,
+    //         maxWidth: "80px"
     //     },
     //     {
     //         name: "CANCEL",
     //         cell: row => (
-    //             <button className="btn btn-danger" onClick={() => handleCloseModal(row)}>
+    //             <button className="btn btn-danger btn-sm" onClick={() => handleCancelModal(row)}>
     //                 <i className="fas fa-times" />
     //             </button>
-    //         )
+    //         ),
+    //         ignoreRowClick: true,
+    //         allowOverflow: true,
+    //         button: true,
+    //         maxWidth: "90px"
     //     },
     //     {
     //         name: "CLOSE",
     //         cell: row => (
-    //             <button className="btn btn-success" onClick={() => handleOpenModal(row)}>
-    //                 {/* <i className="fas fa-check" /> */}
+    //             <button className="btn btn-success btn-sm" onClick={() => handleOpenModal(row)}>
     //                 Close
     //             </button>
-    //         )
+    //         ),
+    //         ignoreRowClick: true,
+    //         allowOverflow: true,
+    //         button: true,
+    //         maxWidth: "90px"
     //     },
     // ];
-
+    
     const columns = [
         { name: "RL", selector: row => row.ruang_lingkup, sortable: true, maxWidth: "80px" },
         { name: "CAB", selector: row => row.reg_branch || "-", sortable: true, maxWidth: "80px" },
         { name: "PST", selector: row => row.reg || "-", sortable: true, maxWidth: "80px" },
-        { name: "ID", selector: row => row.kode_proposal, sortable: true, maxWidth: "100px" },
+        { 
+            name: "ID", 
+            selector: row => row.kode_proposal, 
+            sortable: true, 
+            maxWidth: "100px", 
+            wrap: true,
+            style: { textAlign: "left", whiteSpace: "normal" } 
+        },
         { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "70px" },
         { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },
-        { name: "TITLE", selector: row => row.title, sortable: true, grow: 2 },
+        { 
+            name: "TITLE", 
+            selector: row => row.title, 
+            sortable: true, 
+            grow: 2, 
+            wrap: true,
+            style: { textAlign: "left", whiteSpace: "normal" } 
+        },
         { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },
         {
             name: "EDIT/VIEW",

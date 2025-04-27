@@ -7,6 +7,7 @@ import Select from "react-select";
 import InputProposalServices from "../../services/admin/inputProposalServices";
 import "../../assets/styles/LoadingOverlay.css";
 import { showSuccessToast, showErrorToast } from "../../utils/toast";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
 const InputProposal = () => {
   const [tanggal_pengajuan, setTanggalPengajuan] = useState(new Date().toISOString().split("T")[0]);
@@ -22,6 +23,8 @@ const InputProposal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: '', message: '' });
   const name = localStorage.getItem("name");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const [categories, setCategories] = useState({
     bisnisUnit: [],
@@ -76,7 +79,7 @@ const InputProposal = () => {
 
   // custom number
   const [customNumber, setCustomNumber] = useState("");
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState("9");
 
   // catatan
   const [catatan, setCatatan] = useState("");
@@ -187,7 +190,10 @@ const InputProposal = () => {
       </div>
     )}
 
-     <form onSubmit={handleSubmit}>
+     <form onSubmit={(e) => {
+        e.preventDefault();
+        setIsModalOpen(true);
+      }}>
         {/* MASTER */}
         <div className="card">
           <div className="card-header text-start">Master</div>
@@ -499,8 +505,14 @@ const InputProposal = () => {
 
               {/* Submit Button */}
               <div className="form-group row">
-                <div className="col-12 col-sm-8 col-lg-8 offset-sm-3">
-                  <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Simpan</button>
+                <div className="col-12 col-sm-8 col-lg-8 offset-sm-3 text-start">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  Submit Proposal
+                </button>
                 </div>
               </div>
           </div>
@@ -513,6 +525,15 @@ const InputProposal = () => {
           </div>
         </div>
       )}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        onConfirm={async () => {
+          setIsModalOpen(false);
+          await handleSubmit(new Event('submit'));
+        }}
+        message="Apakah Anda yakin ingin mengirim proposal ini?"
+      />
     </>
   );
 };

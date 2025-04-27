@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import allDataProposal from "../../services/admin/allDataProposal";
 import CustomTable from "../../components/table/customTable";
 import ImagePreviewModal from "../../components/ImagePreviewModal";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
 const DetailOtorisasiPusat = () => {
   const navigate = useNavigate();
@@ -28,6 +29,12 @@ const DetailOtorisasiPusat = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [keterangan, setKeterangan] = useState('');
+  const [showCloseModal, setShowCloseModal] = useState(false);
+
+const handleConfirmClose = () => {
+  navigate('/admin/otorisasipusat');
+};
+
 
   useEffect(() => {
     const fetchDataProposal = async () => {
@@ -177,12 +184,12 @@ const DetailOtorisasiPusat = () => {
           >
             « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
           </button>
-          <button 
-            className="btn btn-danger" 
-            onClick={() => navigate('/admin/otorisasipusat')}
-          >
-            Tutup jendela ini
-          </button>
+          <button
+              className="btn btn-danger"
+              onClick={() => setShowCloseModal(true)}
+            >
+              Tutup jendela ini
+            </button>
           <button 
             className="btn btn-warning" 
             onClick={() => goToPrevNextProposal('next')}
@@ -630,6 +637,17 @@ const DetailOtorisasiPusat = () => {
         </div>
       </div>
       </div>
+      <ConfirmationModal
+          isOpen={showCloseModal}
+          onClose={() => setShowCloseModal(false)}
+          onConfirm={handleConfirmClose}
+          title="Konfirmasi Penutupan"
+          message="Apakah Anda yakin ingin menutup jendela ini?"
+          confirmText="Ya, Tutup"
+          cancelText="Batal"
+          theme="danger"
+      />
+
     </>
   );
 };

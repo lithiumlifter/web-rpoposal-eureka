@@ -252,7 +252,7 @@ const InboxPusat = () => {
                     className="btn btn-info btn-sm"
                     onClick={() => {
                         console.log("ID yang dikirim ke detail:", row.id);
-                        navigate(`/admin/inboxcabang/${row.id}`);
+                        navigate(`/admin/inboxpusat/${row.id}`);
                     }}
                 >
                     <i className="fas fa-eye" />

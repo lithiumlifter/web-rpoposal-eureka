@@ -27,6 +27,13 @@ export const showSuccessToast = (message) => {
   });
 };
 
+export const showDevelopmentToast = (message) => {
+  toast(message, {
+    icon: '🚧',
+  });
+};
+
+
 export const showErrorToast = (message) => {
   toast.error(message, {
     icon: "❌",

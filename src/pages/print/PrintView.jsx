@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation } from "react-router-dom";
+import Barcode from 'react-barcode';
 
 const PrintView = () => {
   const { state } = useLocation();
@@ -108,7 +109,19 @@ const PrintView = () => {
       {/* === Mulai tampilan cetak mirip screenshot pertama === */}
       <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '15px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div><img src="/barcode-placeholder.png" alt="Barcode" height="30" /></div>
+        <div style={{ minWidth: '150px' }}>
+    {proposal.history?.findLast((item) => item.reg_branch) ? (
+      <Barcode
+        value={proposal.history.findLast((item) => item.reg_branch)?.reg_branch || 'N/A'}
+        height={40}
+        width={1.5}
+        fontSize={12}
+        displayValue={false} // kalau mau HILANGIN teks di bawah barcode
+      />
+    ) : (
+      <p style={{ fontSize: '10px' }}>Barcode tidak tersedia</p>
+    )}
+  </div>
           <div style={{ fontWeight: 'bold', textAlign: 'center', flexGrow: 1 }}>
             PROPOSAL : {proposal.tipe} ------ Print by : {userRole}
           </div>

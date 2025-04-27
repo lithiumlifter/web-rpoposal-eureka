@@ -46,12 +46,88 @@ const ProposalReport = () => {
             : true)
     );
 
+    // const columns = [
+    //     { name: "NO", selector: (_, index) => index + 1, width: "60px", wrap: true },
+    //     {
+    //         name: "REG",
+    //         selector: row => (
+    //           <div style={{ whiteSpace: 'pre-line' }}>
+    //             {`${row.reg_branch || "-"}\n${row.reg || "-"}`}
+    //           </div>
+    //         ),
+    //         maxWidth: "120px",
+    //         wrap: true
+    //     },          
+    //     { name: "PROPOSAL", selector: row => row.kode_proposal || "-", maxWidth: "130px", wrap: true },
+    //     { name: "TITLE", selector: row => row.title || "-", grow: 2, wrap: true },
+    //     { name: "BU", selector: row => row.bisnis_unit || "-", maxWidth: "70px", wrap: true },
+    //     {
+    //       name: "VIEW",
+    //       cell: row => (
+    //         <button className="btn btn-success btn-sm" onClick={() => navigate(`/admin/proposalreport/${row.id}`)}>
+    //           <i className="fas fa-search" />
+    //         </button>
+    //       ),
+    //       ignoreRowClick: true,
+    //       allowOverflow: true,
+    //       button: true,
+    //       maxWidth: "70px"
+    //     },
+    //     { name: "RECV", selector: row => row.date?.receive_cabang || "-", maxWidth: "120px", wrap: true },
+    //     { name: "MGRCAB", selector: () => "-", maxWidth: "90px", wrap: true },
+    //     { name: "KADEPT", selector: () => "-", maxWidth: "90px", wrap: true },
+    //     { name: "AKTCAB", selector: () => "-", maxWidth: "90px", wrap: true },
+    //     { name: "KACAB", selector: () => "-", maxWidth: "90px", wrap: true },
+    //     { name: "MGRPST", selector: () => "-", maxWidth: "90px", wrap: true },
+    //     { name: "AKTPST", selector: () => "-", maxWidth: "90px", wrap: true },
+    //     { name: "FIN", selector: () => "-", maxWidth: "80px", wrap: true },
+    //     { name: "AMD", selector: () => "-", maxWidth: "80px", wrap: true },
+    //     { name: "DIRMKT", selector: () => "-", maxWidth: "90px", wrap: true },
+    //     { name: "DIRUTM", selector: () => "-", maxWidth: "90px", wrap: true },
+    //     { name: "STATUS", selector: row => row.status || "-", maxWidth: "100px", wrap: true },
+    //     { name: "USER", selector: row => row.user || "-", maxWidth: "100px", wrap: true }
+    //   ];
+      
     const columns = [
-        { name: "NO", selector: (_, index) => index + 1, width: "60px", wrap: true },
-        { name: "REG", selector: row => `${row.reg_branch || "-"}/${row.reg || "-"}`, maxWidth: "120px", wrap: true },
-        { name: "PROPOSAL", selector: row => row.kode_proposal || "-", maxWidth: "130px", wrap: true },
-        { name: "TITLE", selector: row => row.title || "-", grow: 2, wrap: true },
-        { name: "BU", selector: row => row.bisnis_unit || "-", maxWidth: "70px", wrap: true },
+        { 
+          name: "NO", 
+          selector: (_, index) => index + 1, 
+          width: "60px", 
+          wrap: true, 
+          style: { textAlign: "left" }
+        },
+        {
+          name: "REG",
+          selector: row => (
+            <div style={{ whiteSpace: 'pre-line' }}>
+              {`${row.reg_branch || "-"}\n${row.reg || "-"}`}
+            </div>
+          ),
+          maxWidth: "120px",
+          wrap: true,
+          style: { textAlign: "left" }
+        },
+        { 
+          name: "PROPOSAL", 
+          selector: row => row.kode_proposal || "-", 
+          maxWidth: "130px", 
+          wrap: true, 
+          style: { textAlign: "left" }
+        },
+        { 
+          name: "TITLE", 
+          selector: row => row.title || "-", 
+          grow: 2, 
+          wrap: true, 
+          style: { textAlign: "left" }
+        },
+        { 
+          name: "BU", 
+          selector: row => row.bisnis_unit || "-", 
+          maxWidth: "70px", 
+          wrap: true, 
+          style: { textAlign: "left" }
+        },
         {
           name: "VIEW",
           cell: row => (
@@ -62,21 +138,22 @@ const ProposalReport = () => {
           ignoreRowClick: true,
           allowOverflow: true,
           button: true,
-          maxWidth: "70px"
+          maxWidth: "70px",
+          style: { textAlign: "left" }
         },
-        { name: "RECV", selector: row => row.date?.receive_cabang || "-", maxWidth: "120px", wrap: true },
-        { name: "MGRCAB", selector: () => "-", maxWidth: "90px", wrap: true },
-        { name: "KADEPT", selector: () => "-", maxWidth: "90px", wrap: true },
-        { name: "AKTCAB", selector: () => "-", maxWidth: "90px", wrap: true },
-        { name: "KACAB", selector: () => "-", maxWidth: "90px", wrap: true },
-        { name: "MGRPST", selector: () => "-", maxWidth: "90px", wrap: true },
-        { name: "AKTPST", selector: () => "-", maxWidth: "90px", wrap: true },
-        { name: "FIN", selector: () => "-", maxWidth: "80px", wrap: true },
-        { name: "AMD", selector: () => "-", maxWidth: "80px", wrap: true },
-        { name: "DIRMKT", selector: () => "-", maxWidth: "90px", wrap: true },
-        { name: "DIRUTM", selector: () => "-", maxWidth: "90px", wrap: true },
-        { name: "STATUS", selector: row => row.status || "-", maxWidth: "100px", wrap: true },
-        { name: "USER", selector: row => row.user || "-", maxWidth: "100px", wrap: true }
+        { name: "RECV", selector: row => row.date?.receive_cabang || "-", maxWidth: "120px", wrap: true, style: { textAlign: "left" } },
+        { name: "MGRCAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
+        { name: "KADEPT", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
+        { name: "AKTCAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
+        { name: "KACAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
+        { name: "MGRPST", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
+        { name: "AKTPST", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
+        { name: "FIN", selector: () => "-", maxWidth: "80px", wrap: true, style: { textAlign: "left" } },
+        { name: "AMD", selector: () => "-", maxWidth: "80px", wrap: true, style: { textAlign: "left" } },
+        { name: "DIRMKT", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
+        { name: "DIRUTM", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
+        { name: "STATUS", selector: row => row.status || "-", maxWidth: "100px", wrap: true, style: { textAlign: "left" } },
+        { name: "USER", selector: row => row.user || "-", maxWidth: "100px", wrap: true, style: { textAlign: "left" } }
       ];
       
     return (

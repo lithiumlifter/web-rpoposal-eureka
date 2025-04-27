@@ -40,6 +40,7 @@ import ReportToCabang from "./pages/admin/ReportToCabang";
 import PrintReportCabang from "./pages/print/PrintReportToCabangView";
 import Modal from 'react-modal';
 import { ToastProvider } from "./utils/toast";
+import DetailProposalPusat from "./pages/admin/DetailProposalPusat";
 Modal.setAppElement('#root');
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
             <Route path="otorisationpending" element={<OtorisasiPending />} />
             <Route path="reportkpi" element={<ReportKpi />} />
             <Route path="inboxcabang/:id_proposal" element={<DetailProposalCabang />} />
+            <Route path="inboxpusat/:id_proposal" element={<DetailProposalPusat />} />
             <Route path="updatestatuscabang/:id_proposal" element={<DetailProposalCabang />} />
             <Route path="updatestatuspusat/:id_proposal" element={<DetailProposalCabang />} />
             <Route path="updateanggaran/:id_proposal" element={<InputAnggaran />} />

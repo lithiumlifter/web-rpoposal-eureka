@@ -8,6 +8,7 @@ import allDataProposal from "../../services/admin/allDataProposal";
 import CustomTable from "../../components/table/customTable";
 import ImagePreviewModal from "../../components/ImagePreviewModal";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { showDevelopmentToast, showErrorToast, showSuccessToast } from "../../utils/toast";
 
 const DetailOtorisasiPusat = () => {
   const navigate = useNavigate();
@@ -30,6 +31,9 @@ const DetailOtorisasiPusat = () => {
   const [formData, setFormData] = useState({});
   const [keterangan, setKeterangan] = useState('');
   const [showCloseModal, setShowCloseModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [statusToSubmit, setStatusToSubmit] = useState('');
+
 
 const handleConfirmClose = () => {
   navigate('/admin/otorisasipusat');
@@ -113,48 +117,129 @@ const handleConfirmClose = () => {
 
   // handle otorisasi
   const handleSubmit = async (statusValue) => {
-    const isConfirmed = window.confirm("Apakah kamu yakin ingin melanjutkan proses ini?");
-    if (!isConfirmed) return;
-    const role = localStorage.getItem("role");
-    console.log("Role Pengguna:", role);
+    setStatusToSubmit(statusValue);
+    setShowConfirmationModal(true);
+};
 
+// const handleConfirmSubmit = async () => {
+//   const role = localStorage.getItem("role");
+//   console.log("Role Pengguna:", role);
+
+//   if (role === "admin") {
+//     const idOtorisasiList = proposal.otoritas.map(item => item.id_otorisasi);
+//     console.log("ID Otorisasi untuk Admin:", idOtorisasiList);
+
+//     let hasError = false;
+
+//     for (const idOtorisasi of idOtorisasiList) {
+//       const bodyRequest = {
+//         id_proposal: proposal.id_proposal,
+//         id_otorisasi: idOtorisasi,
+//         keterangan: keterangan,
+//         status: statusToSubmit,
+//       };
+
+//       try {
+//         const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
+//         console.log(`Sukses kirim untuk ID Otorisasi ${idOtorisasi}:`, result);
+//       } catch (error) {
+//         hasError = true;
+//         console.error(`Gagal kirim untuk ID Otorisasi ${idOtorisasi}:`, error);
+//       }
+//       if (hasError) {
+//         showErrorToast("Sebagian proses gagal dikirim 😢");
+//       } else {
+//         showSuccessToast("Semua proses berhasil dikirim! 🎉");
+//         setTimeout(() => {
+//           window.location.reload();
+//         }, 1500); 
+//       }
+//       setShowConfirmationModal(false); 
+//     }
+//   } else {
+//     const bodyRequest = {
+//       id_proposal: proposal.id_proposal,
+//       keterangan: keterangan,
+//       status: statusToSubmit,
+//     };
+
+//     try {
+//       const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
+//       console.log('Sukses:', result);
+//       showSuccessToast("Proses berhasil dikirim! 🎉");
+//       setShowConfirmationModal(false);
+//       setTimeout(() => {
+//         window.location.reload();
+//       }, 1500); 
+//     } catch (error) {
+//       console.error('Gagal:', error);
+//       showErrorToast("Gagal mengirim proses 😢");
+//     }
+//   }
+
+//   setShowConfirmationModal(false);
+// };
   
-    if (role === "admin") {
-      const idOtorisasiList = proposal.otoritas.map(item => item.id_otorisasi);
-      console.log("ID Otorisasi untuk Admin:", idOtorisasiList);
-      
-      for (const idOtorisasi of idOtorisasiList) {
-        const bodyRequest = {
-          id_proposal: proposal.id_proposal,
-          id_otorisasi: idOtorisasi,
-          keterangan: keterangan,
-          status: statusValue
-        };
-  
-        try {
-          const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
-          console.log(`Sukses kirim untuk ID Otorisasi ${idOtorisasi}:`, result);
-        } catch (error) {
-          console.error(`Gagal kirim untuk ID Otorisasi ${idOtorisasi}:`, error);
-        }
-      }
-    } else {
-      // untuk role selain admin (misalnya otoritor)
+const handleConfirmSubmit = async () => {
+  const role = localStorage.getItem("role");
+  console.log("Role Pengguna:", role);
+
+  if (role === "admin") {
+    const idOtorisasiList = proposal.otoritas.map(item => item.id_otorisasi);
+    console.log("ID Otorisasi untuk Admin:", idOtorisasiList);
+
+    let hasError = false;
+
+    for (const idOtorisasi of idOtorisasiList) {
       const bodyRequest = {
         id_proposal: proposal.id_proposal,
+        id_otorisasi: idOtorisasi,
         keterangan: keterangan,
-        status: statusValue,
+        status: statusToSubmit,
       };
-  
+
       try {
         const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
-        console.log('Sukses:', result);
+        console.log(`Sukses kirim untuk ID Otorisasi ${idOtorisasi}:`, result);
       } catch (error) {
-        console.error('Gagal:', error);
+        hasError = true;
+        console.error(`Gagal kirim untuk ID Otorisasi ${idOtorisasi}:`, error);
       }
     }
+
+    if (hasError) {
+      showErrorToast("Sebagian proses gagal dikirim 😢");
+    } else {
+      showSuccessToast("Semua proses berhasil dikirim! 🎉");
+      setTimeout(() => {
+        window.location.reload(); // Refresh setelah toast sukses
+      }, 1500); // kasih jeda 1.5 detik biar user sempat lihat toast-nya
+    }
+    
+    setShowConfirmationModal(false);
+  } else {
+    const bodyRequest = {
+      id_proposal: proposal.id_proposal,
+      keterangan: keterangan,
+      status: statusToSubmit,
+    };
+
+    try {
+      const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
+      console.log('Sukses:', result);
+      showSuccessToast("Proses berhasil dikirim! 🎉");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+      setShowConfirmationModal(false);
+    } catch (error) {
+      console.error('Gagal:', error);
+      showErrorToast("Gagal mengirim proses 😢");
+      setShowConfirmationModal(false);
+    }
+  }
 };
-  
+
   const historyColumns = [
     { name: "Date", selector: (row) => row.transdate, sortable: true },
     { name: "Position", selector: (row) => row.status_position, sortable: true },
@@ -174,8 +259,19 @@ const handleConfirmClose = () => {
         {/* Proposal biaya pemesanan Japan Vs Indonesia World Cup Asian Qualifiers AFC Tiket - Bapak Raja D Manahara */}
         {proposal.title}
     </h2>
+    Bisnis unit: {" "} 
+    {proposal.bisnis_unit && (
+      <span className="badge bg-primary mb-4">
+        {proposal.bisnis_unit}
+      </span>
+    )}
     <div className="d-flex justify-content-between mb-4">
-        <button className="btn btn-primary">Info ARC</button>
+    <button
+      className="btn btn-primary"
+      onClick={() => showDevelopmentToast('Sedang dalam pengembangan')}
+    >
+      Info ARC
+    </button>
         <div className="btn-group">
           <button 
             className="btn btn-warning" 
@@ -647,6 +743,18 @@ const handleConfirmClose = () => {
           cancelText="Batal"
           theme="danger"
       />
+
+      <ConfirmationModal
+        isOpen={showConfirmationModal}
+        onClose={() => setShowConfirmationModal(false)}
+        onConfirm={handleConfirmSubmit}
+        title="Konfirmasi Proses"
+        message={`Apakah kamu yakin ingin mengirim status: "${statusToSubmit}"?`}
+        confirmText="Ya, Kirim"
+        cancelText="Batal"
+        theme="danger"
+      />
+
 
     </>
   );

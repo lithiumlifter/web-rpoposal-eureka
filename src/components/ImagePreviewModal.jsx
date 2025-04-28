@@ -154,7 +154,7 @@ const ImagePreviewModal = ({ isOpen, onClose, images = [], activeIndex = 0, setA
           cursor: 'pointer',
         }}
       >
-        <i className="fas fa-x" style={{ backgroundColor: "blue", padding: "10px", borderRadius: "40%" }}></i>
+        <i className="fas fa-x" style={{ backgroundColor: "red", padding: "10px", borderRadius: "" }}></i>
       </button>
 
       {images.length > 0 && (

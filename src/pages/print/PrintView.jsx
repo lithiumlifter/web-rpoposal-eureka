@@ -5,15 +5,30 @@ const PrintView = () => {
   const [proposal, setProposal] = useState(null);
   const [formData, setFormData] = useState(null);
   const userRole = localStorage.getItem("name");
-
+  
   useEffect(() => {
-    // Ambil dari localStorage
     const storedData = JSON.parse(localStorage.getItem('printData'));
     if (storedData) {
       setProposal(storedData.proposal);
       setFormData(storedData.formData);
+  
+      const formatTanggal = (isoDate) => {
+        if (!isoDate) return '';
+        const date = new Date(isoDate);
+        return date.toLocaleDateString('id-ID', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        });
+      };
+  
+      const tanggal = formatTanggal(storedData.formData?.tgl_proposal);
+      const historyItem = storedData.proposal?.history?.findLast(item => item.reg_branch);
+      const regBranch = historyItem?.reg_branch || '';
+  
+      document.title = `${tanggal} - ${regBranch}`;
     }
-    document.title = `Proposal - ${storedData?.formData?.title || 'Print'}`;
+  
     setTimeout(() => window.print(), 500);
   }, []);
   
@@ -22,25 +37,6 @@ const PrintView = () => {
 
   return (
     <div className="print-container">
-      {/* <style>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          .print-container, .print-container * {
-            visibility: visible;
-          }
-          .print-container {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            padding: 30px;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-          }
-        }
-      `}</style> */}
       <style>{`
         @media print {
           body, .print-container {

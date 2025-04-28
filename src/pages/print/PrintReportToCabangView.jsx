@@ -6,16 +6,42 @@ const PrintReportCabang = () => {
   const fromDate = data[0]?.date?.receive_cabang || "-";
   const toDate = data[data.length - 1]?.date?.receive_cabang || "-";
 
+  // useEffect(() => {
+  //   const storedData = localStorage.getItem("print-data-cabang");
+  //   if (storedData) {
+  //     setData(JSON.parse(storedData));
+  //   }
+
+  //   // Otomatis print setelah data kebaca
+  //   setTimeout(() => {
+  //     window.print();
+  //     // Bersihkan localStorage setelah print
+  //     localStorage.removeItem("print-data-cabang");
+  //   }, 500);
+  // }, []);
+  
   useEffect(() => {
     const storedData = localStorage.getItem("print-data-cabang");
     if (storedData) {
-      setData(JSON.parse(storedData));
+      const parsedData = JSON.parse(storedData);
+      setData(parsedData);
+  
+      if (parsedData.length > 0) {
+        const formatTanggal = (isoDate) => {
+          if (!isoDate) return '-';
+          const date = new Date(isoDate);
+          return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        };
+  
+        const fromDateFormatted = formatTanggal(parsedData[0]?.date?.receive_cabang);
+        const toDateFormatted = formatTanggal(parsedData[parsedData.length - 1]?.date?.receive_cabang);
+  
+        document.title = `Rekap Persetujuan ${fromDateFormatted} s/d ${toDateFormatted}`;
+      }
     }
-
-    // Otomatis print setelah data kebaca
+  
     setTimeout(() => {
       window.print();
-      // Bersihkan localStorage setelah print
       localStorage.removeItem("print-data-cabang");
     }, 500);
   }, []);

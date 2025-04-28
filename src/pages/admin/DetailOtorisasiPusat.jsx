@@ -87,7 +87,7 @@ const handleConfirmClose = () => {
         setLoading(true);
         const data = await DetailProposal.getDetailProposal(id_proposal);
         setProposal(data.data);
-        setFormData(data.data); // Set nilai awal form
+        setFormData(data.data); 
       } catch (err) {
         setError(err.response?.data || err.message);
       } finally {

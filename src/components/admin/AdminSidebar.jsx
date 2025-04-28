@@ -95,60 +95,66 @@ const Sidebar = ({ isOpen }) => {
                   </Link>
                 </li>
 
-                {/* LAIN-LAIN */}
-                  <li className="nav-item">
-                  <span
-                    className="nav-link"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setLainLain(!lainLain)}
-                  >
-                    <i className="fas fa-cogs"></i> <span className="menu-text">Lain-lain</span>
-                    {/* <i className={`fas fa-chevron-${lainLain ? "down" : "right"} float-end`} style={{ float: "right" }}></i> */}
-                  </span>
-                  {lainLain && (
-                    <ul className="navbar-nav flex-column ms-3">
-                    {hasAccess(["admin","otoritor"]) && (
-                  <li className={`nav-item ${isActive("/admin/updateanggaran") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/admin/updateanggaran">
-                      <i className="fas fa-fw fa-edit"></i> <span className="menu-text">Update Anggaran</span>
-                    </Link>
-                  </li>
+                {hasAccess(["admin", "kontrol", "kontrol cabang", "otoritor cabang", "otoritor"]) && (
+                  <>
+                    {/* LAIN-LAIN admin, kontrol, kontrol cabang */}
+                    <li className="nav-item">
+                      <span
+                        className="nav-link"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setLainLain(!lainLain)}
+                      >
+                        <i className="fas fa-cogs"></i> <span className="menu-text">Lain-lain</span>
+                      </span>
+
+                      {lainLain && (
+                        <ul className="navbar-nav flex-column ms-3">
+                          {hasAccess(["admin", "otoritor"]) && (
+                            <li className={`nav-item ${isActive("/admin/updateanggaran") ? "active" : ""}`}>
+                              <Link className="nav-link" to="/admin/updateanggaran">
+                                <i className="fas fa-fw fa-edit"></i> <span className="menu-text">Update Anggaran</span>
+                              </Link>
+                            </li>
+                          )}
+
+                          {hasAccess(["admin", "kontrol", "otoritor", "kontrol cabang", "otoritor cabang"]) && (
+                            <li className={`nav-item ${isActive("/admin/reportkpi") ? "active" : ""}`}>
+                              <Link className="nav-link" to="/admin/reportkpi">
+                                <i className="fas fa-file"></i> <span className="menu-text">Report KPI</span>
+                              </Link>
+                            </li>
+                          )}
+
+                          {hasAccess(["admin", "kontrol"]) && (
+                            <li className={`nav-item ${isActive("/admin/reporttocabang") ? "active" : ""}`}>
+                              <Link className="nav-link" to="/admin/reporttocabang">
+                                <i className="fas fa-file"></i> <span className="menu-text">Report To Cabang</span>
+                              </Link>
+                            </li>
+                          )}
+
+                          {hasAccess(["admin", "kontrol", "kontrol cabang"]) && (
+                            <li className={`nav-item ${isActive("/admin/otorisationnotcompleted") ? "active" : ""}`}>
+                              <Link className="nav-link" to="/admin/otorisationnotcompleted">
+                                <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Complete</span>
+                              </Link>
+                            </li>
+                          )}
+
+                          {hasAccess(["admin", "kontrol", "kontrol cabang"]) && (
+                            <li className={`nav-item ${isActive("/admin/otorisationpending") ? "active" : ""}`}>
+                              <Link className="nav-link" to="/admin/otorisationpending">
+                                <i className="fas fa-file"></i> <span className="menu-text">Otorisation Pending</span>
+                              </Link>
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </li>
+                  </>
                 )}
 
-                {hasAccess(["admin","kontrol","otoritor","kontrol cabang", "otoritor cabang"]) && (
-                  <li className={`nav-item ${isActive("/admin/reportkpi") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/admin/reportkpi">
-                      <i className="fas fa-file"></i> <span className="menu-text">Report KPI</span>
-                    </Link>
-                  </li>
-                )}
-
-                {hasAccess(["admin","kontrol"]) && (
-                  <li className={`nav-item ${isActive("/admin/reporttocabang") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/admin/reporttocabang">
-                      <i className="fas fa-file"></i> <span className="menu-text">Report To Cabang</span>
-                    </Link>
-                  </li>
-                )}
-
-                {hasAccess(["admin","kontrol","kontrol cabang"]) && (
-                  <li className={`nav-item ${isActive("/admin/otorisationnotcompleted") ? "active" : ""}`}>
-                      <Link className="nav-link" to="/admin/otorisationnotcompleted">
-                          <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Complete</span>
-                      </Link>
-                  </li>
-                )}
-
-                {hasAccess(["admin","kontrol","kontrol cabang"]) && (
-                  <li className={`nav-item ${isActive("/admin/otorisationpending") ? "active" : ""}`}>
-                      <Link className="nav-link" to="/admin/otorisationpending">
-                          <i className="fas fa-file"></i> <span className="menu-text">Otorisation Pending</span>
-                      </Link>
-                  </li>
-                )}
-                    </ul>
-                  )}
-                </li>
+                
 
                 {/* Submenu Master */}
                 {hasAccess(["admin","kontrol","kontrol cabang"]) && (

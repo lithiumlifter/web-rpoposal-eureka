@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import userServices from "../../services/admin/userServices";
 import CategoryService from "../../services/admin/categoryServices";
+import CustomTable from "../../components/table/customTable";
 
 const SetupUser = () => {
     const [userData, setUserData] = useState([]);
@@ -207,13 +208,18 @@ const SetupUser = () => {
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                 />
-                <DataTable
+                {/* <DataTable
                     columns={columns}
                     data={filteredData}
                     progressPending={loading}
                     pagination
                     highlightOnHover
                     responsive
+                /> */}
+                <CustomTable
+                    columns={columns}
+                    data={filteredData}
+                    loading={loading}
                 />
             </div>
         </div>

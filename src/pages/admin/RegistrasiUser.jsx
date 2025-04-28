@@ -77,7 +77,7 @@ const RegistrasiUser = () => {
 
     return (
         <div className="card">
-            <div className="card-body">
+            <div className="card-body p-0">
                 <div className="mb-3">
                     <input
                         type="text"

@@ -55,24 +55,26 @@ const AdminPanel = () => {
         <div className="container-fluid dashboard-content flex-grow-1 w-100">
           <div className="row">
             <div className="col">
+            {!location.pathname.startsWith("/admin/detailotorisasipusat") && (
               <div className="page-header">
-                <h2 className="pageheader-title">{pageTitle}</h2>
-                <p className="pageheader-text">
-                  Anda sedang berada di halaman {pageTitle.toLowerCase()}.
-                </p>
-                <div className="page-breadcrumb">
-                  <nav aria-label="breadcrumb">
-                    <ol className="breadcrumb">
-                      <li className="breadcrumb-item">
-                        <a className="breadcrumb-link">{userRole}</a>
-                      </li>
-                      <li className="breadcrumb-item active" aria-current="page">
-                        {pageTitle}
-                      </li>
-                    </ol>
-                  </nav>
-                </div>
-              </div>
+                  <h1 className="pageheader-title">{pageTitle}</h1>
+                    <p className="pageheader-text">
+                      Anda sedang berada di halaman {pageTitle.toLowerCase()}.
+                    </p>
+                    <div className="page-breadcrumb">
+                      <nav aria-label="breadcrumb">
+                        <ol className="breadcrumb">
+                          <li className="breadcrumb-item">
+                            <a className="breadcrumb-link">{userRole}</a>
+                          </li>
+                          <li className="breadcrumb-item active" aria-current="page">
+                            {pageTitle}
+                          </li>
+                        </ol>
+                      </nav>
+                    </div>
+              </div>     
+            )}
             </div>
           </div>
           <Outlet />

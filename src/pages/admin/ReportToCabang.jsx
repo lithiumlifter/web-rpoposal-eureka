@@ -118,7 +118,7 @@ const ReportToCabang = () => {
 
     return (
         <div className="card">
-            <div className="card-body">
+            <div className="card-body p-0">
                 <div className="d-flex justify-content-between flex-wrap align-items-center mb-3">
                     {/* Kiri: Filter */}
                     <div className="d-flex gap-2 flex-wrap align-items-center">

@@ -67,7 +67,7 @@ const ReportKpi = () => {
 
     return (
         <div className="card">
-            <div className="card-body">
+            <div className="card-body p-0">
                 <div className="d-flex gap-2 mb-3 align-items-center flex-wrap">
                     <input
                         type="text"

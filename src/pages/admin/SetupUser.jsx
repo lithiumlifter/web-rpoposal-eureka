@@ -200,7 +200,7 @@ const SetupUser = () => {
 
     return (
         <div className="card">
-            <div className="card-body">
+            <div className="card-body p-0">
                 <input
                     type="text"
                     className="form-control mb-3"

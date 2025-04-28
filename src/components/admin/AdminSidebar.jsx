@@ -57,7 +57,7 @@ const Sidebar = ({ isOpen }) => {
                   </li>
                 )}
 
-                {hasAccess(["admin","otoritor cabang","otoritor"]) && (
+                {hasAccess(["admin","otoritor cabang"]) && (
                   <li className={`nav-item ${isActive("/admin/otorisasicabang") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/otorisasicabang">
                       <i className="fas fa-wrench"></i> <span className="menu-text">Otorisasi Cabang</span>

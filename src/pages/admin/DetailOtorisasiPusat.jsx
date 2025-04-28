@@ -121,65 +121,6 @@ const handleConfirmClose = () => {
     setShowConfirmationModal(true);
 };
 
-// const handleConfirmSubmit = async () => {
-//   const role = localStorage.getItem("role");
-//   console.log("Role Pengguna:", role);
-
-//   if (role === "admin") {
-//     const idOtorisasiList = proposal.otoritas.map(item => item.id_otorisasi);
-//     console.log("ID Otorisasi untuk Admin:", idOtorisasiList);
-
-//     let hasError = false;
-
-//     for (const idOtorisasi of idOtorisasiList) {
-//       const bodyRequest = {
-//         id_proposal: proposal.id_proposal,
-//         id_otorisasi: idOtorisasi,
-//         keterangan: keterangan,
-//         status: statusToSubmit,
-//       };
-
-//       try {
-//         const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
-//         console.log(`Sukses kirim untuk ID Otorisasi ${idOtorisasi}:`, result);
-//       } catch (error) {
-//         hasError = true;
-//         console.error(`Gagal kirim untuk ID Otorisasi ${idOtorisasi}:`, error);
-//       }
-//       if (hasError) {
-//         showErrorToast("Sebagian proses gagal dikirim 😢");
-//       } else {
-//         showSuccessToast("Semua proses berhasil dikirim! 🎉");
-//         setTimeout(() => {
-//           window.location.reload();
-//         }, 1500); 
-//       }
-//       setShowConfirmationModal(false); 
-//     }
-//   } else {
-//     const bodyRequest = {
-//       id_proposal: proposal.id_proposal,
-//       keterangan: keterangan,
-//       status: statusToSubmit,
-//     };
-
-//     try {
-//       const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
-//       console.log('Sukses:', result);
-//       showSuccessToast("Proses berhasil dikirim! 🎉");
-//       setShowConfirmationModal(false);
-//       setTimeout(() => {
-//         window.location.reload();
-//       }, 1500); 
-//     } catch (error) {
-//       console.error('Gagal:', error);
-//       showErrorToast("Gagal mengirim proses 😢");
-//     }
-//   }
-
-//   setShowConfirmationModal(false);
-// };
-  
 const handleConfirmSubmit = async () => {
   const role = localStorage.getItem("role");
   console.log("Role Pengguna:", role);
@@ -212,8 +153,8 @@ const handleConfirmSubmit = async () => {
     } else {
       showSuccessToast("Semua proses berhasil dikirim! 🎉");
       setTimeout(() => {
-        window.location.reload(); // Refresh setelah toast sukses
-      }, 1500); // kasih jeda 1.5 detik biar user sempat lihat toast-nya
+        window.location.reload();
+      }, 1500);
     }
     
     setShowConfirmationModal(false);
@@ -255,47 +196,55 @@ const handleConfirmSubmit = async () => {
   return (
     <>
     <div className="py-4 font-sans">
-    <h2 className="h5 fw-semibold mb-4">
-        {/* Proposal biaya pemesanan Japan Vs Indonesia World Cup Asian Qualifiers AFC Tiket - Bapak Raja D Manahara */}
+    <h2
+        className="h5 fw-semibold mb-4"
+        style={{
+          textTransform: 'uppercase',
+          fontSize: '32px', 
+        }}
+      >
         {proposal.title}
     </h2>
-    Bisnis unit: {" "} 
-    {proposal.bisnis_unit && (
-      <span className="badge bg-primary mb-4">
-        {proposal.bisnis_unit}
-      </span>
-    )}
     <div className="d-flex justify-content-between mb-4">
-    <button
-      className="btn btn-primary"
-      onClick={() => showDevelopmentToast('Sedang dalam pengembangan')}
-    >
-      Info ARC
-    </button>
-        <div className="btn-group">
-          <button 
-            className="btn btn-warning" 
-            onClick={() => goToPrevNextProposal('prev')}
-            disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
-          >
-            « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
-          </button>
-          <button
-              className="btn btn-danger"
-              onClick={() => setShowCloseModal(true)}
-            >
-              Tutup jendela ini
-            </button>
-          <button 
-            className="btn btn-warning" 
-            onClick={() => goToPrevNextProposal('next')}
-            disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
-          >
-            Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
-          </button>
+      <button
+        className="btn btn-primary"
+        onClick={() => showDevelopmentToast('Sedang dalam pengembangan')}
+      >
+        Info ARC
+      </button>
+        {/* Bisnis Unit di tengah */}
+        <div className="text-center">
+          Bisnis unit:{" "}
+          {proposal.bisnis_unit && (
+            <span className="badge bg-primary">
+              {proposal.bisnis_unit}
+            </span>
+          )}
         </div>
+          <div className="btn-group">
+            <button 
+              className="btn btn-warning" 
+              onClick={() => goToPrevNextProposal('prev')}
+              disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
+            >
+              « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
+            </button>
+            <button
+                className="btn btn-danger"
+                onClick={() => setShowCloseModal(true)}
+              >
+                Tutup jendela ini
+              </button>
+            <button 
+              className="btn btn-warning" 
+              onClick={() => goToPrevNextProposal('next')}
+              disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
+            >
+              Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
+            </button>
+          </div>
+      </div>
 
-    </div>
     <h6 className="mb-1">Penanggung Jawab Pelanggan</h6>
     <table className="table table-bordered table-sm mb-4">
         <thead className="table-danger text-center">
@@ -719,19 +668,44 @@ const handleConfirmSubmit = async () => {
         </div>
       </div>
 
-      {/* C. OTORITOR */}
-      <div className="card mt-3">
-        <div className="card-header text-start">C. OTORITOR</div>
-        <div className="card-body">
-        <CustomTable
-          columns={otoritasColumns}
-          data={proposal.otoritas || []}
-          loading={loading}
-          noHeader
-          pagination={false}
-        />
+        {/* C. OTORITOR */}
+        <div className="card mt-3">
+          <div className="card-header text-start">C. OTORITOR</div>
+          <div className="card-body">
+          <CustomTable
+            columns={otoritasColumns}
+            data={proposal.otoritas || []}
+            loading={loading}
+            noHeader
+            pagination={false}
+          />
+          </div>
         </div>
-      </div>
+
+        <div className="d-flex justify-content-center mb-4">
+            <div className="btn-group">
+              <button 
+                className="btn btn-warning" 
+                onClick={() => goToPrevNextProposal('prev')}
+                disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
+              >
+                « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => setShowCloseModal(true)}
+              >
+                Tutup jendela ini
+              </button>
+              <button 
+                className="btn btn-warning" 
+                onClick={() => goToPrevNextProposal('next')}
+                disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
+              >
+                Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
+              </button>
+            </div>
+          </div>
       </div>
       <ConfirmationModal
           isOpen={showCloseModal}

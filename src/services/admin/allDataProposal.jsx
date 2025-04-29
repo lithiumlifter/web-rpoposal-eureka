@@ -21,7 +21,7 @@ const allDataProposal = {
     getAllDataProposalPST: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

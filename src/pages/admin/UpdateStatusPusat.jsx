@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 import updateStatusCabangServices from "../../services/admin/updateStatusCabangServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import CustomTable from "../../components/table/customTable";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 
 const UpdateStatusPusat = () => {
     const navigate = useNavigate();
@@ -40,10 +40,12 @@ const UpdateStatusPusat = () => {
     const handleConfirm = async () => {
         try {
             await updateStatusCabangServices.closeProposalCabang(selectedItem?.id);
-            alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-approve.`);
+            // alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-approve.`);
+            showSuccessToast(`Proposal dengan ID ${selectedItem?.id} berhasil di-approve.`)
             setDataCabang(prev => prev.filter(item => item.id !== selectedItem?.id));
         } catch (error) {
-            alert(`Gagal approve proposal: ${error.response?.data?.message || error.message}`);
+            // alert(`Gagal approve proposal: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal approve proposal: ${error.response?.data?.message || error.message}`)
         } finally {
             setIsModalOpen(false);
             setSelectedItem(null);
@@ -58,10 +60,12 @@ const UpdateStatusPusat = () => {
     const handleCloseConfirm = async () => {
         try {
             await updateStatusCabangServices.cancelProposalCabang(selectedItem?.id);
-            alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`);
+            // alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`);
+            showSuccessToast(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`)
             setDataCabang(prev => prev.filter(item => item.id !== selectedItem?.id));
         } catch (error) {
-            alert(`Gagal cancel proposal: ${error.response?.data?.message || error.message}`);
+            // alert(`Gagal cancel proposal: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal cancel proposal: ${error.response?.data?.message || error.message}`)
         } finally {
             setIsCloseModalOpen(false);
             setSelectedItem(null);
@@ -221,6 +225,8 @@ const UpdateStatusPusat = () => {
                         <option value="">Semua BU</option>
                         <option value="50">BU 50</option>
                         <option value="51">BU 51</option>
+                        <option value="4102">BU 4102</option>
+
                     </select>
                     <input
                         type="text"
@@ -230,16 +236,6 @@ const UpdateStatusPusat = () => {
                         onChange={(e) => setSearchText(e.target.value)}
                     />
                 </div>
-
-                {/* <DataTable
-                    columns={columns}
-                    data={filteredData}
-                    pagination
-                    highlightOnHover
-                    striped
-                    responsive
-                    persistTableHead
-                /> */}
                 <CustomTable
                     columns={columns}
                     data={filteredData}

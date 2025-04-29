@@ -101,8 +101,29 @@ const ReportToCabang = () => {
     const columns = [
         { name: "NO", selector: (row, index) => index + 1, width: "60px" },
         { name: "TGL", selector: (row) => row.date?.receive_cabang || "-", width: "120px" },
-        { name: "ID", selector: (row) => row.kode_proposal || "-", width: "180px" },
-        { name: "TITLE", selector: (row) => row.title || "-", wrap: true, grow: 3 },
+        {
+            name: "ID",
+            selector: (row) => row.kode_proposal || "-",
+            minWidth: "220px",
+            style: {
+              textAlign: 'left',
+              whiteSpace: 'normal',
+              overflow: 'visible',  
+              textOverflow: 'unset',
+            },
+        },
+          
+        {
+            name: "TITLE",
+            selector: (row) => row.title || "-",
+            wrap: true,
+            grow: 3,
+            style: {
+              textAlign: 'left',
+              whiteSpace: 'normal',
+            },
+        },
+          
         { name: "MGR PST", selector: (row) => row.approve?.oto_mgr || "-", width: "100px" },
         { name: "AKT PST", selector: (row) => row.approve?.oto_akt || "-", width: "100px" },
         { name: "FIN", selector: (row) => row.approve?.oto_fin || "-", width: "80px" },

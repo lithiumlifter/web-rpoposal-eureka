@@ -52,15 +52,15 @@ const optionsBUName = useMemo(() => {
 
 // BU Wilayah
 const optionsBUWilayah = useMemo(() => {
-  return categories.bisnisUnit.length
-    ? categories.bisnisUnit
-        .filter(item => item.name === selectedBUName)
-        .map(item => ({
-          value: item.value, // value tetap id atau kode
-          label: item.wilayah,
-        }))
+  const selectedBU = categories.bisnisUnit.find(item => item.name === selectedBUName);
+  return selectedBU
+    ? selectedBU.branch.map(branch => ({
+        value: branch.value,
+        label: branch.wilayah,
+      }))
     : [];
 }, [categories.bisnisUnit, selectedBUName]);
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -110,12 +110,6 @@ const optionsBUWilayah = useMemo(() => {
   // catatan
   const [catatan, setCatatan] = useState("");
 
-  
-  // fetch category
-  // const optionBisnisunit = categories.bisnisUnit.map((item) => ({
-  //   value: item.value,
-  //   label: `${item.name} - ${item.wilayah}`,
-  // }));
 
   const optionsRuangLingkup = categories.ruangLingkup.map((item) => ({
     value: item.value,
@@ -189,11 +183,11 @@ const optionsBUWilayah = useMemo(() => {
 
 
     // Delay biar alert sempat tampil
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 1000);
       showSuccessToast("Proposal berhasil dikirim!");
-      window.location.reload();
+      // window.location.reload();
       console.log(response);
     } catch (error) {
       showErrorToast(

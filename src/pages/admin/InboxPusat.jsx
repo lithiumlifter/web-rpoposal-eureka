@@ -1,136 +1,10 @@
-// const InboxPusat = () => {
-//     return (
-//          <>
-//               <div className="card">
-//                     {/* <h5 className="card-header">Update Anggaran</h5> */}
-//                     <div className="card-body">
-//                         <div className="table-responsive">
-//                         <table className="table table-striped table-bordered first">
-//                             <thead>
-//                             <tr>
-//                                 <th>ID</th>
-//                                 <th>BU</th>
-//                                 <th>PRO DATE</th>
-//                                 <th>TITLE</th>
-//                                 <th>TYPE</th>
-//                                 <th></th>
-//                                 <th></th>
-//                                 <th></th>
-//                                 <th></th>
-//                                 <th></th>
-//                             </tr>
-//                             </thead>
-//                             <tbody>
-//                             <tr>
-//                                     <td>
-                                        
-//                                     </td>
-//                                     <td></td>
-//                                     <td></td>
-//                                     <td></td>
-//                                     <td></td>
-//                                     <td></td>
-//                                     <td></td>
-//                                     <td></td>
-//                                     <td></td>
-//                                     <td></td>
-//                                     <td></td>
-//                             </tr>
-//                             </tbody>
-//                         </table>
-//                         </div>
-//                     </div>
-//                     </div>
-
-//         </>
-//     );
-// }
-
-// export default InboxPusat;
-
-// import { useEffect, useState } from "react";
-// import DataTable from "react-data-table-component";
-// import inboxPusatServices from "../../services/admin/inboxPusatServices";
-
-// const BASE_URL = import.meta.env.VITE_BASE_URL;
-
-// const InboxPusat = () => {
-//     const [data, setData] = useState([]);
-//     const [filteredData, setFilteredData] = useState([]);
-//     const [selectedBU, setSelectedBU] = useState("");
-//     const [searchTitle, setSearchTitle] = useState("");
-//     const [loading, setLoading] = useState(true);
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const response = await inboxPusatServices.getInboxPusat();
-//                 setData(response.data.data);
-//             } catch (error) {
-//                 console.error("Error fetching data:", error);
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
-//         fetchData();
-//     }, []);
-
-//     useEffect(() => {
-//         const filterData = data.filter(item =>
-//             (selectedBU === "" || item.bisnis_unit === selectedBU) &&
-//             (searchTitle === "" || item.title.toLowerCase().includes(searchTitle.toLowerCase()))
-//         );
-//         setFilteredData(filterData);
-//     }, [selectedBU, searchTitle, data]);
-
-//     const columns = [
-//         { name: "ID", selector: row => row.id, sortable: true },
-//         { name: "BU", selector: row => row.bisnis_unit, sortable: true },
-//         { name: "PRO DATE", selector: row => row.tgl_pengajuan, sortable: true },
-//         { name: "TITLE", selector: row => row.title, sortable: true },
-//         { name: "TYPE", selector: row => row.type, sortable: true }
-//     ];
-
-//     return (
-//         <div className="card">
-//             <div className="card-body">
-//                 <div className="d-flex gap-2 mb-3 align-items-center">
-//                     <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
-//                         <option value="">Semua BU</option>
-//                         {[...new Set(data.map(item => item.bisnis_unit))].map((bu, index) => (
-//                             <option key={index} value={bu}>{bu}</option>
-//                         ))}
-//                     </select>
-//                     <input
-//                         type="text"
-//                         className="form-control w-auto"
-//                         placeholder="Cari Title..."
-//                         value={searchTitle}
-//                         onChange={(e) => setSearchTitle(e.target.value)}
-//                     />
-//                     {/* <button className="btn btn-primary" onClick={() => setFilteredData(data)}>Tampilkan</button> */}
-//                 </div>
-//                 <DataTable
-//                     columns={columns}
-//                     data={filteredData}
-//                     progressPending={loading}
-//                     pagination
-//                     highlightOnHover
-//                     striped
-//                 />
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default InboxPusat;
-
 import { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 import inboxPusatServices from "../../services/admin/inboxPusatServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import CustomTable from "../../components/table/customTable";
+import TableFilterBar from "../../components/table/tableFilterBar";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 
 const InboxPusat = () => {
     const navigate = useNavigate();
@@ -142,12 +16,17 @@ const InboxPusat = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [buOptions, setBuOptions] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await inboxPusatServices.getInboxPusat();
-                setData(response.data.data);
+                const fetchedData = response?.data?.data || [];
+                setData(fetchedData);
+                
+                const uniqueBU = [...new Set(fetchedData.map(item => item.bisnis_unit))];
+                setBuOptions(uniqueBU);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -156,7 +35,6 @@ const InboxPusat = () => {
         };
         fetchData();
     }, []);
-
     const handleOpenModal = (item) => {
         setSelectedItem(item);
         setIsModalOpen(true);
@@ -174,10 +52,12 @@ const InboxPusat = () => {
         setIsModalOpen(false);
         try {
             await inboxPusatServices.approveProposalPusat(selectedItem.id);
-            alert(`Proposal ${selectedItem.id} berhasil di-approve!`);
+            // alert(`Proposal ${selectedItem.id} berhasil di-approve!`);
+            showSuccessToast(`Proposal ${selectedItem.id} berhasil di-approve!`);
             setData(prevData => prevData.filter(item => item.id !== selectedItem.id));
         } catch (error) {
-            alert(`Gagal approve proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
+            // alert(`Gagal approve proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal approve proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
         } finally {
             setProcessingId(null);
             setSelectedItem(null);
@@ -191,10 +71,12 @@ const InboxPusat = () => {
         setIsDeleteModalOpen(false);
         try {
             await inboxPusatServices.cancelProposalPusat(selectedItem.id);
-            alert(`Proposal ${selectedItem.id} berhasil dihapus!`);
+            // alert(`Proposal ${selectedItem.id} berhasil dihapus!`);
+            showSuccessToast(`Proposal ${selectedItem.id} berhasil dihapus!`);
             setData(prevData => prevData.filter(item => item.id !== selectedItem.id));
         } catch (error) {
-            alert(`Gagal menghapus proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
+            // alert(`Gagal menghapus proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal menghapus proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
         } finally {
             setProcessingId(null);
             setSelectedItem(null);
@@ -214,10 +96,10 @@ const InboxPusat = () => {
             name: "TITLE",
             selector: row => row.title,
             sortable: true,
-            wrap: true, // biar teks panjang bisa turun ke bawah
-            grow: 3,    // proporsi lebih besar biar lebar
+            wrap: true,
+            grow: 3,
             style: {
-                whiteSpace: 'normal' // hilangkan ellipsis (...)
+                whiteSpace: 'normal'
             }
         },
         { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },
@@ -265,35 +147,18 @@ const InboxPusat = () => {
         },
     ];
 
-
     return (
         <div className="card">
             <div className="card-body p-0">
                 <div className="d-flex gap-2 mb-3 align-items-center">
-                    <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
-                        <option value="">Semua BU</option>
-                        {[...new Set(data.map(item => item.bisnis_unit))].map((bu, index) => (
-                            <option key={index} value={bu}>{bu}</option>
-                        ))}
-                    </select>
-                    <input
-                        type="text"
-                        className="form-control w-auto"
-                        placeholder="Cari Title..."
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
+                    <TableFilterBar
+                        selectedBU={selectedBU}
+                        setSelectedBU={setSelectedBU}
+                        buOptions={buOptions}
+                        searchText={searchText}
+                        setSearchText={setSearchText}
                     />
                 </div>
-                {/* <DataTable
-                    columns={columns}
-                    data={filteredData}
-                    progressPending={loading}
-                    pagination
-                    highlightOnHover
-                    striped
-                    responsive
-                    persistTableHead
-                /> */}
                 <CustomTable
                     columns={columns}
                     data={filteredData}

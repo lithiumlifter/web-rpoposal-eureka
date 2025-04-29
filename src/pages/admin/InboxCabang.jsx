@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 import inboxCabangServices from "../../services/admin/inboxCabangServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import CustomTable from "../../components/table/customTable";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
+import TableFilterBar from "../../components/table/tableFilterBar";
 
 const InboxCabang = () => {
     const navigate = useNavigate();
@@ -15,12 +16,16 @@ const InboxCabang = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [buOptions, setBuOptions] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await inboxCabangServices.getInboxCabang();
                 setData(response.data.data);
+
+                const uniqueBU = [...new Set(response.data.data.map(item => item.bisnis_unit))];
+                setBuOptions(uniqueBU);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -47,12 +52,12 @@ const InboxCabang = () => {
         setIsModalOpen(false);
         try {
             const response = await inboxCabangServices.approveProposalCabang(selectedItem.id);
-            alert(`Proposal ${selectedItem.id} berhasil di-approve!`);
+            showSuccessToast(`Proposal ${selectedItem.id} berhasil di-approve!`);
             console.log("Approve success:", response);
 
             setData(prevData => prevData.filter(item => item.id !== selectedItem.id));
         } catch (error) {
-            alert(`Gagal approve proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal approve proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
         } finally {
             setProcessingId(null);
             setSelectedItem(null);
@@ -66,12 +71,12 @@ const InboxCabang = () => {
         setIsDeleteModalOpen(false);
         try {
             const response = await inboxCabangServices.cancelProposalCabang(selectedItem.id);
-            alert(`Proposal ${selectedItem.id} berhasil dihapus!`);
+            showSuccessToast(`Proposal ${selectedItem.id} berhasil dihapus!`)
             console.log("Delete success:", response);
 
             setData(prevData => prevData.filter(item => item.id !== selectedItem.id));
         } catch (error) {
-            alert(`Gagal menghapus proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal menghapus proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`)
         } finally {
             setProcessingId(null);
             setSelectedItem(null);
@@ -93,10 +98,10 @@ const InboxCabang = () => {
             name: "TITLE",
             selector: row => row.title,
             sortable: true,
-            wrap: true, // agar teks bisa turun ke baris bawah kalau kepanjangan
-            grow: 3,    // kasih proporsi lebar lebih besar dari kolom lain
+            wrap: true,
+            grow: 3,
             style: {
-                whiteSpace: 'normal' // ini biar teks tidak jadi '...'
+                whiteSpace: 'normal'
             }
         },
         { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },
@@ -160,35 +165,18 @@ const InboxCabang = () => {
         },
     ];
     
-
     return (
         <div className="card">
             <div className="card-body p-0">
                 <div className="d-flex gap-2 mb-3 align-items-center">
-                    <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
-                        <option value="">Semua BU</option>
-                        <option value="50">BU 50</option>
-                        <option value="51">BU 51</option>
-                    </select>
-                    <input
-                        type="text"
-                        className="form-control w-auto"
-                        placeholder="Cari Title / Type..."
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
+                    <TableFilterBar
+                        selectedBU={selectedBU}
+                        setSelectedBU={setSelectedBU}
+                        buOptions={buOptions}
+                        searchText={searchText}
+                        setSearchText={setSearchText}
                     />
                 </div>
-
-                {/* <DataTable
-                    columns={columns}
-                    data={filteredData}
-                    progressPending={loading}
-                    pagination
-                    highlightOnHover
-                    striped
-                    responsive
-                    persistTableHead
-                /> */}
                 <CustomTable
                     columns={columns}
                     data={filteredData}

@@ -6,7 +6,7 @@ const inboxPusatServices = {
     getInboxPusat: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=To PST`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=To PST&bisnis_unit=`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

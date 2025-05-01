@@ -7014,9 +7014,9 @@ html, body {
 }
 
 /* Sembunyikan teks jika sidebar collapsed */
-.nav-left-sidebar.collapsed .nav-link span {
+/* .nav-left-sidebar.collapsed .nav-link span {
     display: none;
-}
+} */
 
 /* Tampilkan teks jika sidebar expanded */
 .nav-left-sidebar.expanded .nav-link span {
@@ -7054,7 +7054,7 @@ html, body {
 }
 
 .nav-left-sidebar.expanded {
-    width: 250px; /* Lebar sidebar saat diperluas */
+    width: 260px; /* Lebar sidebar saat diperluas */
 }
 
 /* Flexbox untuk mencegah pergeseran ikon */

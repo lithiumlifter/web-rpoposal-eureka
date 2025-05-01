@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation  } from "react-router-dom";
 import useCategories from "../../hooks/useCategories";
+import proposalServices from "../../services/admin/allDataProposal"
 
 const Sidebar = ({ isOpen }) => {
     const [isHovered, setIsHovered] = useState(false);
     const location = useLocation();
     const [masterOpen, setMasterOpen] = useState(false);
     const [lainLain, setLainLain] = useState(false);
+    const [jumlahProposalPST, setJumlahProposalPST] = useState(0);
+    const [jumlahProposalPSTDirektur, setJumlahProposalPSTDirektur] = useState(0);
+
 
     const currentPath = location.pathname;
     const isActive = (path) => currentPath.startsWith(path);
@@ -18,6 +22,32 @@ const Sidebar = ({ isOpen }) => {
     const hasAccess = (allowedRoles) => {
       return allowedRoles.includes(currentUserRole);
     };
+
+      useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await proposalServices.getAllDataProposalPST();
+                setJumlahProposalPST(data?.data?.totalData || 0);
+                console.log("Data proposal PST:", data);
+            } catch (err) {
+                console.error("Failed to fetch proposal PST:", err);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const data = await proposalServices.getAllDataProposalPSTDirektur();
+              setJumlahProposalPSTDirektur(data?.data?.totalData || 0);
+              console.log("Data proposal PST:", data);
+          } catch (err) {
+              console.error("Failed to fetch proposal PST:", err);
+          }
+      };
+      fetchData();
+  }, []);
 
     return (
         <div
@@ -81,12 +111,120 @@ const Sidebar = ({ isOpen }) => {
                   </li>
                 )}
 
-                {hasAccess(["admin","otoritor"]) && (
+                {hasAccess(["admin", "otoritor"]) && (
                   <li className={`nav-item ${isActive("/admin/otorisasipusat") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/otorisasipusat">
-                      <i className="fas fa-th-list"></i> <span className="menu-text">Otorisasi Pusat</span>
+                      <i className="fas fa-th-list"></i>
+                      {jumlahProposalPST > 0 && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "6px",
+                            left: "1px",
+                            background: "red",
+                            color: "white",
+                            borderRadius: "50%",
+                            width: "18px",
+                            height: "18px",
+                            fontSize: "10px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 2,
+                          }}
+                        >
+                          {jumlahProposalPST}
+                        </div>
+                      )}
+                      <span className="menu-text">Otorisasi Pusat (Non Direktur)</span>
                     </Link>
                   </li>
+                )}
+
+                {hasAccess(["admin","direktur"]) && (
+                  <li className={`nav-item ${isActive("/admin/otorisasi-pusat-dir") ? "active" : ""}`}>
+                    <Link className="nav-link" to="/admin/otorisasi-pusat-dir">
+                      <i className="fas fa-th-list"></i> <span className="menu-text">Otorisasi Pusat (Direktur)</span>
+                      {jumlahProposalPSTDirektur > 0 && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "6px",
+                            left: "1px",
+                            background: "red",
+                            color: "white",
+                            borderRadius: "50%",
+                            width: "18px",
+                            height: "18px",
+                            fontSize: "10px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 2,
+                          }}
+                        >
+                          {jumlahProposalPSTDirektur}
+                        </div>
+                      )}
+                    </Link>
+                  </li>
+                )}
+
+                {/* Submenu Master */}
+                {hasAccess(["admin","direktur"]) && (
+                  <li className="nav-item">
+                  <span
+                    className="nav-link"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setMasterOpen(!masterOpen)}
+                  >
+                    <i className="fas fa-cogs"></i> <span className="menu-text">Otorisasi Pusat</span>
+                    {/* <i className={`fas fa-chevron-${masterOpen ? "down" : "right"} float-end`} style={{ float: "right" }}></i> */}
+                  </span>
+                  {masterOpen && (
+                    <ul className="navbar-nav flex-column ms-3">
+                      {hasAccess(["admin","kontrol","kontrol cabang"]) && (
+                        <li className={`nav-item ${isActive("/admin/levelotorisasi") ? "active" : ""}`}>
+                          <Link className="nav-link" to="/admin/levelotorisasi">
+                            <i className="fas fa-th-list"></i> <span className="menu-text">Raja Cepat</span>
+                          </Link>
+                        </li>
+                      )}
+
+                      {hasAccess(["admin","kontrol","kontrol cabang"]) && (
+                        <li className={`nav-item ${isActive("/admin/setupuser") ? "active" : ""}`}>
+                          <Link className="nav-link" to="/admin/setupuser">
+                            <i className="fas fa-wrench"></i> <span className="menu-text">Setup User</span>
+                          </Link>
+                        </li>
+                      )}
+
+                      {hasAccess(["admin","kontrol","kontrol cabang"]) && (
+                        <li className={`nav-item ${isActive("/admin/registrasiuser") ? "active" : ""}`}>
+                          <Link className="nav-link" to="/admin/registrasiuser">
+                            <i className="fas fa-wrench"></i> <span className="menu-text">Registrasi User</span>
+                          </Link>
+                        </li>
+                      )}
+
+                      {hasAccess(["admin","kontrol","kontrol cabang"]) && (
+                        <li className={`nav-item ${isActive("/admin/validasiotorisasi") ? "active" : ""}`}>
+                          <Link className="nav-link" to="/admin/validasiotorisasi">
+                            <i className="fas fa-wrench"></i> <span className="menu-text">Validasi Otorisasi</span>
+                          </Link>
+                        </li>
+                      )}
+
+                      {hasAccess(["admin","kontrol","kontrol cabang"]) && (
+                        <li className={`nav-item ${isActive("/admin/rubahruanglingkup") ? "active" : ""}`}>
+                          <Link className="nav-link" to="/admin/rubahruanglingkup">
+                            <i className="fas fa-wrench"></i> <span className="menu-text">Rubah Ruang Lingkup</span>
+                          </Link>
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                </li>
                 )}
 
                 <li className={`nav-item ${isActive("/admin/proposalreport") ? "active" : ""}`}>
@@ -153,8 +291,6 @@ const Sidebar = ({ isOpen }) => {
                     </li>
                   </>
                 )}
-
-                
 
                 {/* Submenu Master */}
                 {hasAccess(["admin","kontrol","kontrol cabang"]) && (

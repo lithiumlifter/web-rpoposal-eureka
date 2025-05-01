@@ -19,6 +19,7 @@ const pageTitles = {
   "/admin/inboxpusat": "Inbox Pusat",
   "/admin/updatestatuspusat": "Update Status Pusat",
   "/admin/otorisasipusat": "Otorisasi Pusat",
+  "/admin/otorisasi-pusat-dir": "Otorisasi Pusat",
   "/admin/otorisasibandingpst": "Otorisasi Banding Pusat",
   "/admin/proposalreport": "Proposal Report",
   "/admin/reportbanding": "Report Banding",

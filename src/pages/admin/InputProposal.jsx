@@ -36,7 +36,7 @@ const InputProposal = () => {
     dataTipe: [],
     dataOtorisasi: [],
   });
-// BU Names (Nama BU)
+
 const buNames = useMemo(() => {
   return categories.bisnisUnit.length
     ? [...new Set(categories.bisnisUnit.map(item => item.name))]
@@ -44,23 +44,21 @@ const buNames = useMemo(() => {
 }, [categories.bisnisUnit]);
 
 const optionsBUName = useMemo(() => {
-  return buNames.map(name => ({
-    value: name,
-    label: name,
+  return categories.bisnisUnit.map(item => ({
+    value: item.value,
+    label: item.name,
   }));
-}, [buNames]);
+}, [categories.bisnisUnit]);
 
-// BU Wilayah
 const optionsBUWilayah = useMemo(() => {
-  const selectedBU = categories.bisnisUnit.find(item => item.name === selectedBUName);
+  const selectedBU = categories.bisnisUnit.find(item => item.value === selectedBUName);
   return selectedBU
     ? selectedBU.branch.map(branch => ({
         value: branch.value,
         label: branch.wilayah,
       }))
     : [];
-}, [categories.bisnisUnit, selectedBUName]);
-
+}, [categories.bisnisUnit, selectedBUName]); 
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -110,7 +108,6 @@ const optionsBUWilayah = useMemo(() => {
   // catatan
   const [catatan, setCatatan] = useState("");
 
-
   const optionsRuangLingkup = categories.ruangLingkup.map((item) => ({
     value: item.value,
     label: item.name,
@@ -156,7 +153,8 @@ const optionsBUWilayah = useMemo(() => {
 
     const formData = new FormData();
     formData.append("tanggal_pengajuan", tanggal_pengajuan);
-    formData.append("bisnis_unit", selectedBUWilayah);
+    formData.append("bisnis_unit", selectedBUName); 
+    formData.append("bisnis_unit_branch", selectedBUWilayah);
     formData.append("proposalid", proposalid);
     formData.append("ruanglingkup", selectedRuangLingkup);
     formData.append("kategori", selectedKategori);
@@ -180,7 +178,6 @@ const optionsBUWilayah = useMemo(() => {
     try {
       const response = await InputProposalServices.submitProposal(formData);
       console.log("ISI FORM DATA:", [...formData.entries()]);
-
 
     // Delay biar alert sempat tampil
     // setTimeout(() => {
@@ -252,45 +249,46 @@ const optionsBUWilayah = useMemo(() => {
                 </div>
               </div>
 
-             {/* BU Name */}
-<div className="form-group row">
-  <label className="col-12 col-sm-3 col-form-label text-left">
-    BU Name:
-  </label>
-  <div className="col-12 col-sm-8 col-lg-8">
-    <Select
-      options={optionsBUName}
-      placeholder="Pilih Nama BU"
-      className="basic-single"
-      classNamePrefix="select"
-      styles={customStyles}
-      value={optionsBUName.find(opt => opt.value === selectedBUName) || null}
-      onChange={(selectedOption) => {
-        setSelectedBUName(selectedOption ? selectedOption.value : null);
-        setSelectedBUWilayah(null); // Reset wilayah setelah pilih nama baru
-      }}
-    />
-  </div>
-</div>
+              {/* BU Name */}
+              <div className="form-group row">
+                <label className="col-12 col-sm-3 col-form-label text-left">
+                  BU Name:
+                </label>
+                <div className="col-12 col-sm-8 col-lg-8">
+                  <Select
+                    options={optionsBUName}
+                    placeholder="Pilih Nama BU"
+                    className="basic-single"
+                    classNamePrefix="select"
+                    styles={customStyles}
+                    value={optionsBUName.find(opt => opt.value === selectedBUName) || null}
+                    onChange={(selectedOption) => {
+                      setSelectedBUName(selectedOption ? selectedOption.value : null); // Mengirim value ke backend
+                      console.log("ISI SELECT:", selectedOption); // Log untuk melihat isi yang dipilih
+                      setSelectedBUWilayah(null); // Reset BU Wilayah setelah memilih BU Name
+                    }}
+                  />
+                </div>
+              </div>
 
-{/* BU Wilayah */}
-<div className="form-group row">
-  <label className="col-12 col-sm-3 col-form-label text-left">
-    BU Wilayah:
-  </label>
-  <div className="col-12 col-sm-8 col-lg-8">
-    <Select
-      options={optionsBUWilayah}
-      placeholder="Pilih Wilayah BU"
-      className="basic-single"
-      classNamePrefix="select"
-      styles={customStyles}
-      value={optionsBUWilayah.find(opt => opt.value === selectedBUWilayah) || null}
-      onChange={(selectedOption) => setSelectedBUWilayah(selectedOption ? selectedOption.value : null)}
-      isDisabled={!selectedBUName} // disable kalau nama belum dipilih
-    />
-  </div>
-</div>
+              {/* BU Wilayah */}
+              <div className="form-group row">
+                <label className="col-12 col-sm-3 col-form-label text-left">
+                  BU Wilayah:
+                </label>
+                <div className="col-12 col-sm-8 col-lg-8">
+                  <Select
+                    options={optionsBUWilayah}
+                    placeholder="Pilih Wilayah BU"
+                    className="basic-single"
+                    classNamePrefix="select"
+                    styles={customStyles}
+                    value={optionsBUWilayah.find(opt => opt.value === selectedBUWilayah) || null}
+                    onChange={(selectedOption) => setSelectedBUWilayah(selectedOption ? selectedOption.value : null)}
+                    isDisabled={!selectedBUName} // disable kalau nama belum dipilih
+                  />
+                </div>
+              </div>
 
 
               {/* Ruang Lingkup */}

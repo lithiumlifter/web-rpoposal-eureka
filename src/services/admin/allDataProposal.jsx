@@ -33,6 +33,21 @@ const allDataProposal = {
             throw error;
         }
     },
+    getAllDataProposalPSTDirektur: async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=&direktur=true`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log('Data Proposal PST:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Proposal:', error.response?.data || error.message);
+            throw error;
+        }
+    },
     editProposal: async (payload) => {
         try {
             const token = localStorage.getItem('token');

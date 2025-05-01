@@ -30,30 +30,32 @@ const DetailProposalCabang = () => {
     dataOtorisasi: [],
   });
 
-  const buNames = useMemo(() => {
-    return categories.bisnisUnit.length
-      ? [...new Set(categories.bisnisUnit.map(item => item.name))] 
-      : [];
-  }, [categories.bisnisUnit]);
+  // const buNames = useMemo(() => {
+  //   return categories.bisnisUnit.length
+  //     ? [...new Set(categories.bisnisUnit.map(item => item.name))] 
+  //     : [];
+  // }, [categories.bisnisUnit]);
 
   const optionsBUName = useMemo(() => {
-    return buNames.map(name => ({
-      value: name,
-      label: name,
+    return categories.bisnisUnit.map(item => ({
+      value: item.value,
+      label: item.name,
     }));
-  }, [buNames]);
+  }, [categories.bisnisUnit]);
+  
 
   const optionsBUWilayah = useMemo(() => {
     if (!categories.bisnisUnit.length || !selectedBUName) return [];
   
-    const selectedBU = categories.bisnisUnit.find(bu => bu.name === selectedBUName);
+    const selectedBU = categories.bisnisUnit.find(bu => bu.value === selectedBUName);
     if (!selectedBU || !selectedBU.branch) return [];
   
     return selectedBU.branch.map(branchItem => ({
       value: branchItem.value,
-      label: branchItem.wilayah
+      label: branchItem.name || branchItem.wilayah 
     }));
   }, [categories.bisnisUnit, selectedBUName]);
+  
   
   const customStyles = {
     control: (base) => ({
@@ -152,30 +154,32 @@ const DetailProposalCabang = () => {
 
   useEffect(() => {
     if (proposal && categories.bisnisUnit.length > 0) {
-      const selectedBU = categories.bisnisUnit.find(bu => 
-        bu.branch?.some(branch => branch.value === proposal.bisnis_unit)
+      const selectedBU = categories.bisnisUnit.find(
+        bu => bu.value === proposal.bisnis_unit
       );
   
       if (selectedBU) {
-        setSelectedBUName(selectedBU.name);
+        setSelectedBUName(selectedBU.value); // ✅ Ganti dari selectedBU.name
   
-        const selectedBranch = selectedBU.branch.find(branch => branch.value === proposal.bisnis_unit);
+        const selectedBranch = selectedBU.branch.find(
+          branch => branch.value === proposal.bisnis_unit_branch
+        );
+  
         if (selectedBranch) {
-          setSelectedBUWilayah(selectedBranch.value);
+          setSelectedBUWilayah(selectedBranch.value); // ✅ Ganti dari selectedBU.wilayah
         }
       }
   
       setFormData({
         ...proposal,
         bu_name: selectedBU?.name ?? "",
-        bu_wilayah: selectedBU ? selectedBU.wilayah : "",
+        bu_wilayah: selectedBU?.wilayah ?? "",
       });
-
+  
       setCatatan(proposal.description ?? "");
     }
   }, [proposal, categories.bisnisUnit]);
   
-
   const handleAddOtorisasi = () => {
     console.log("Selected Otorisasi (value):", selectedOtorisasi);
   
@@ -191,7 +195,7 @@ const DetailProposalCabang = () => {
         console.log("Data yang ditambahkan:", idLevel);
         setAddedOtorisasi([
           ...addedOtorisasi,
-          idLevel
+          idLevel,
         ]);
       }
       
@@ -233,12 +237,6 @@ const DetailProposalCabang = () => {
   
   const handleSubmitForm = async () => {
     try {
-      const updatedFormData = {
-        ...formData,
-        bu_name: selectedBUName,
-        bu_wilayah: selectedBUWilayah,
-      };
-
       // Ambil id_level otorisasi awal
     const existingOtorisasi = proposal.otoritas?.map(item => item.idlevel) || [];
 
@@ -256,7 +254,8 @@ const DetailProposalCabang = () => {
       setFormData({ ...formData, biaya_lain: editedBiayaLain });
       const payload = {
         id_proposal: proposal.id_proposal,
-        bisnis_unit: updatedFormData.bisnis_unit,
+        bisnis_unit: selectedBUName,
+        bisnis_unit_branch: selectedBUWilayah,
         title: formData.title,
         biayalainlain: formData.biaya_lain ?? 0,
         description: catatan ?? "",
@@ -388,6 +387,7 @@ const DetailProposalCabang = () => {
                     styles={customStyles}
                     value={selectedBUName ? optionsBUName.find(opt => opt.value === selectedBUName) : null}
                     onChange={(selectedOption) => {
+                      console.log("Yang dipilih:", selectedOption);
                       if (isEditing) {
                         const selectedBU = categories.bisnisUnit.find(bu => bu.name === selectedOption?.value);
 
@@ -425,6 +425,7 @@ const DetailProposalCabang = () => {
                       ? optionsBUWilayah.find(option => option.value === selectedBUWilayah) 
                       : null}
                     onChange={(selectedOption) => {
+                      console.log("Yang dipilih WILAYAH:", selectedOption);
                       if (isEditing) {
                         setSelectedBUWilayah(selectedOption ? selectedOption.value : null);
                         setFormData(prev => ({

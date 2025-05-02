@@ -5,6 +5,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import CustomTable from "../../components/table/customTable";
 import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import TableFilterBar from "../../components/table/tableFilterBar";
+import CategoryService from "../../services/admin/categoryServices";
 
 const InboxCabang = () => {
     const navigate = useNavigate();
@@ -17,15 +18,39 @@ const InboxCabang = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [buOptions, setBuOptions] = useState([]);
+    const [buMasterList, setBuMasterList] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await inboxCabangServices.getInboxCabang();
-                setData(response.data.data);
-
-                const uniqueBU = [...new Set(response.data.data.map(item => item.bisnis_unit))];
-                setBuOptions(uniqueBU);
+                const inboxRes = await inboxCabangServices.getInboxCabang();
+                setData(inboxRes.data.data);
+    
+                const categoryRes = await CategoryService.getCategories(); // misalnya ini sumbernya
+                const allBU = [];
+    
+                categoryRes.data.bisnisUnit.forEach(unit => {
+                    allBU.push({ value: unit.value, label: unit.name });
+                    unit.branch.forEach(branch => {
+                        allBU.push({ value: branch.value, label: branch.name });
+                    });
+                });
+    
+                setBuMasterList(allBU);
+    
+                // Ambil value unik dari inbox
+                const uniqueBUValues = [...new Set(inboxRes.data.data.map(item => item.bisnis_unit))];
+    
+                // Mapping value ke name
+                const buOptions = uniqueBUValues.map(value => {
+                    const match = allBU.find(bu => bu.value === value);
+                    return {
+                        value,
+                        label: match ? match.label : `BU ${value}`,
+                    };
+                });
+    
+                setBuOptions(buOptions);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -34,6 +59,7 @@ const InboxCabang = () => {
         };
         fetchData();
     }, []);
+    
 
     const handleOpenModal = (item) => {
         setSelectedItem(item);
@@ -92,7 +118,16 @@ const InboxCabang = () => {
 
     const columns = [
         { name: "ID", selector: row => row.id, sortable: true, maxWidth: "80px" },
-        { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "80px" },
+        // { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "80px" },
+        {
+            name: "BU",
+            selector: row => {
+              const match = buMasterList.find(bu => bu.value === row.bisnis_unit);
+              return match ? match.label : `BU ${row.bisnis_unit}`;
+            },
+            sortable: true,
+            maxWidth: "200px"
+          },          
         { name: "PRO DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },
         {
             name: "TITLE",

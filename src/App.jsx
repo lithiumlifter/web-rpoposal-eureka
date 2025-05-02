@@ -41,7 +41,14 @@ import PrintReportCabang from "./pages/print/PrintReportToCabangView";
 import Modal from 'react-modal';
 import { ToastProvider } from "./utils/toast";
 import DetailProposalPusat from "./pages/admin/DetailProposalPusat";
-import OtorisasiPusatDirektur from "./pages/admin/OtorisasiPusatDirektur";
+import OtorisasiPusatDirektur from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatDirektur";
+import DetailOtorisasiPusatDirektur from "./pages/admin/OtorisasiPusatDirektur/DetailOtorisasiPusatDirektur";
+import OtorisasiPusatDirekturEurekaLogistics from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatEurekaLogistics";
+import OtorisasiPusatDirekturRajaCepat from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatRajaCepat";
+import OtorisasiPusatDirekturEurekaBookhouse from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatEurekaBookhouse";
+import OtorisasiPusatDirekturMasterDiskon from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatMasterDiskon";
+import OtorisasiPusatDirekturKataRasa from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatKataRasa";
+
 Modal.setAppElement('#root');
 
 function App() {
@@ -68,8 +75,8 @@ function App() {
             <Route path="rubahruanglingkup" element={<RubahRuangLingkup />} />
             <Route path="inboxpusat" element={<InboxPusat />} />
             <Route path="updatestatuspusat" element={<UpdateStatusPst />} />
-            <Route path="otorisasipusat" element={<OtorisasiPusat />} />
-            <Route path="otorisasi-pusat-dir" element={<OtorisasiPusatDirektur />} />
+            <Route path="otorisasi-pusat" element={<OtorisasiPusat />} />
+            <Route path="otorisasipusat-direktur-all" element={<OtorisasiPusatDirektur />} />
             <Route path="otorisasibandingpst" element={<OtorisasiBandingPusat />} />
             <Route path="proposalreport" element={<ProposalReport />} />
             <Route path="reporttocabang" element={<ReportToCabang />} />
@@ -85,6 +92,13 @@ function App() {
             <Route path="detailotorisasi/:id_otorisasi" element={<DetailLevelOtorisasi />} />
             <Route path="detailregistrasiuser/:id_user" element={<DetailRegistrasiUser />} />
             <Route path="detailotorisasipusat/:id_proposal" element={<DetailOtorisasiPusat />} />
+            <Route path="detailotorisasipusat-direktur/:id_proposal" element={<DetailOtorisasiPusatDirektur />} />
+            <Route path="otorisasipusat-direktur/eurekalogistics" element={<OtorisasiPusatDirekturEurekaLogistics />} />
+            <Route path="otorisasipusat-direktur/rajacepat" element={<OtorisasiPusatDirekturRajaCepat />} />
+            <Route path="otorisasipusat-direktur/eurekabookhouse" element={<OtorisasiPusatDirekturEurekaBookhouse />} />
+            <Route path="otorisasipusat-direktur/masterdiskon" element={<OtorisasiPusatDirekturMasterDiskon />} />
+            <Route path="otorisasipusat-direktur/katarasa" element={<OtorisasiPusatDirekturKataRasa />} />
+
             <Route path="printview" element={<PrintView />} />
             <Route path="registrasiuser" element={<RegistrasiUser />} />
             <Route path="setupuser" element={<SetupUser />} />

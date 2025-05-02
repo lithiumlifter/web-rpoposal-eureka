@@ -1,14 +1,14 @@
 import React, { useEffect, useState,  useRef } from "react";
 import { useParams } from "react-router-dom";
-import DetailProposal from "../../services/admin/detailProposalServices";
-import CategoryService from "../../services/admin/categoryServices";
-import OtorisasiServices from "../../services/admin/otorisasiServices";
+import DetailProposal from "../../../services/admin/detailProposalServices";
+import CategoryService from "../../../services/admin/categoryServices";
+import OtorisasiServices from "../../../services/admin/otorisasiServices";
 import { useNavigate } from "react-router-dom";
-import allDataProposal from "../../services/admin/allDataProposal";
-import CustomTable from "../../components/table/customTable";
-import ImagePreviewModal from "../../components/ImagePreviewModal";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import { showDevelopmentToast, showErrorToast, showSuccessToast } from "../../utils/toast";
+import allDataProposal from "../../../services/admin/allDataProposal";
+import CustomTable from "../../../components/table/customTable";
+import ImagePreviewModal from "../../../components/ImagePreviewModal";
+import ConfirmationModal from "../../../components/ConfirmationModal";
+import { showDevelopmentToast, showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 const DetailOtorisasiPusat = () => {
   const navigate = useNavigate();

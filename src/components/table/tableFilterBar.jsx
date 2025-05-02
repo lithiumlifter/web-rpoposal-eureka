@@ -16,10 +16,11 @@ const TableFilterBar = ({
       >
         <option value="">Semua BU</option>
         {buOptions.map((bu) => (
-          <option key={bu} value={bu}>
-            BU {bu}
-          </option>
-        ))}
+  <option key={bu.value} value={bu.value}>
+    {bu.label}
+  </option>
+))}
+
       </select>
       <input
         type="text"

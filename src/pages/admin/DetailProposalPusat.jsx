@@ -360,61 +360,61 @@ const DetailProposalPusat = () => {
                   </div>
                 </div>
 
-{/* BU Name */}
-<div className="form-group row">
-  <label className="col-12 col-sm-3 col-form-label text-left">
-    BU Name:
-  </label>
-  <div className="col-12 col-sm-8 col-lg-8">
-  <Select
-  options={optionsBUName}
-  placeholder="Pilih Nama BU"
-  className="basic-single"
-  classNamePrefix="select"
-  styles={customStyles}
-  value={optionsBUName.find(opt => opt.value === selectedBUName) || null}
-  onChange={(selectedOption) => {
-    if (isEditing) {
-      setSelectedBUName(selectedOption ? selectedOption.value : null);
-      setSelectedBUWilayah(null); // Reset wilayah after selecting new BU
-    }
-  }}
-  isDisabled={!isEditing} // Disable if not in edit mode
-/>
+                {/* BU Name */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">
+                    BU Name:
+                  </label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                  <Select
+                  options={optionsBUName}
+                  placeholder="Pilih Nama BU"
+                  className="basic-single"
+                  classNamePrefix="select"
+                  styles={customStyles}
+                  value={optionsBUName.find(opt => opt.value === selectedBUName) || null}
+                  onChange={(selectedOption) => {
+                    if (isEditing) {
+                      setSelectedBUName(selectedOption ? selectedOption.value : null);
+                      setSelectedBUWilayah(null); // Reset wilayah after selecting new BU
+                    }
+                  }}
+                  isDisabled={!isEditing} // Disable if not in edit mode
+                />
 
 
-  </div>
-</div>
+                  </div>
+                </div>
 
-{/* BU Wilayah */}
-<div className="form-group row">
-  <label className="col-12 col-sm-3 col-form-label text-left">
-    BU Wilayah:
-  </label>
-  <div className="col-12 col-sm-8 col-lg-8">
-  <Select
-  options={optionsBUWilayah}
-  placeholder="Pilih Wilayah BU"
-  className="basic-single"
-  classNamePrefix="select"
-  styles={customStyles}
-  value={selectedBUWilayah 
-    ? optionsBUWilayah.find(option => option.label === selectedBUWilayah) 
-    : null}
-  onChange={(selectedOption) => {
-    if (isEditing) {
-      setSelectedBUWilayah(selectedOption ? selectedOption.value : null);
-      setFormData(prev => ({
-        ...prev,
-        bisnis_unit: selectedOption ? selectedOption.value : "",
-      }));
-    }
-  }}
-  isDisabled={!selectedBUName || !isEditing}
-/>
+                {/* BU Wilayah */}
+                <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">
+                    BU Wilayah:
+                  </label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                  <Select
+                  options={optionsBUWilayah}
+                  placeholder="Pilih Wilayah BU"
+                  className="basic-single"
+                  classNamePrefix="select"
+                  styles={customStyles}
+                  value={selectedBUWilayah 
+                    ? optionsBUWilayah.find(option => option.label === selectedBUWilayah) 
+                    : null}
+                  onChange={(selectedOption) => {
+                    if (isEditing) {
+                      setSelectedBUWilayah(selectedOption ? selectedOption.value : null);
+                      setFormData(prev => ({
+                        ...prev,
+                        bisnis_unit: selectedOption ? selectedOption.value : "",
+                      }));
+                    }
+                  }}
+                  isDisabled={!selectedBUName || !isEditing}
+                />
 
-  </div>
-</div>
+                  </div>
+                </div>
 
 
 

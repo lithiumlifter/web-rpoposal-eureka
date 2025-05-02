@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import allDataProposal from "../../services/admin/allDataProposal";
-import CustomTable from "../../components/table/customTable";
+import allDataProposal from "../../../services/admin/allDataProposal";
+import CustomTable from "../../../components/table/customTable";
 import { useNavigate } from "react-router-dom";
+import TableFilterBar from "../../../components/table/tableFilterBar";
+import CategoryService from "../../../services/admin/categoryServices";
 
 const OtorisasiPusatDirektur = () => {
   const navigate = useNavigate();
@@ -11,13 +13,41 @@ const OtorisasiPusatDirektur = () => {
   const [selectedBU, setSelectedBU] = useState("");
   const [searchText, setSearchText] = useState("");
 
+  const [buMasterList, setBuMasterList] = useState([]);
+  const [buOptions, setBuOptions] = useState([]);
+
   useEffect(() => {
     const fetchDataProposal = async () => {
-      const response = await allDataProposal.getAllDataProposalPSTDirektur();
-      if (response && response.success) {
-        setData(response.data.data);
-        setFilteredData(response.data.data);
+      const response = await allDataProposal.getAllDataProposalPSTDirekturEurekaLogistic();
+      const categoryRes = await CategoryService.getCategories();
+
+      if (response && response.success && categoryRes?.data?.bisnisUnit) {
+        const proposals = response.data.data;
+        setData(proposals);
+        setFilteredData(proposals);
+
+        // Buat buMasterList dari category
+        const allBU = [];
+        categoryRes.data.bisnisUnit.forEach(unit => {
+          allBU.push({ value: unit.value, label: unit.name });
+          unit.branch.forEach(branch => {
+            allBU.push({ value: branch.value, label: branch.name });
+          });
+        });
+        setBuMasterList(allBU);
+
+        // Buat buOptions hanya dari BU yang digunakan
+        const uniqueBU = [...new Set(proposals.map(item => item.bisnis_unit))];
+        const mappedOptions = uniqueBU.map(value => {
+          const match = allBU.find(bu => bu.value === value);
+          return {
+            value,
+            label: match ? match.label : `BU ${value}`
+          };
+        });
+        setBuOptions(mappedOptions);
       }
+
       setLoading(false);
     };
 
@@ -27,12 +57,10 @@ const OtorisasiPusatDirektur = () => {
   useEffect(() => {
     let updatedData = [...data];
 
-    // Filter by BU
     if (selectedBU !== "") {
-      updatedData = updatedData.filter(item => item.bisnis_unit === selectedBU);
+      updatedData = updatedData.filter(item => item.bisnis_unit === parseInt(selectedBU));
     }
 
-    // Search by Title, ID, REG
     if (searchText.trim() !== "") {
       updatedData = updatedData.filter(item =>
         (item.title && item.title.toLowerCase().includes(searchText.toLowerCase())) ||
@@ -44,6 +72,11 @@ const OtorisasiPusatDirektur = () => {
     setFilteredData(updatedData);
   }, [selectedBU, searchText, data]);
 
+  const getBuLabel = (value) => {
+    const found = buMasterList.find(bu => bu.value === value);
+    return found ? found.label : `BU ${value}`;
+  };
+
   const columns = [
     {
       name: "OTO",
@@ -51,7 +84,7 @@ const OtorisasiPusatDirektur = () => {
       cell: (row) => (
         <button
           className="btn btn-sm btn-primary"
-          onClick={() => navigate(`/admin/detailotorisasipusat/${row.id}`)}
+          onClick={() => navigate(`/admin/detailotorisasipusat-direktur/${row.id}`)}
         >
           <i className="fas fa-edit"></i>
         </button>
@@ -63,7 +96,7 @@ const OtorisasiPusatDirektur = () => {
     },
     { name: "REG", selector: (row) => row.reg_branch ?? "-", width: "100px" },
     { name: "ID", selector: (row) => row.kode_proposal, wrap: true, style: { textAlign: "left", whiteSpace: "normal" }},
-    { name: "BU", selector: (row) => row.bisnis_unit, width: "100px" },
+    { name: "BU", selector: (row) => getBuLabel(row.bisnis_unit), width: "200px" },
     { name: "DATE INPUT", selector: (row) => row.tgl_pengajuan },
     { name: "TITLE", selector: (row) => row.title, wrap: true, grow: 3, style: { textAlign: "left", whiteSpace: "normal" }},
     { name: "TYPE", selector: (row) => row.type },
@@ -73,26 +106,14 @@ const OtorisasiPusatDirektur = () => {
   return (
     <div className="card">
       <div className="card-body p-0">
-        {/* FILTER SECTION */}
-        <div className="d-flex gap-2 mb-3 align-items-center">
-          <select
-            className="form-control w-auto"
-            value={selectedBU}
-            onChange={(e) => setSelectedBU(e.target.value)}
-          >
-            <option value="">Semua BU</option>
-            {[...new Set(data.map(item => item.bisnis_unit))].map((bu, index) => (
-              <option key={index} value={bu}>{bu}</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            className="form-control w-auto"
-            placeholder="Cari Title, ID, Reg..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-        </div>
+        {/* FILTER BAR */}
+        <TableFilterBar
+          selectedBU={selectedBU}
+          setSelectedBU={setSelectedBU}
+          buOptions={buOptions}
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
 
         <CustomTable columns={columns} data={filteredData} loading={loading} />
       </div>

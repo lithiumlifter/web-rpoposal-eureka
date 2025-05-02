@@ -5,6 +5,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import CustomTable from "../../components/table/customTable";
 import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import TableFilterBar from "../../components/table/tableFilterBar";
+import CategoryService from "../../services/admin/categoryServices";
 
 const UpdateStatusCabang = () => {
     const navigate = useNavigate();
@@ -16,28 +17,48 @@ const UpdateStatusCabang = () => {
     const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [buOptions, setBuOptions] = useState([]);
+    const [buMasterList, setBuMasterList] = useState([]);
 
     useEffect(() => {
       const fetchData = async () => {
-          try {
-              const response = await updateStatusCabangServices.getUpdateStatusCabangServices();
-              if (response?.data?.data) {
-                  const fetchedData = response.data.data;
-                  setDataCabang(fetchedData);
-  
-                  // HARUS pakai fetchedData, bukan data
-                  const uniqueBU = [...new Set(fetchedData.map(item => item.bisnis_unit))];
-                  setBuOptions(uniqueBU);
-              }
-          } catch (error) {
-              console.error("Error fetching data: ", error);
-          } finally {
-              setLoading(false);
-          }
+        try {
+          const response = await updateStatusCabangServices.getUpdateStatusCabangServices();
+          const fetchedData = response?.data?.data || [];
+          setDataCabang(fetchedData);
+    
+          // Ambil master list dari CategoryService
+          const categoryRes = await CategoryService.getCategories();
+          const allBU = [];
+    
+          categoryRes.data.bisnisUnit.forEach(unit => {
+            allBU.push({ value: unit.value, label: unit.name });
+            unit.branch.forEach(branch => {
+              allBU.push({ value: branch.value, label: branch.name });
+            });
+          });
+    
+          setBuMasterList(allBU);
+    
+          const uniqueBU = [...new Set(fetchedData.map(item => item.bisnis_unit))];
+          const buOptionsMapped = uniqueBU.map(value => {
+            const match = allBU.find(bu => bu.value === value);
+            return {
+              value,
+              label: match ? match.label : `BU ${value}`,
+            };
+          });
+    
+          setBuOptions(buOptionsMapped);
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally {
+          setLoading(false);
+        }
       };
-  
+    
       fetchData();
-  }, []);
+    }, []);
+    
   
 
     const handleOpenModal = (item) => {
@@ -53,7 +74,7 @@ const UpdateStatusCabang = () => {
             setDataCabang(prev => prev.filter(item => item.id !== selectedItem?.id));
         } catch (error) {
             // alert(`Gagal approve proposal: ${error.response?.data?.message || error.message}`);
-            showErrorToast(`Gagal approve proposal: ${error.response?.data?.message || error.message}`)
+            showErrorToast(`Gagal approve proposal: ${error.response?.data?.message || error.message}`);
         } finally {
             setIsModalOpen(false);
             setSelectedItem(null);
@@ -141,10 +162,14 @@ const UpdateStatusCabang = () => {
         },
         {
           name: "BU",
-          selector: row => row.bisnis_unit,
+          selector: row => {
+            const match = buMasterList.find(bu => bu.value === row.bisnis_unit);
+            return match ? match.label : `BU ${row.bisnis_unit}`;
+          },
           sortable: true,
           wrap: true,
-          width: "50px",
+          // width: "50px",
+          maxWidth: "200px",
           style: {
             whiteSpace: "normal",
             fontSize: "12px",

@@ -9,18 +9,19 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CustomTable from "../../components/table/customTable";
 import ImagePreviewModal from "../../components/ImagePreviewModal";
 import Select from "react-select";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 
 const DetailProposalPusat = () => {
   
   const navigate = useNavigate();
   const [originalData, setOriginalData] = useState(null);
-  // const [isEditingBiayaLain, setIsEditingBiayaLain] = useState(false);
   const [editedBiayaLain, setEditedBiayaLain] = useState(null);
   const [addedOtorisasi, setAddedOtorisasi] = useState([]);
   const [selectedOtorisasi, setSelectedOtorisasi] = useState("");
   const [catatan, setCatatan] = useState('');
   const [selectedBUName, setSelectedBUName] = useState(null);
   const [selectedBUWilayah, setSelectedBUWilayah] = useState(null);
+  const [removedOtorisasi, setRemovedOtorisasi] = useState([]);
   const [categories, setCategories] = useState({
     bisnisUnit: [],
     ruangLingkup: [],
@@ -29,36 +30,33 @@ const DetailProposalPusat = () => {
     dataOtorisasi: [],
   });
 
-
-  // Process BU names (Unique Names)
-  const buNames = useMemo(() => {
-    return categories.bisnisUnit.length
-      ? [...new Set(categories.bisnisUnit.map(item => item.name))] 
-      : [];
-  }, [categories.bisnisUnit]);
+  // const buNames = useMemo(() => {
+  //   return categories.bisnisUnit.length
+  //     ? [...new Set(categories.bisnisUnit.map(item => item.name))] 
+  //     : [];
+  // }, [categories.bisnisUnit]);
 
   const optionsBUName = useMemo(() => {
-    return buNames.map(name => ({
-      value: name,
-      label: name,
+    return categories.bisnisUnit.map(item => ({
+      value: item.value,
+      label: item.name,
     }));
-  }, [buNames]);
+  }, [categories.bisnisUnit]);
+  
 
   const optionsBUWilayah = useMemo(() => {
-    return categories.bisnisUnit.length
-      ? categories.bisnisUnit
-          .filter(item => item.name === selectedBUName)
-          .map(item => ({
-            value: item.value,
-            label: item.wilayah,
-          }))
-      : [];
+    if (!categories.bisnisUnit.length || !selectedBUName) return [];
+  
+    const selectedBU = categories.bisnisUnit.find(bu => bu.value === selectedBUName);
+    if (!selectedBU || !selectedBU.branch) return [];
+  
+    return selectedBU.branch.map(branchItem => ({
+      value: branchItem.value,
+      label: branchItem.name || branchItem.wilayah 
+    }));
   }, [categories.bisnisUnit, selectedBUName]);
   
   
-  
-
-    // custom style select search
   const customStyles = {
     control: (base) => ({
       ...base,
@@ -126,13 +124,11 @@ const DetailProposalPusat = () => {
         (bu) => bu.value === proposal.bisnis_unit
       );
       if (selectedBU) {
-        setSelectedBUName(selectedBU.name); // Set BU Name
-        setSelectedBUWilayah(selectedBU.wilayah); // Set BU Wilayah
+        setSelectedBUName(selectedBU.name);
+        setSelectedBUWilayah(selectedBU.wilayah);
       }
     }
   }, [proposal, categories.bisnisUnit]);
-  
-  
   
 
   useEffect(() => {
@@ -145,18 +141,6 @@ const DetailProposalPusat = () => {
         const data = await DetailProposal.getDetailProposal(id_proposal);
         console.log("DATA DETAIL PROPOSAL:", data);
         setProposal(data.data);
-        
-        // Set bisnis_unit data (if available) based on the fetched proposal
-        const selectedBU = categories.bisnisUnit.find((bu) => bu.value === data.data.bisnis_unit);
-        setFormData({
-          ...data.data,
-          bu_name: selectedBU ? selectedBU.name : "",
-          bu_wilayah: selectedBU ? selectedBU.wilayah : "",
-        });
-  
-        // Update selected BU Name and Wilayah based on proposal data
-        setSelectedBUName(selectedBU ? selectedBU.name : "");
-        setSelectedBUWilayah(selectedBU ? selectedBU.wilayah : "");
   
       } catch (err) {
         setError(err.response?.data || err.message);
@@ -168,19 +152,62 @@ const DetailProposalPusat = () => {
     fetchDetailProposal();
   }, [id_proposal, categories.dataOtorisasi]);
 
+  useEffect(() => {
+    if (proposal && categories.bisnisUnit.length > 0) {
+      const selectedBU = categories.bisnisUnit.find(
+        bu => bu.value === proposal.bisnis_unit
+      );
+  
+      if (selectedBU) {
+        setSelectedBUName(selectedBU.value); // ✅ Ganti dari selectedBU.name
+  
+        const selectedBranch = selectedBU.branch.find(
+          branch => branch.value === proposal.bisnis_unit_branch
+        );
+  
+        if (selectedBranch) {
+          setSelectedBUWilayah(selectedBranch.value); // ✅ Ganti dari selectedBU.wilayah
+        }
+      }
+  
+      setFormData({
+        ...proposal,
+        bu_name: selectedBU?.name ?? "",
+        bu_wilayah: selectedBU?.wilayah ?? "",
+      });
+  
+      setCatatan(proposal.description ?? "");
+    }
+  }, [proposal, categories.bisnisUnit]);
+  
   const handleAddOtorisasi = () => {
-    if (selectedOtorisasi && !addedOtorisasi.includes(selectedOtorisasi)) {
-      setAddedOtorisasi([...addedOtorisasi, selectedOtorisasi]);
+    console.log("Selected Otorisasi (value):", selectedOtorisasi);
+  
+    const selectedItem = categories.dataOtorisasi.find(
+      (item) => String(item.value) === String(selectedOtorisasi)
+    );
+  
+    if (selectedItem) {
+      const idLevel = selectedItem.idLevel;
+  
+  
+      if (!addedOtorisasi.some((item) => item.idlevel === idLevel)) {
+        console.log("Data yang ditambahkan:", idLevel);
+        setAddedOtorisasi([
+          ...addedOtorisasi,
+          idLevel,
+        ]);
+      }
+      
       setSelectedOtorisasi("");
     }
   };
-  
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {JSON.stringify(error)}</p>;
   if (!proposal) return <p>Data tidak ditemukan</p>;
 
-  // Handler untuk mengubah nilai input saat mode edit
   const handleChange = (e) => {
     const { name, value } = e.target;
   
@@ -199,71 +226,58 @@ const DetailProposalPusat = () => {
     }
   };
   
-  
-  
-
-  // Handler untuk tombol Edit/Simpan
   const toggleEdit = () => {
     if (isEditing) {
-      // Jika sedang dalam mode edit dan klik Simpan, update data ke state utama
       setProposal(formData);
     } else {
-      // saat masuk mode edit, set nilai awal biaya lain-lain
       setEditedBiayaLain(formData.biaya_lain ?? "");
     }
-    setIsEditing(!isEditing); // Toggle mode edit
+    setIsEditing(!isEditing);
   };
   
-
   const handleSubmitForm = async () => {
     try {
-      const updatedFormData = {
-        ...formData,
-        bu_name: selectedBUName,
-        bu_wilayah: selectedBUWilayah,
-      };
-      // Persiapan data otorisasi awal (dari proposal sebelumnya)
-    const initialOtorisasi = proposal.otoritas?.map((item) => {
-      const match = categories.dataOtorisasi.find((otor) =>
-        otor.name.startsWith(item.id_level + " :")
-      );
-      return match?.value ?? null;
-    }).filter(Boolean) || [];
+      // Ambil id_level otorisasi awal
+    const existingOtorisasi = proposal.otoritas?.map(item => item.idlevel) || [];
 
-    // Cari yang ditambahkan (ada di addedOtorisasi tapi tidak di initial)
+    // Buat array otorisasi akhir: gabungan yang sudah ada dan ditambahkan, dikurangi yang dihapus
+    const finalOtorisasi = [...new Set([...existingOtorisasi, ...addedOtorisasi])]
+      .filter(id => !removedOtorisasi.includes(id));
+
+
+    const initialOtorisasi = proposal.otoritas?.map((item) => item.idlevel) || [];
     const newlyAdded = addedOtorisasi.filter(x => !initialOtorisasi.includes(x));
-
-    // Cari yang dihapus (ada di initial tapi tidak di addedOtorisasi)
     const removed = initialOtorisasi.filter(x => !addedOtorisasi.includes(x));
 
-    // Tampilkan log perubahan (bisa juga dikirim ke backend kalau perlu)
     console.log("Otorisasi ditambahkan:", newlyAdded);
     console.log("Otorisasi dihapus:", removed);
       setFormData({ ...formData, biaya_lain: editedBiayaLain });
       const payload = {
         id_proposal: proposal.id_proposal,
-        bisnis_unit: updatedFormData.bisnis_unit,
+        bisnis_unit: selectedBUName,
+        bisnis_unit_branch: selectedBUWilayah,
         title: formData.title,
         biayalainlain: formData.biaya_lain ?? 0,
         description: catatan ?? "",
         email1: "",
         email2: "",
         email3: "",
-        otorisasi: addedOtorisasi,
+        otorisasi: finalOtorisasi,
       };
   
       await allDataProposal.editProposal(payload);
   
-      alert("Data berhasil disimpan!");
+      showSuccessToast("Data proposal berhasil diubah");
       setProposal({ ...proposal, ...payload });
+      setAddedOtorisasi([]);
+      setRemovedOtorisasi([]);
       setIsEditing(false);
     } catch (error) {
       console.error("Gagal menyimpan data:", error);
-      alert("Gagal menyimpan data.");
+      showErrorToast("Data proposal gagal diubah")
     }
   };
 
-    // DataTable columns untuk History
     const historyColumns = [
       { name: "Date", selector: (row) => row.transdate, sortable: true },
       { name: "Position", selector: (row) => row.status_position, sortable: true },
@@ -271,7 +285,6 @@ const DetailProposalPusat = () => {
       { name: "BY", selector: (row) => row.name, sortable: true },
     ];
   
-    // DataTable columns untuk Otoritor
     const otoritasColumns = [
       { name: "Urutan No. Level", selector: (row) => row.urutan, sortable: true },
       { name: "EMPLID", selector: (row) => `${row.emplid} ${row.name}`, sortable: true },
@@ -367,21 +380,31 @@ const DetailProposalPusat = () => {
                   </label>
                   <div className="col-12 col-sm-8 col-lg-8">
                   <Select
-                  options={optionsBUName}
-                  placeholder="Pilih Nama BU"
-                  className="basic-single"
-                  classNamePrefix="select"
-                  styles={customStyles}
-                  value={optionsBUName.find(opt => opt.value === selectedBUName) || null}
-                  onChange={(selectedOption) => {
-                    if (isEditing) {
-                      setSelectedBUName(selectedOption ? selectedOption.value : null);
-                      setSelectedBUWilayah(null); // Reset wilayah after selecting new BU
-                    }
-                  }}
-                  isDisabled={!isEditing} // Disable if not in edit mode
-                />
+                    options={optionsBUName}
+                    placeholder="Pilih Nama BU"
+                    className="basic-single"
+                    classNamePrefix="select"
+                    styles={customStyles}
+                    value={selectedBUName ? optionsBUName.find(opt => opt.value === selectedBUName) : null}
+                    onChange={(selectedOption) => {
+                      console.log("Yang dipilih:", selectedOption);
+                      if (isEditing) {
+                        const selectedBU = categories.bisnisUnit.find(bu => bu.name === selectedOption?.value);
 
+                        setSelectedBUName(selectedOption ? selectedOption.value : null);
+                        
+                        // Saat ganti BU Name, reset Wilayah
+                        setSelectedBUWilayah(null);
+                        
+                        // Optional: kalau mau set FormData bisnis_unit kosong, biar nanti user harus pilih ulang wilayah
+                        setFormData(prev => ({
+                          ...prev,
+                          bisnis_unit: "",
+                        }));
+                      }
+                    }}
+                    isDisabled={!isEditing}
+                  />
 
                   </div>
                 </div>
@@ -393,30 +416,28 @@ const DetailProposalPusat = () => {
                   </label>
                   <div className="col-12 col-sm-8 col-lg-8">
                   <Select
-                  options={optionsBUWilayah}
-                  placeholder="Pilih Wilayah BU"
-                  className="basic-single"
-                  classNamePrefix="select"
-                  styles={customStyles}
-                  value={selectedBUWilayah 
-                    ? optionsBUWilayah.find(option => option.label === selectedBUWilayah) 
-                    : null}
-                  onChange={(selectedOption) => {
-                    if (isEditing) {
-                      setSelectedBUWilayah(selectedOption ? selectedOption.value : null);
-                      setFormData(prev => ({
-                        ...prev,
-                        bisnis_unit: selectedOption ? selectedOption.value : "",
-                      }));
-                    }
-                  }}
-                  isDisabled={!selectedBUName || !isEditing}
-                />
-
+                    options={optionsBUWilayah}
+                    placeholder="Pilih Wilayah BU"
+                    className="basic-single"
+                    classNamePrefix="select"
+                    styles={customStyles}
+                    value={selectedBUWilayah 
+                      ? optionsBUWilayah.find(option => option.value === selectedBUWilayah) 
+                      : null}
+                    onChange={(selectedOption) => {
+                      console.log("Yang dipilih WILAYAH:", selectedOption);
+                      if (isEditing) {
+                        setSelectedBUWilayah(selectedOption ? selectedOption.value : null);
+                        setFormData(prev => ({
+                          ...prev,
+                          bisnis_unit: selectedOption ? selectedOption.value : "",
+                        }));
+                      }
+                    }}
+                    isDisabled={!selectedBUName || !isEditing}
+                  />
                   </div>
                 </div>
-
-
 
                   {/* Ruang Lingkup */}
                   <div className="form-group row">
@@ -532,12 +553,15 @@ const DetailProposalPusat = () => {
                     {/* LIST OTORITAS YG ADA */}
                     <div className="list-group">
                       {[...(proposal?.otoritas || []), ...addedOtorisasi].map((item, index) => {
-                        // Cek apakah item ini dari 'addedOtorisasi' (biasanya berupa string value)
                         const isNew = typeof item === 'string' || typeof item === 'number';
 
                         const label = isNew
-                          ? categories.dataOtorisasi.find((cat) => String(cat.value) === String(item))?.name || item
-                          : item.name || item.jabatan || 'Tanpa Nama';
+                          ? (() => {
+                              const found = categories.dataOtorisasi.find((cat) => String(cat.value) === String(item));
+                              return found ? `${found.name}` : item;
+                            })()
+                          : `${item.idlevel} : ${item.name || item.jabatan || 'Tanpa Nama'}`;
+
 
                         return (
                           <div key={index} className="list-group-item d-flex justify-content-between align-items-center">
@@ -547,15 +571,15 @@ const DetailProposalPusat = () => {
                                 type="button"
                                 className="btn btn-danger btn-sm"
                                 onClick={() => {
-                                  if (isNew) {
-                                    // Hapus dari addedOtorisasi
-                                    setAddedOtorisasi(addedOtorisasi.filter((_, i) => i !== index - (proposal?.otoritas?.length || 0)));
-                                  } else {
-                                    // Hapus dari proposal.otoritas
-                                    const updated = [...proposal.otoritas];
-                                    updated.splice(index, 1);
-                                    setProposal({ ...proposal, otoritas: updated });
-                                  }
+                                    if (isNew) {
+                                      setAddedOtorisasi(addedOtorisasi.filter((_, i) => i !== index - (proposal?.otoritas?.length || 0)));
+                                    } else {
+                                      const otorisasiToRemove = item.idlevel;
+                                      const updated = [...proposal.otoritas];
+                                      updated.splice(index, 1);
+                                      setProposal({ ...proposal, otoritas: updated });
+                                      setRemovedOtorisasi((prev) => [...prev, otorisasiToRemove]);
+                                    }
                                 }}
                               >
                                 Remove

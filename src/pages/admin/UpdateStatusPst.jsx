@@ -1,73 +1,11 @@
-// const UpdateStatusPst = () => {
-//     return (
-//          <>
-//               <div className="card">
-//                     {/* <h5 className="card-header">Update Anggaran</h5> */}
-//                     <div className="card-body">
-//                         <div className="table-responsive">
-//                         <table className="table table-striped table-bordered first">
-//                             <thead>
-//                             <tr>
-//                                 <th>RL</th>
-//                                 <th>CAB</th>
-//                                 <th>PST</th>
-//                                 <th>ID</th>
-//                                 <th>BU</th>
-//                                 <th>DATE</th>
-//                                 <th>TITLE</th>
-//                                 <th>TYPE</th>
-//                                 <th>OTO</th>
-//                                 <th>PROSESS</th>
-//                                 <th>CANCEL</th>
-//                                 <th>CLOSE</th>
-//                                 <th></th>
-//                             </tr>
-//                             </thead>
-//                             <tbody>
-//                             <tr>
-//                                     <td>PST</td>
-//                                     <td>RB-8078</td>
-//                                     <td>R-8078</td>
-//                                     <td>GT/2025020066/PIV</td>
-//                                     <td>50</td>
-//                                     <td>2025-03-11</td>
-//                                     <td>Permohonan Biaya Pembayaran Vendor PT. PLATINDO KARYA PRIMA No. Invoice: IVS250200078</td>
-//                                     <td>99. LAIN-LAIN</td>
-//                                     <td></td>
-//                                     <td>
-//                                         <div className="d-flex justify-content-between">
-//                                             <button className="btn btn-primary" type="submit"><i className="fas fa-edit" /></button>
-//                                             <button className="btn btn-warning" type="submit"><i className="fas fa-map-marker-alt" /></button>
-//                                         </div>
-//                                     </td>
-//                                     <td>
-//                                     <button className="btn btn-danger" type="submit"><i className="fas fa-expand-arrows-alt" /></button>
-//                                     </td>
-//                                     <td>
-//                                     <button className="btn btn-success" type="submit">Close</button>
-//                                     </td>
-//                                     <td>
-//                                     <button className="btn btn-primary" type="submit"><i className=" fas fa-arrow-right" /></button>
-//                                     </td>
-//                             </tr>
-//                             </tbody>
-//                         </table>
-//                         </div>
-//                     </div>
-//                     </div>
-
-//         </>
-//     );
-// }
-
-// export default UpdateStatusPst;
-
 import { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
 import updateStatusPusatServices from "../../services/admin/updateStatusPusatServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import CustomTable from "../../components/table/customTable";
+import CategoryService from "../../services/admin/categoryServices";
+import TableFilterBar from "../../components/table/tableFilterBar";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 
 const UpdateStatusPst = () => {
     const navigate = useNavigate();
@@ -78,24 +16,49 @@ const UpdateStatusPst = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [buMasterList, setBuMasterList] = useState([]);
+    const [buOptions, setBuOptions] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await updateStatusPusatServices.getUpdateStatusPusatServices();
-                if (response?.data?.data) {
-                    setDataPusat(response.data.data);
-                }
-            } catch (error) {
-                console.error("Error fetching data: ", error);
-            } finally {
-                setLoading(false);
-            }
+          try {
+            const response = await updateStatusPusatServices.getUpdateStatusPusatServices();
+            const fetchedData = response?.data?.data || [];
+            setDataPusat(fetchedData);
+      
+            // Ambil master list dari CategoryService
+            const categoryRes = await CategoryService.getCategories();
+            const allBU = [];
+      
+            categoryRes.data.bisnisUnit.forEach(unit => {
+              allBU.push({ value: unit.value, label: unit.name });
+              unit.branch.forEach(branch => {
+                allBU.push({ value: branch.value, label: branch.name });
+              });
+            });
+      
+            setBuMasterList(allBU);
+      
+            const uniqueBU = [...new Set(fetchedData.map(item => item.bisnis_unit))];
+            const buOptionsMapped = uniqueBU.map(value => {
+              const match = allBU.find(bu => bu.value === value);
+              return {
+                value,
+                label: match ? match.label : `BU ${value}`,
+              };
+            });
+      
+            setBuOptions(buOptionsMapped);
+          } catch (error) {
+            console.error("Error fetching data: ", error);
+          } finally {
+            setLoading(false);
+          }
         };
-
+      
         fetchData();
-    }, []);
-
+      }, []);
+      
     const handleOpenModal = (item) => {
         setSelectedItem(item);
         setIsModalOpen(true);
@@ -104,10 +67,12 @@ const UpdateStatusPst = () => {
     const handleConfirm = async () => {
         try {
             await updateStatusPusatServices.closeProposalPusat(selectedItem?.id);
-            alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-approve.`);
+            // alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-approve.`);
+             showSuccessToast(`Proposal dengan ID ${selectedItem?.id} berhasil diclose.`);
             setDataPusat(prev => prev.filter(item => item.id !== selectedItem?.id));
         } catch (error) {
-            alert(`Gagal approve proposal: ${error.response?.data?.message || error.message}`);
+            // alert(`Gagal approve proposal: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal close proposal: ${error.response?.data?.message || error.message}`);
         } finally {
             setIsModalOpen(false);
             setSelectedItem(null);
@@ -122,10 +87,12 @@ const UpdateStatusPst = () => {
     const handleCancelConfirm = async () => {
         try {
             await updateStatusPusatServices.cancelProposalPusat(selectedItem?.id);
-            alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`);
+            // alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`);
+            showSuccessToast(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`)
             setDataPusat(prev => prev.filter(item => item.id !== selectedItem?.id));
         } catch (error) {
-            alert(`Gagal cancel proposal: ${error.response?.data?.message || error.message}`);
+            // alert(`Gagal cancel proposal: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal cancel proposal: ${error.response?.data?.message || error.message}`)
         } finally {
             setIsCloseModalOpen(false);
             setSelectedItem(null);
@@ -198,7 +165,22 @@ const UpdateStatusPst = () => {
             wrap: true,
             style: { textAlign: "left", whiteSpace: "normal" } 
         },
-        { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "70px" },
+        {
+            name: "BU",
+            selector: row => {
+              const match = buMasterList.find(bu => bu.value === row.bisnis_unit);
+              return match ? match.label : `BU ${row.bisnis_unit}`;
+            },
+            sortable: true,
+            wrap: true,
+            // width: "50px",
+            maxWidth: "200px",
+            style: {
+              whiteSpace: "normal",
+              fontSize: "12px",
+              padding: "4px",
+            }
+          },
         { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },
         { 
             name: "TITLE", 
@@ -251,29 +233,14 @@ const UpdateStatusPst = () => {
         <div className="card">
             <div className="card-body p-0">
                 <div className="d-flex gap-2 mb-3 align-items-center">
-                    <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
-                        <option value="">Semua BU</option>
-                        <option value="50">BU 50</option>
-                        <option value="51">BU 51</option>
-                    </select>
-                    <input
-                        type="text"
-                        className="form-control w-auto"
-                        placeholder="Cari Title / Type..."
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
+                    <TableFilterBar
+                        selectedBU={selectedBU}
+                        setSelectedBU={setSelectedBU}
+                        buOptions={buOptions}
+                        searchText={searchText}
+                        setSearchText={setSearchText}
                     />
                 </div>
-
-                {/* <DataTable
-                    columns={columns}
-                    data={filteredData}
-                    pagination
-                    highlightOnHover
-                    striped
-                    responsive
-                    persistTableHead
-                /> */}
                 <CustomTable
                     columns={columns}
                     data={filteredData}

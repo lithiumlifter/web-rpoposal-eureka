@@ -26,7 +26,7 @@ const InboxCabang = () => {
                 const inboxRes = await inboxCabangServices.getInboxCabang();
                 setData(inboxRes.data.data);
     
-                const categoryRes = await CategoryService.getCategories(); // misalnya ini sumbernya
+                const categoryRes = await CategoryService.getCategories();
                 const allBU = [];
     
                 categoryRes.data.bisnisUnit.forEach(unit => {

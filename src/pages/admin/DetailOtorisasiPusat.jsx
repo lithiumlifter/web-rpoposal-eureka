@@ -36,10 +36,8 @@ const DetailOtorisasiPusat = () => {
 
 
 const handleConfirmClose = () => {
-  // navigate('/admin/otorisasipusat');
-  navigate(-1);
+  navigate('/admin/otorisasi-pusat');
 };
-
 
   useEffect(() => {
     const fetchDataProposal = async () => {

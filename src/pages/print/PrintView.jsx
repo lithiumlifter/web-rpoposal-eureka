@@ -107,74 +107,79 @@ const PrintView = () => {
         }
       `}</style>
 
-      {/* === Mulai tampilan cetak mirip screenshot pertama === */}
+      {/* === print === */}
       <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '15px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ minWidth: '150px' }}>
-    {proposal.history?.findLast((item) => item.reg_branch) ? (
-      <Barcode
-        value={proposal.history.findLast((item) => item.reg_branch)?.reg_branch || 'N/A'}
-        height={40}
-        width={1.5}
-        fontSize={12}
-        displayValue={false} // kalau mau HILANGIN teks di bawah barcode
-      />
-    ) : (
-      <p style={{ fontSize: '10px' }}>Barcode tidak tersedia</p>
-    )}
-  </div>
+            <div style={{ minWidth: '150px' }}>
+              {proposal.history?.findLast((item) => item.reg_branch) ? (
+                <Barcode
+                  value={proposal.history.findLast((item) => item.reg_branch)?.reg_branch || 'N/A'}
+                  height={70}
+                  width={2.5}
+                  fontSize={12}
+                  displayValue={false}
+                />
+              ) : (
+                <p style={{ fontSize: '10px' }}>Barcode tidak tersedia</p>
+              )}
+          </div>
           <div style={{ fontWeight: 'bold', textAlign: 'center', flexGrow: 1 }}>
             PROPOSAL : {proposal.tipe} ------ Print by : {userRole}
           </div>
         </div>
-        <table style={{ width: '100%', marginTop: '10px', fontSize: '13px' }}>
+        <table style={{ width: '100%', marginTop: '10px', fontSize: '13px', borderCollapse: 'collapse' }}>
           <tbody>
             <tr>
-                <td><strong>Perihal:</strong></td>
-                <td>{formData.title}</td></tr>
+              <td style={{ width: '15%', verticalAlign: 'top' }}><strong>Perihal:</strong></td>
+              <td style={{ width: '60%', whiteSpace: 'normal', wordBreak: 'break-word' }}>{formData.title}</td>
+              <td style={{ width: '10%', verticalAlign: 'top' }}></td>
+              <td style={{ width: '15%' }}></td>
+            </tr>
             <tr>
               <td><strong>Nomor:</strong></td>
               <td>{formData.kode_proposal}</td>
               <td><strong>BU</strong></td>
-              <td>{formData.bisnis_unit}</td>
+              {/* <td>{formData.bisnis_unit}</td> */}
+              <td>50</td>
             </tr>
             <tr>
               <td><strong>Register:</strong></td>
               <td>
-                    {
-                      proposal.history?.findLast((item) => item.reg && item.reg_branch) ? (
-                        <>
-                          {proposal.history.findLast((item) => item.reg && item.reg_branch).reg_branch}/
-                          {proposal.history.findLast((item) => item.reg && item.reg_branch).reg}
-                        </>
-                      ) : (
-                        'Belum tersedia'
-                      )
-                    } - Tgl : {formData.tgl_proposal}
+                {
+                  proposal.history?.findLast((item) => item.reg && item.reg_branch) ? (
+                    <>
+                      {proposal.history.findLast((item) => item.reg && item.reg_branch).reg_branch}/
+                      {proposal.history.findLast((item) => item.reg && item.reg_branch).reg}
+                    </>
+                  ) : (
+                    'Belum tersedia'
+                  )
+                } - Tgl : {formData.tgl_proposal}
               </td>
-              <td><strong>Jml Siswa</strong></td>
-              <td>{formData.jumlah_siswa || 0}</td>
+              <td><strong>BU Name</strong></td>
+              <td>Raja Cepat Nusantara</td>
             </tr>
             <tr>
               <td><strong>Lembaga:</strong></td>
               <td>{formData.lembaga}</td>
-              <td><strong>Nama Mitra:</strong></td>
-              <td>{formData.nama_mitra}</td>
+              <td><strong>BU Wilayah:</strong></td>
+              <td>Jakarta</td>
             </tr>
             <tr>
               <td><strong>Kode:</strong></td>
               <td>{formData.kode_mitra}</td>
-              <td><strong>No HP:</strong></td>
-              <td>{formData.no_hp}</td>
+              {/* <td><strong>No HP:</strong></td>
+              <td>{formData.no_hp}</td> */}
             </tr>
             <tr>
               <td><strong>Alamat:</strong></td>
               <td>{formData.alamat}</td>
-              <td><strong>Sejak:</strong></td>
-              <td>{formData.sejak}</td>
+              {/* <td><strong>Sejak:</strong></td>
+              <td>{formData.sejak}</td> */}
             </tr>
           </tbody>
         </table>
+
       </div>
 
       {/* Konten Surat */}
@@ -215,10 +220,10 @@ const PrintView = () => {
           <table className="table table-bordered">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Position</th>
-                <th>Description</th>
-                <th>By</th>
+                <th>DATE</th>
+                <th>POSITION</th>
+                <th>DESCRIPTION</th>
+                <th>BY</th>
               </tr>
             </thead>
             <tbody>
@@ -227,7 +232,8 @@ const PrintView = () => {
                   <tr key={item.id_history}>
                     <td>{item.transdate}</td>
                     <td>{item.status_position}</td>
-                    <td>{item.description}</td>
+                    {/* <td>{item.description}</td> */}
+                    <td>{item.description.toUpperCase()}</td>
                     <td>{item.name}</td>
                   </tr>
                 ))

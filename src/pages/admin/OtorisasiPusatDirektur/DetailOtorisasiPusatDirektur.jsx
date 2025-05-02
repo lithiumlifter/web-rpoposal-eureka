@@ -9,6 +9,7 @@ import CustomTable from "../../../components/table/customTable";
 import ImagePreviewModal from "../../../components/ImagePreviewModal";
 import ConfirmationModal from "../../../components/ConfirmationModal";
 import { showDevelopmentToast, showErrorToast, showSuccessToast } from "../../../utils/toast";
+import KaryawanServices from "../../../services/admin/dataKaryawan";
 
 const DetailOtorisasiPusat = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const DetailOtorisasiPusat = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const printRef = useRef();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [karyawanDetail, setKaryawanDetail] = useState(null);
   const [categories, setCategories] = useState({
     bisnisUnit: [],
     ruangLingkup: [],
@@ -35,8 +38,7 @@ const DetailOtorisasiPusat = () => {
   const [statusToSubmit, setStatusToSubmit] = useState('');
 
 const handleConfirmClose = () => {
-  // navigate('/admin/otorisasi-pusat');
-  navigate(-1);
+  navigate('/admin/otorisasipusat-direktur-all');
 };
 
   useEffect(() => {
@@ -124,6 +126,22 @@ const handleConfirmClose = () => {
     setStatusToSubmit(statusValue);
     setShowConfirmationModal(true);
 };
+
+const handleDetail = async (pemohon) => {
+  try {
+    const allKaryawan = await KaryawanServices.getKaryawan();
+    const detail = allKaryawan.find(k => k.username === pemohon.username);
+    if (detail) {
+      setKaryawanDetail(detail);
+      setModalOpen(true);
+    } else {
+      alert('Data karyawan tidak ditemukan');
+    }
+  } catch (error) {
+    alert('Gagal mengambil data karyawan', error);
+  }
+};
+
 
 const handleConfirmSubmit = async () => {
   const role = localStorage.getItem("role");
@@ -262,7 +280,20 @@ const handleConfirmSubmit = async () => {
         <tbody>
         <tr>
             <td>Nama Pelanggan:</td>
-            <td>{proposal.pemohon.name}</td>
+            <td>
+              {proposal.pemohon.name}
+              <button
+                onClick={() => handleDetail("P3101")}
+                style={{
+                  marginLeft: '10px',
+                  padding: '2px 6px',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                }}
+              >
+                Detail
+              </button>
+            </td>
             <td>GL:</td>
             <td></td>
         </tr>
@@ -733,7 +764,116 @@ const handleConfirmSubmit = async () => {
         theme="danger"
       />
 
+      {modalOpen && karyawanDetail && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 9999
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px 30px',
+            width: '95%',
+            maxWidth: '1100px',
+            borderRadius: '10px',
+            maxHeight: '95vh',
+            overflowY: 'auto',
+            fontFamily: 'Segoe UI, sans-serif',
+            fontSize: '14px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 600 }}>Employee Identity</h2>
+              {karyawanDetail.photo && (
+                <img
+                  src={`https://api.dashboard.eurekagroup.id/employee/view/${karyawanDetail.photo}`}
+                  crossOrigin="anonymous"
+                  alt="Employee"
+                  style={{ width: '120px', height: '160px', objectFit: 'cover', borderRadius: '6px' }}
+                />
+              )}
+            </div>
 
+            <table style={{ width: '100%', marginBottom: '20px' }}>
+              <tbody>
+                <tr>
+                  <td>Full Name</td><td>:</td><td>{karyawanDetail.full_name}</td>
+                  <td>Email</td><td>:</td><td>{karyawanDetail.email || '-'}</td>
+                </tr>
+                <tr>
+                  <td>NIK</td><td>:</td><td>{karyawanDetail.emp_id}</td>
+                  <td>Marital status</td><td>:</td><td>{karyawanDetail.marital_status}</td>
+                </tr>
+                <tr>
+                  <td>Date of Birth</td><td>:</td>
+                  <td>{new Date(karyawanDetail.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
+                  <td>Phone</td><td>:</td><td>{karyawanDetail.no_telp}</td>
+                </tr>
+                <tr>
+                  <td>Religion</td><td>:</td><td>{karyawanDetail.religion}</td>
+                  <td>Address</td><td>:</td><td>{karyawanDetail.address || '-'}</td>
+                </tr>
+                <tr>
+                  <td>Education</td><td>:</td><td>{karyawanDetail.education}</td>
+                  <td>Major</td><td>:</td><td>{karyawanDetail.education_major}</td>
+                </tr>
+                <tr>
+                  <td>Collage</td><td>:</td><td>{karyawanDetail.collage}</td>
+                  <td>Tax Category</td><td>:</td><td>{karyawanDetail.tax_category}</td>
+                </tr>
+                <tr>
+                  <td>BPJS TK</td><td>:</td><td>{karyawanDetail.bpjs_tk?.low || '-'}</td>
+                  <td>BPJS Kesehatan</td><td>:</td><td>{karyawanDetail.bpjs_kes?.low || '-'}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h2 style={{ fontSize: '18px', marginBottom: '20px', fontWeight: 600 }}>Employee</h2>
+
+            <table style={{ width: '100%' }}>
+              <tbody>
+                <tr>
+                  <td>Jabatan</td><td>:</td><td>{karyawanDetail.id_department?.department_name || '-'}</td>
+                  <td>Hire Date</td><td>:</td>
+                  <td>{new Date(karyawanDetail.hire_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
+                </tr>
+                <tr>
+                  <td>Business Unit</td><td>:</td><td>{karyawanDetail.id_bu?.bu_name || '-'}</td>
+                  <td>Employee Status</td><td>:</td><td>{karyawanDetail.employee_status}</td>
+                </tr>
+                <tr>
+                  <td>Grade</td><td>:</td><td>{karyawanDetail.grade || '-'}</td>
+                  <td>Active/Inactive</td><td>:</td><td>{karyawanDetail.is_active}</td>
+                </tr>
+                <tr>
+                  <td>Points</td><td>:</td><td>{karyawanDetail.points}</td>
+                  <td>PPH21</td><td>:</td><td>{karyawanDetail.pph21}</td>
+                </tr>
+                <tr>
+                  <td>Date Added</td><td>:</td>
+                  <td>{new Date(karyawanDetail.date_added).toLocaleDateString('id-ID')}</td>
+                  <td>Date Modified</td><td>:</td>
+                  <td>{new Date(karyawanDetail.date_modified).toLocaleDateString('id-ID')}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style={{ textAlign: 'right', marginTop: '30px' }}>
+              <button onClick={() => setModalOpen(false)} style={{
+                padding: '8px 16px',
+                backgroundColor: '#333',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

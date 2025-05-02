@@ -116,14 +116,6 @@ const Sidebar = ({ isOpen }) => {
                   </li>
                 )}
 
-                {hasAccess(["admin","otoritor cabang"]) && (
-                  <li className={`nav-item ${isActive("/admin/otorisasicabang") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/admin/otorisasicabang">
-                      <i className="fas fa-wrench"></i> <span className="menu-text">Otorisasi Cabang</span>
-                    </Link>
-                  </li>
-                )}
-
                 {hasAccess(["admin","kontrol"]) && (
                   <li className={`nav-item ${isActive("/admin/inboxpusat") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/inboxpusat">
@@ -421,6 +413,13 @@ const Sidebar = ({ isOpen }) => {
 
                       {lainLain && (
                         <ul className="navbar-nav flex-column ms-3">
+                         {hasAccess(["admin","otoritor cabang"]) && (
+                            <li className={`nav-item ${isActive("/admin/otorisasicabang") ? "active" : ""}`}>
+                              <Link className="nav-link" to="/admin/otorisasicabang">
+                                <i className="fas fa-wrench"></i> <span className="menu-text">Otorisasi Cabang</span>
+                              </Link>
+                            </li>
+                          )}
                           {hasAccess(["admin", "otoritor"]) && (
                             <li className={`nav-item ${isActive("/admin/updateanggaran") ? "active" : ""}`}>
                               <Link className="nav-link" to="/admin/updateanggaran">

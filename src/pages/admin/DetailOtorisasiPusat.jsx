@@ -36,7 +36,8 @@ const DetailOtorisasiPusat = () => {
 
 
 const handleConfirmClose = () => {
-  navigate('/admin/otorisasipusat');
+  // navigate('/admin/otorisasipusat');
+  navigate(-1);
 };
 
 

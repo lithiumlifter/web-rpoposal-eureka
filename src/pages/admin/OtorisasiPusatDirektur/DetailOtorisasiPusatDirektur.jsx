@@ -34,11 +34,10 @@ const DetailOtorisasiPusat = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [statusToSubmit, setStatusToSubmit] = useState('');
 
-
 const handleConfirmClose = () => {
-  navigate('/admin/otorisasipusat');
+  // navigate('/admin/otorisasi-pusat');
+  navigate(-1);
 };
-
 
   useEffect(() => {
     const fetchDataProposal = async () => {

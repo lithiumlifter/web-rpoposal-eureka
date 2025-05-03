@@ -185,7 +185,10 @@ const PrintView = () => {
       {/* Konten Surat */}
       <div className="card mb-4 p-0">
         <div className="card-body p-0">
-        <h5 className="card-header mb-3 text-start" style={{backgroundColor: 'white'}}>Biaya: {formData.biaya_lain}</h5>
+        {/* <h5 className="card-header mb-3 text-start" style={{backgroundColor: 'white'}}>Biaya: {formData.biaya_lain}</h5> */}
+        <h5 className="card-header mb-3 text-start" style={{backgroundColor: 'white'}}>
+          Biaya: Rp {Number(formData.biaya_lain).toLocaleString('id-ID')}
+        </h5>
         <div
             className="p-3 ck-content"
             style={{
@@ -204,19 +207,26 @@ const PrintView = () => {
       {/* B. HISTORY */}
       <div className="card mt-3 p-0">
         <div className="card-body p-0">
-        <h1 className="card-header mb-2 text-start"  style={{backgroundColor: 'white',}}>
-            Nomor Reg.:{' '}
+        <h1 className="card-header mb-2 text-start" style={{ backgroundColor: 'white' }}>
+          Nomor Reg.:{' '}
           {
             proposal.history?.findLast((item) => item.reg && item.reg_branch) ? (
               <>
-                {proposal.history.findLast((item) => item.reg && item.reg_branch).reg_branch}/
-                {proposal.history.findLast((item) => item.reg && item.reg).reg}
+                {/* {
+                  proposal.history.findLast((item) => item.reg && item.reg_branch)
+                    .reg_branch.replace(/^RB-/, '')
+                }/ */}
+                {
+                  proposal.history.findLast((item) => item.reg && item.reg)
+                    .reg.replace(/^R-/, '')
+                }
               </>
             ) : (
               'Belum tersedia'
             )
           }
         </h1>
+
           <table className="table table-bordered">
             <thead>
               <tr>
@@ -233,7 +243,51 @@ const PrintView = () => {
                     <td>{item.transdate}</td>
                     <td>{item.status_position}</td>
                     {/* <td>{item.description}</td> */}
-                    <td>{item.description.toUpperCase()}</td>
+                    {/* <td>{item.description.toUpperCase()}</td> */}
+                    {/* <td>{item.description ? item.description.toUpperCase() : '-'}</td> */}
+                    <td>
+  {item.status_position === "Dirut" ? (
+    <>
+      <span
+        style={{
+          color:
+            item.status === "Approve"
+              ? "green"
+              : item.status === "Pending"
+              ? "yellow"
+              : item.status === "Close"
+              ? "red"
+              : "black",
+          fontWeight: "bold",
+        }}
+      >
+        {item.status === "Approve"
+          ? "[Saya Setuju]"
+          : item.status === "Pending"
+          ? "[Pending]"
+          : item.status === "Close"
+          ? "[Close]"
+          : `[${item.status}]`}
+      </span>
+      {proposal?.otoritas?.find(
+        (o) => o.emplid === item.username && o.status === item.status
+      )?.keterangan && (
+        <span style={{ marginLeft: "8px", color: "#888" }}>
+          (
+          {
+            proposal.otoritas.find(
+              (o) => o.emplid === item.username && o.status === item.status
+            ).keterangan
+          }
+          )
+        </span>
+      )}
+    </>
+  ) : (
+    item.description ? item.description.toUpperCase() : "-"
+  )}
+</td>
+
                     <td>{item.name}</td>
                   </tr>
                 ))

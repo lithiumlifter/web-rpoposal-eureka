@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import AllReportServices from "../../services/admin/allReportServices";
 import { useNavigate } from "react-router-dom"; 
-import DataTable from "react-data-table-component";
 import CustomTable from "../../components/table/customTable";
 
 const ProposalReport = () => {
     const navigate = useNavigate();
+    const today = new Date();
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(today.getMonth() - 3);
+    
+    const formatDate = (date) => date.toISOString().split("T")[0];
     const [filters, setFilters] = useState({
         keyword: "",
-        fromDate: "",
-        toDate: "",
+        fromDate: formatDate(threeMonthsAgo),
+        toDate: formatDate(today),
     });
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,7 +22,7 @@ const ProposalReport = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const result = await AllReportServices.getReportCabang(filters);
+                const result = await AllReportServices.getProposalReport(filters);
                 setData(result.data.data || []);
             } catch (error) {
                 console.error("Error fetching data: ", error);
@@ -194,15 +198,6 @@ const ProposalReport = () => {
                     data={filteredData}
                     loading={loading}
                 />
-                {/* <DataTable
-                    columns={columns}
-                    data={filteredData}
-                    progressPending={loading}
-                    pagination
-                    highlightOnHover
-                    pointerOnHover
-                    responsive
-                /> */}
             </div>
         </div>
     );

@@ -64,7 +64,7 @@ const handleConfirmClose = () => {
   
     if (newIndex >= 0 && newIndex < proposalList.length) {
       const nextId = proposalList[newIndex];
-      navigate(`/admin/detailotorisasipusat/${nextId}`);
+      navigate(`/admin/detailotorisasipusat-direktur/${nextId}`);
     }
   };
   
@@ -239,7 +239,7 @@ const handleConfirmSubmit = async () => {
           Bisnis unit:{" "}
           {proposal.bisnis_unit && (
             <span className="badge bg-info">
-              {getBuName(proposal.bisnis_unit)} {/* Menampilkan nama bisnis unit */}
+              {getBuName(proposal.bisnis_unit)}
             </span>
           )}
         </div>

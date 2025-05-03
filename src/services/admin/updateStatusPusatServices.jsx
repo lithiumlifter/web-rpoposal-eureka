@@ -53,7 +53,7 @@ const updateStatusPusatServices = {
     closeProposalPusat: async (id_proposal) => {
         try {
             const token = localStorage.getItem('token')
-            const response = await axios.post(`${BASE_URL}/master/update-status-pusat?id_proposal=${id_proposal}&status=Approve`, {}, {
+            const response = await axios.post(`${BASE_URL}/master/update-status-close?id_proposal=${id_proposal}&status=Approve`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

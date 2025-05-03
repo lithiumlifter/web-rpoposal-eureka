@@ -21,7 +21,7 @@ const allDataProposal = {
     getAllDataProposalPST: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat&bisnis_unit=&direktur=false`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -36,7 +36,7 @@ const allDataProposal = {
     getAllDataProposalPSTDirektur: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=&direktur=true`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat&bisnis_unit=&direktur=true`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -51,7 +51,7 @@ const allDataProposal = {
     getAllDataProposalPSTDirekturEurekaLogistic: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=11&direktur=true`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat&bisnis_unit=11&direktur=true`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -66,7 +66,7 @@ const allDataProposal = {
     getAllDataProposalPSTDirekturRajaCepat: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=21&direktur=true`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat&bisnis_unit=21&direktur=true`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -81,7 +81,7 @@ const allDataProposal = {
     getAllDataProposalPSTDirekturEurekaBookhouse: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=31&direktur=true`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat&bisnis_unit=31&direktur=true`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -96,7 +96,7 @@ const allDataProposal = {
     getAllDataProposalPSTDirekturMasterDiskon: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=41&direktur=true`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat&bisnis_unit=41&direktur=true`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -111,7 +111,7 @@ const allDataProposal = {
     getAllDataProposalPSTDirekturKataRasa: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=51&direktur=true`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat&bisnis_unit=51&direktur=true`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -126,7 +126,7 @@ const allDataProposal = {
     getAllDataProposalPSTDirekturJajaUsahaLaku: async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=PST&bisnis_unit=61&direktur=true`, {
+            const response = await axios.get(`${BASE_URL}/master/data-proposal?page=&limit=10&keyword=&status=RecievedPusat&bisnis_unit=61&direktur=true`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

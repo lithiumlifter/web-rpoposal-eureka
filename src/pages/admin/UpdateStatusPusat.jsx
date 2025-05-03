@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
-import updateStatusCabangServices from "../../services/admin/updateStatusCabangServices";
+import updateStatusPusatServices from "../../services/admin/updateStatusCabangServices";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import CustomTable from "../../components/table/customTable";
 import { showErrorToast, showSuccessToast } from "../../utils/toast";
@@ -18,7 +18,7 @@ const UpdateStatusPusat = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await updateStatusCabangServices.getUpdateStatusCabangServices();
+                const response = await updateStatusPusatServices.getUpdateStatusPusatServices();
                 if (response?.data?.data) {
                     setDataCabang(response.data.data);
                 }

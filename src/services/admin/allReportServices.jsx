@@ -19,21 +19,24 @@ const AllReportServices = {
       }
     },
 
-    getProposalReport: async () => {
-        try {
-          const token = localStorage.getItem('token');
-          const response = await axios.get(`${BASE_URL}/master/data-report?page=&limit=10&keyword=&type=transdate&fromDate=&toDate=&bisnis_unit=&ruang_lingkup=&status=`, {
+    getProposalReport: async ({ keyword = "", fromDate, toDate }) => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `${BASE_URL}/master/data-report?page=&limit=10&keyword=${keyword}&type=transdate&fromDate=${fromDate}&toDate=${toDate}&bisnis_unit=&ruang_lingkup=&status=`,
+          {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          console.log('Data report proposal:', response.data);
-          return response.data;
-        } catch (error) {
-          console.error('Error fetching report proposal:', error.response?.data || error.message);
-          throw error;
-        }
-      },
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching report proposal:", error.response?.data || error.message);
+        throw error;
+      }
+    },
+    
       
       getReportCabang: async () => {
         try {

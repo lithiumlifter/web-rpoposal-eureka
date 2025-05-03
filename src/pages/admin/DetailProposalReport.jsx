@@ -84,9 +84,50 @@ const closeModal = () => setIsModalOpen(false);
   const historyColumns = [
     { name: "Date", selector: (row) => row.transdate, sortable: true },
     { name: "Position", selector: (row) => row.status_position, sortable: true },
-    { name: "Description", selector: (row) => row.description, sortable: true },
+    {
+      name: "Description",
+      cell: (row) => {
+        const isDirut = row.status_position === "Dirut";
+  
+        // Ambil keterangan dari otoritas jika ada yang cocok
+        const matchingOtoritas = proposal?.otoritas?.find(
+          (o) => o.emplid === row.username && o.status === row.status
+        );
+  
+        const comment = matchingOtoritas?.keterangan;
+  
+        if (isDirut) {
+          let labelColor = "black";
+          let labelText = `[${row.status}]`;
+  
+          if (row.status === "Approve") {
+            labelColor = "blue";
+            labelText = "[Saya Setuju]";
+          } else if (row.status === "Pending") {
+            labelColor = "yellow";
+            labelText = "[Pending]";
+          } else if (row.status === "Close") {
+            labelColor = "red";
+            labelText = "[Close]";
+          }
+  
+          return (
+            <div>
+              <span style={{ color: labelColor, fontWeight: "bold" }}>{labelText}</span>
+              {comment && (
+                <span style={{ marginLeft: "8px", color: "#888" }}>({comment})</span>
+              )}
+            </div>
+          );
+        }
+  
+        return row.description || "-";
+      },
+      sortable: false,
+    },
     { name: "BY", selector: (row) => row.name, sortable: true },
   ];
+  
 
   // DataTable columns untuk Otoritor
   const otoritasColumns = [

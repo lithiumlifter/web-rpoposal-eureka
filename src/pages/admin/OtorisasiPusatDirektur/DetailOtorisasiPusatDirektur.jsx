@@ -783,19 +783,60 @@ const handleConfirmSubmit = async () => {
             fontFamily: 'Segoe UI, sans-serif',
             fontSize: '14px'
           }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '20px' }}>Employee Identity</h2>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '18px', fontWeight: 600 }}>Employee Identity</h2>
-              {karyawanDetail.photo && (
-                <img
-                  src={`https://api.dashboard.eurekagroup.id/employee/view/${karyawanDetail.photo}`}
-                  crossOrigin="anonymous"
-                  alt="Employee"
-                  style={{ width: '120px', height: '160px', objectFit: 'cover', borderRadius: '6px' }}
-                />
-              )}
+                <div style={{ display: 'flex', gap: '30px', marginBottom: '30px' }}>
+                  {/* Kolom 1: Foto */}
+                  <div style={{ flex: '0 0 150px', textAlign: 'center' }}>
+                    {karyawanDetail.photo ? (
+                      <img
+                        src={`https://api.dashboard.eurekagroup.id/employee/view/${karyawanDetail.photo}`}
+                        crossOrigin="anonymous"
+                        alt="Employee"
+                        style={{ width: '120px', height: '160px', objectFit: 'cover', borderRadius: '6px' }}
+                      />
+                    ) : (
+                      <div style={{ width: '120px', height: '160px', backgroundColor: '#ccc', borderRadius: '6px' }} />
+                    )}
+                  </div>
+
+                  {/* Kolom 2: Fullname s.d. BPJS TK */}
+                  <div style={{ flex: 1 }}>
+                    <table style={{ width: '100%', borderSpacing: '0 6px' }}>
+                      <tbody>
+                        <tr><td>Full Name</td><td>:</td><td>{karyawanDetail.full_name}</td></tr>
+                        <tr><td>NIK</td><td>:</td><td>{karyawanDetail.emp_id}</td></tr>
+                        <tr>
+                          <td>Date of Birth</td><td>:</td>
+                          <td>{new Date(karyawanDetail.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
+                        </tr>
+                        <tr><td>Religion</td><td>:</td><td>{karyawanDetail.religion}</td></tr>
+                        <tr><td>Education</td><td>:</td><td>{karyawanDetail.education}</td></tr>
+                        <tr><td>Collage</td><td>:</td><td>{karyawanDetail.collage}</td></tr>
+                        <tr><td>BPJS TK</td><td>:</td><td>{karyawanDetail.bpjs_tk?.low || '-'}</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Kolom 3: Email s.d. BPJS Kesehatan */}
+                  <div style={{ flex: 1 }}>
+                    <table style={{ width: '100%', borderSpacing: '0 6px', marginLeft: '80px' }}>
+                      <tbody>
+                        <tr><td>Email</td><td>:</td><td>{karyawanDetail.email || '-'}</td></tr>
+                        <tr><td>Marital Status</td><td>:</td><td>{karyawanDetail.marital_status}</td></tr>
+                        <tr><td>Phone</td><td>:</td><td>{karyawanDetail.no_telp}</td></tr>
+                        <tr><td>Address</td><td>:</td><td>{karyawanDetail.address || '-'}</td></tr>
+                        <tr><td>Major</td><td>:</td><td>{karyawanDetail.education_major}</td></tr>
+                        <tr><td>Tax Category</td><td>:</td><td>{karyawanDetail.tax_category}</td></tr>
+                        <tr><td>BPJS Kesehatan</td><td>:</td><td>{karyawanDetail.bpjs_kes?.low || '-'}</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
             </div>
 
-            <table style={{ width: '100%', marginBottom: '20px' }}>
+            {/* <table style={{ width: '100%', marginBottom: '20px' }}>
               <tbody>
                 <tr>
                   <td>Full Name</td><td>:</td><td>{karyawanDetail.full_name}</td>
@@ -827,10 +868,10 @@ const handleConfirmSubmit = async () => {
                   <td>BPJS Kesehatan</td><td>:</td><td>{karyawanDetail.bpjs_kes?.low || '-'}</td>
                 </tr>
               </tbody>
-            </table>
+            </table> */}
 
+            {/* Row 2 */}
             <h2 style={{ fontSize: '18px', marginBottom: '20px', fontWeight: 600 }}>Employee</h2>
-
             <table style={{ width: '100%' }}>
               <tbody>
                 <tr>

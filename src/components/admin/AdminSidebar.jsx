@@ -162,35 +162,6 @@ const Sidebar = ({ isOpen }) => {
                   </li>
                 )}
 
-                {/* {hasAccess(["admin","direktur"]) && (
-                  <li className={`nav-item ${isActive("/admin/otorisasi-pusat-dir") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/admin/otorisasi-pusat-dir">
-                      <i className="fas fa-th-list"></i> <span className="menu-text">Otorisasi Pusat (Direktur)</span>
-                      {jumlahProposalPSTDirektur > 0 && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "6px",
-                            left: "1px",
-                            background: "red",
-                            color: "white",
-                            borderRadius: "50%",
-                            width: "18px",
-                            height: "18px",
-                            fontSize: "10px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 2,
-                          }}
-                        >
-                          {jumlahProposalPSTDirektur}
-                        </div>
-                      )}
-                    </Link>
-                  </li>
-                )} */}
-
                 {/* Submenu Otorisasi Pusat Direktur */}
                 {hasAccess(["admin", "direktur"]) && (
                     <li className="nav-item" style={{ position: "relative" }}>

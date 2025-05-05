@@ -88,47 +88,51 @@ const closeModal = () => setIsModalOpen(false);
       name: "Description",
       cell: (row) => {
         const isDirut = row.status_position === "Dirut";
-  
-        // Ambil keterangan dari otoritas jika ada yang cocok
+    
         const matchingOtoritas = proposal?.otoritas?.find(
           (o) => o.emplid === row.username && o.status === row.status
         );
-  
+    
         const comment = matchingOtoritas?.keterangan;
-  
+    
         if (isDirut) {
           let labelColor = "black";
           let labelText = `[${row.status}]`;
-  
+    
           if (row.status === "Approve") {
-            labelColor = "blue";
+            labelColor = "green";
             labelText = "[Saya Setuju]";
           } else if (row.status === "Pending") {
-            labelColor = "yellow";
+            labelColor = "orange";
             labelText = "[Pending]";
           } else if (row.status === "Close") {
             labelColor = "red";
             labelText = "[Close]";
           }
-  
+    
           return (
             <div>
-              <span style={{ color: labelColor, fontWeight: "bold" }}>{labelText}</span>
+              <span style={{ color: labelColor }}>{labelText}</span>
               {comment && (
-                <span style={{ marginLeft: "8px", color: "#888" }}>({comment})</span>
+                <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
+                  - {comment}
+                </span>
               )}
             </div>
           );
         }
-  
-        return row.description || "-";
+    
+        return (
+          <span style={{ fontWeight: "" }}>
+            {row.description ? row.description.toUpperCase() : "-"}
+          </span>
+        );
       },
       sortable: false,
-    },
+    },    
     { name: "BY", selector: (row) => row.name, sortable: true },
   ];
   
-
   // DataTable columns untuk Otoritor
   const otoritasColumns = [
     { name: "Urutan No. Level", selector: (row) => row.urutan, sortable: true },

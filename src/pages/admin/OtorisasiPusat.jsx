@@ -84,7 +84,7 @@ const OtorisasiPusat = () => {
       cell: (row) => (
         <button
           className="btn btn-sm btn-primary"
-          onClick={() => navigate(`/admin/detailotorisasipusat-direktur/${row.id}`)}
+          onClick={() => navigate(`/admin/detailotorisasipusat/${row.id}`)}
         >
           <i className="fas fa-edit"></i>
         </button>

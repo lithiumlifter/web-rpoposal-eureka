@@ -11,7 +11,6 @@ const navigate = useNavigate();
 const handlePrint = () => {
   const printWindow = window.open('/printview', '_blank');
   if (printWindow) {
-    // Kalau mau kirim data (proposal, formData) kamu bisa pakai localStorage/sessionStorage dulu
     localStorage.setItem('printData', JSON.stringify({ proposal, formData }));
   }
 };
@@ -209,14 +208,37 @@ const closeModal = () => setIsModalOpen(false);
                 </div>
 
                 <div className="form-group row">
-                    <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
+                    <label className="col-12 col-sm-3 col-form-label text-left">BU Name:</label>
                     <div className="col-12 col-sm-8 col-lg-8">
-                      <select className="form-control" disabled={!isEditing}>
+                      <select
+                        className="form-control"
+                        value={formData.bisnis_unit}
+                        disabled
+                      >
                         {categories.bisnisUnit.map((item) => (
                           <option key={item.value} value={item.value}>
-                            {item.name} - {item.wilayah}
+                            {item.name}
                           </option>
                         ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">BU Wilayah:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select
+                        className="form-control"
+                        value={formData.bisnis_unit_branch}
+                        disabled
+                      >
+                        {categories.bisnisUnit
+                          .find((item) => item.value === formData.bisnis_unit)
+                          ?.branch.map((branch) => (
+                            <option key={branch.value} value={branch.value}>
+                              {branch.wilayah}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </div>
@@ -259,7 +281,7 @@ const closeModal = () => setIsModalOpen(false);
                 </div>
 
                 {/* Bisnis Unit */}
-                <div className="form-group row">
+                {/* <div className="form-group row">
                   <label className="col-12 col-sm-3 col-form-label text-left">Bisnis Unit:</label>
                   <div className="col-12 col-sm-8 col-lg-8">
                     <input
@@ -271,7 +293,7 @@ const closeModal = () => setIsModalOpen(false);
                       onChange={handleChange}
                     />
                   </div>
-                </div>
+                </div> */}
 
                 {/* Judul Proposal */}
                 <div className="form-group row">

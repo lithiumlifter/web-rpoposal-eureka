@@ -31,7 +31,6 @@ const PrintView = () => {
   
     setTimeout(() => window.print(), 500);
   }, []);
-  
 
   if (!proposal || !formData) return <p>Data tidak tersedia.</p>;
 
@@ -175,7 +174,6 @@ const PrintView = () => {
             </tr>
           </tbody>
         </table>
-
       </div>
 
       {/* Konten Surat */}
@@ -192,8 +190,6 @@ const PrintView = () => {
             }}
             dangerouslySetInnerHTML={{ __html: formData.description }}
         />
-
-
         </div>
       </div>
 

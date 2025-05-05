@@ -505,6 +505,21 @@ const handleConfirmSubmit = async () => {
                   </div>
                 </div>
 
+                 {/* Judul Proposal */}
+                 <div className="form-group row">
+                  <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
+                  <div className="col-12 col-sm-8 col-lg-8">
+                    <input
+                      type="text"
+                      name="title"
+                      className="form-control"
+                      value={formData.title}
+                      readOnly={!isEditing}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
                 {/* Proposal ID */}
                 <div className="form-group row">
                   <label className="col-12 col-sm-3 col-form-label text-left">Proposal ID:</label>
@@ -520,30 +535,38 @@ const handleConfirmSubmit = async () => {
                   </div>
                 </div>
 
-                {/* Ruang Lingkup */}
                 <div className="form-group row">
-                  <label className="col-12 col-sm-3 col-form-label text-left">Ruang Lingkup:</label>
-                  <div className="col-12 col-sm-8 col-lg-8">
-                    <input
-                      type="text"
-                      name="ruang_lingkup"
-                      className="form-control"
-                      value={formData.ruang_lingkup}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group row">
-                    <label className="col-12 col-sm-3 col-form-label text-left">BU:</label>
+                    <label className="col-12 col-sm-3 col-form-label text-left">BU Name:</label>
                     <div className="col-12 col-sm-8 col-lg-8">
-                      <select className="form-control" disabled={!isEditing}>
+                      <select
+                        className="form-control"
+                        value={formData.bisnis_unit}
+                        disabled
+                      >
                         {categories.bisnisUnit.map((item) => (
                           <option key={item.value} value={item.value}>
-                            {item.name} - {item.wilayah}
+                            {item.name}
                           </option>
                         ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group row">
+                    <label className="col-12 col-sm-3 col-form-label text-left">BU Wilayah:</label>
+                    <div className="col-12 col-sm-8 col-lg-8">
+                      <select
+                        className="form-control"
+                        value={formData.bisnis_unit_branch}
+                        disabled
+                      >
+                        {categories.bisnisUnit
+                          .find((item) => item.value === formData.bisnis_unit)
+                          ?.branch.map((branch) => (
+                            <option key={branch.value} value={branch.value}>
+                              {branch.wilayah}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </div>
@@ -569,51 +592,6 @@ const handleConfirmSubmit = async () => {
                       </select>
                     </div>
                   </div>
-
-                {/* Bisnis Unit */}
-                <div className="form-group row">
-                  <label className="col-12 col-sm-3 col-form-label text-left">Bisnis Unit:</label>
-                  <div className="col-12 col-sm-8 col-lg-8">
-                    <input
-                      type="text"
-                      name="bisnis_unit"
-                      className="form-control"
-                      value={formData.bisnis_unit}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                {/* Judul Proposal */}
-                <div className="form-group row">
-                  <label className="col-12 col-sm-3 col-form-label text-left">Judul Proposal:</label>
-                  <div className="col-12 col-sm-8 col-lg-8">
-                    <input
-                      type="text"
-                      name="title"
-                      className="form-control"
-                      value={formData.title}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                {/* Status */}
-                <div className="form-group row">
-                  <label className="col-12 col-sm-3 col-form-label text-left">Status:</label>
-                  <div className="col-12 col-sm-8 col-lg-8">
-                    <input
-                      type="text"
-                      name="status"
-                      className="form-control"
-                      value={formData.status}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
 
                 {/* Pemohon */}
                 <div className="form-group row">

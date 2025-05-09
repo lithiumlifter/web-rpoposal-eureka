@@ -7,6 +7,7 @@ const Sidebar = ({ isOpen }) => {
     const [isHovered, setIsHovered] = useState(false);
     const location = useLocation();
     const [masterOpen, setMasterOpen] = useState(false);
+    const [otorisasiPusatDirektur, setOtorisasiPusatDirekturOpen] = useState(false);
     const [lainLain, setLainLain] = useState(false);
     const [jumlahProposalPST, setJumlahProposalPST] = useState(0);
     const [jumlahProposalPSTDirektur, setJumlahProposalPSTDirektur] = useState(0);
@@ -168,7 +169,7 @@ const Sidebar = ({ isOpen }) => {
                       <span
                         className="nav-link"
                         style={{ cursor: "pointer", position: "relative" }}
-                        onClick={() => setMasterOpen(!masterOpen)}
+                        onClick={() => setOtorisasiPusatDirekturOpen(!otorisasiPusatDirektur)}
                       >
                         <i className="fas fa-th-list"></i>{" "}
                         <span className="menu-text">Otorisasi Pusat (Direktur)</span>
@@ -197,7 +198,7 @@ const Sidebar = ({ isOpen }) => {
                         )}
                       </span>
 
-                      {masterOpen && (
+                      {otorisasiPusatDirektur && (
                         <ul className="navbar-nav flex-column ms-3">
                           <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur-all") ? "active" : ""}`} style={{ position: "relative" }}>
                             <Link className="nav-link" to="/admin/otorisasipusat-direktur-all">

@@ -105,53 +105,6 @@ const UpdateStatusPst = () => {
             item.title.toLowerCase().includes(searchText.toLowerCase()) ||
             item.type.toLowerCase().includes(searchText.toLowerCase()))
     );
-
-    // const columns = [
-    //     { name: "RL", selector: row => row.ruang_lingkup, sortable: true, maxWidth: "80px" },
-    //     { name: "CAB", selector: row => row.reg_branch || "-", sortable: true, maxWidth: "80px" },
-    //     { name: "PST", selector: row => row.reg || "-", sortable: true, maxWidth: "80px" },
-    //     { name: "ID", selector: row => row.kode_proposal, sortable: true, maxWidth: "100px" },
-    //     { name: "BU", selector: row => row.bisnis_unit, sortable: true, maxWidth: "70px" },
-    //     { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },
-    //     { name: "TITLE", selector: row => row.title, sortable: true, grow: 2 },
-    //     { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },
-    //     {
-    //         name: "EDIT/VIEW",
-    //         cell: row => (
-    //             <button className="btn btn-warning btn-sm" onClick={() => navigate(`/admin/updatestatuspusat/${row.id}`)}>
-    //                 <i className="fas fa-edit" />
-    //             </button>
-    //         ),
-    //         ignoreRowClick: true,
-    //         allowOverflow: true,
-    //         button: true,
-    //         maxWidth: "80px"
-    //     },
-    //     {
-    //         name: "CANCEL",
-    //         cell: row => (
-    //             <button className="btn btn-danger btn-sm" onClick={() => handleCancelModal(row)}>
-    //                 <i className="fas fa-times" />
-    //             </button>
-    //         ),
-    //         ignoreRowClick: true,
-    //         allowOverflow: true,
-    //         button: true,
-    //         maxWidth: "90px"
-    //     },
-    //     {
-    //         name: "CLOSE",
-    //         cell: row => (
-    //             <button className="btn btn-success btn-sm" onClick={() => handleOpenModal(row)}>
-    //                 Close
-    //             </button>
-    //         ),
-    //         ignoreRowClick: true,
-    //         allowOverflow: true,
-    //         button: true,
-    //         maxWidth: "90px"
-    //     },
-    // ];
     
     const columns = [
         { name: "RL", selector: row => row.ruang_lingkup, sortable: true, maxWidth: "80px" },
@@ -179,6 +132,7 @@ const UpdateStatusPst = () => {
               whiteSpace: "normal",
               fontSize: "12px",
               padding: "4px",
+              textAlign: "left",
             }
           },
         { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true, maxWidth: "120px" },

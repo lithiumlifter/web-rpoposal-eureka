@@ -99,8 +99,8 @@ const ReportToCabang = () => {
     // ];    
 
     const columns = [
-        { name: "NO", selector: (row, index) => index + 1, width: "60px" },
-        { name: "TGL", selector: (row) => row.date?.receive_cabang || "-", width: "120px" },
+        { name: "NO", selector: (row, index) => index + 1, width: "60px", sortable: true,  },
+        { name: "TGL", selector: (row) => row.date?.receive_cabang || "-", width: "120px", sortable: true,  },
         {
             name: "ID",
             selector: (row) => row.kode_proposal || "-",
@@ -111,6 +111,7 @@ const ReportToCabang = () => {
               overflow: 'visible',  
               textOverflow: 'unset',
             },
+            sortable: true, 
         },
           
         {
@@ -122,19 +123,20 @@ const ReportToCabang = () => {
               textAlign: 'left',
               whiteSpace: 'normal',
             },
+            sortable: true, 
         },
           
-        { name: "MGR PST", selector: (row) => row.approve?.oto_mgr || "-", width: "100px" },
-        { name: "AKT PST", selector: (row) => row.approve?.oto_akt || "-", width: "100px" },
-        { name: "FIN", selector: (row) => row.approve?.oto_fin || "-", width: "80px" },
-        { name: "AMD", selector: (row) => row.approve?.oto_amd || "-", width: "80px" },
-        { name: "DIR MKT", selector: (row) => row.approve?.oto_mkt || "-", width: "100px" },
-        { name: "DIR UTM", selector: (row) => row.approve?.oto_ut || "-", width: "100px" },
-        { name: "NO ARSIP", selector: (row) => row.no_arsip || "-", width: "100px" },
-        { name: "STATUS", selector: (row) => row.status || "-", width: "120px" },
-        { name: "TGL RECEIVED", selector: (row) => row.date?.receive_pusat || "-", width: "160px" },
-        { name: "TGL OTORISASI AKT PST", selector: (row) => row.date?.otorisasi_akt || "-", width: "200px" },
-        { name: "JAM", selector: (row) => row.jam || "0", width: "80px" },
+        { name: "MGR PST", selector: (row) => row.approve?.oto_mgr || "-", width: "100px", sortable: true,  },
+        { name: "AKT PST", selector: (row) => row.approve?.oto_akt || "-", width: "100px", sortable: true,  },
+        { name: "FIN", selector: (row) => row.approve?.oto_fin || "-", width: "80px", sortable: true,  },
+        { name: "AMD", selector: (row) => row.approve?.oto_amd || "-", width: "80px", sortable: true,  },
+        { name: "DIR MKT", selector: (row) => row.approve?.oto_mkt || "-", width: "100px", sortable: true,  },
+        { name: "DIR UTM", selector: (row) => row.approve?.oto_ut || "-", width: "100px", sortable: true,  },
+        { name: "NO ARSIP", selector: (row) => row.no_arsip || "-", width: "100px", sortable: true,  },
+        { name: "STATUS", selector: (row) => row.status || "-", width: "120px", sortable: true,  },
+        { name: "TGL RECEIVED", selector: (row) => row.date?.receive_pusat || "-", width: "160px", sortable: true,  },
+        { name: "TGL OTORISASI AKT PST", selector: (row) => row.date?.otorisasi_akt || "-", width: "200px", sortable: true,  },
+        { name: "JAM", selector: (row) => row.jam || "0", width: "80px", sortable: true,  },
     ];
 
     return (

@@ -192,11 +192,14 @@ const UpdateStatusCabang = () => {
           name: "TITLE",
           selector: row => row.title,
           sortable: true,
+          wrap: true,
           style: {
             fontSize: "12px",
             padding: "4px",
+            textAlign: "left",
+            whiteSpace: "normal",
           }
-        },
+        },        
         {
           name: "TYPE",
           selector: row => row.type,

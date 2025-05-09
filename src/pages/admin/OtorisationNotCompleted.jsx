@@ -47,26 +47,31 @@ const OtorisationNotCompleted = () => {
       name: "TITLE",
       selector: (row) => row.title || "-",
       wrap: true,
+      sortable: true, 
     },
     {
       name: "LEVEL",
       selector: (row) => row.id_level || "-",
       width: "120px",
+      sortable: true, 
     },
     {
       name: "KETERANGAN",
       selector: (row) => row.keterangan || "-",
       wrap: true,
+      sortable: true, 
     },
     {
       name: "TANGGAL",
       selector: (row) => row.otorisasi_date || "-",
       width: "150px",
+      sortable: true, 
     },
     {
       name: "STATUS",
       selector: (row) => row.status || "-",
       width: "120px",
+      sortable: true, 
     },
   ];
 

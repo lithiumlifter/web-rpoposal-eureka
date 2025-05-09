@@ -98,7 +98,8 @@ const ProposalReport = () => {
           selector: (_, index) => index + 1, 
           width: "60px", 
           wrap: true, 
-          style: { textAlign: "left" }
+          style: { textAlign: "left" },
+          sortable: true, 
         },
         {
           name: "REG",
@@ -109,28 +110,32 @@ const ProposalReport = () => {
           ),
           maxWidth: "120px",
           wrap: true,
-          style: { textAlign: "left" }
+          style: { textAlign: "left" },
+          sortable: true, 
         },
         { 
           name: "PROPOSAL", 
           selector: row => row.kode_proposal || "-", 
           maxWidth: "130px", 
           wrap: true, 
-          style: { textAlign: "left" }
+          style: { textAlign: "left" },
+          sortable: true, 
         },
         { 
           name: "TITLE", 
           selector: row => row.title || "-", 
           grow: 2, 
           wrap: true, 
-          style: { textAlign: "left" }
+          style: { textAlign: "left" },
+          sortable: true, 
         },
         { 
           name: "BU", 
           selector: row => row.bisnis_unit || "-", 
           maxWidth: "70px", 
           wrap: true, 
-          style: { textAlign: "left" }
+          style: { textAlign: "left" },
+          sortable: true, 
         },
         {
           name: "VIEW",
@@ -143,21 +148,22 @@ const ProposalReport = () => {
           allowOverflow: true,
           button: true,
           maxWidth: "70px",
-          style: { textAlign: "left" }
+          style: { textAlign: "left" },
+          sortable: true, 
         },
-        { name: "RECV", selector: row => row.date?.receive_cabang || "-", maxWidth: "120px", wrap: true, style: { textAlign: "left" } },
-        { name: "MGRCAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
-        { name: "KADEPT", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
-        { name: "AKTCAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
-        { name: "KACAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
-        { name: "MGRPST", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
-        { name: "AKTPST", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
-        { name: "FIN", selector: () => "-", maxWidth: "80px", wrap: true, style: { textAlign: "left" } },
-        { name: "AMD", selector: () => "-", maxWidth: "80px", wrap: true, style: { textAlign: "left" } },
-        { name: "DIRMKT", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
-        { name: "DIRUTM", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" } },
-        { name: "STATUS", selector: row => row.status || "-", maxWidth: "100px", wrap: true, style: { textAlign: "left" } },
-        { name: "USER", selector: row => row.user || "-", maxWidth: "100px", wrap: true, style: { textAlign: "left" } }
+        { name: "RECV", selector: row => row.date?.receive_cabang || "-", maxWidth: "120px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "MGRCAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "KADEPT", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "AKTCAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "KACAB", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "MGRPST", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "AKTPST", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "FIN", selector: () => "-", maxWidth: "80px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "AMD", selector: () => "-", maxWidth: "80px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "DIRMKT", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "DIRUTM", selector: () => "-", maxWidth: "90px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "STATUS", selector: row => row.status || "-", maxWidth: "100px", wrap: true, style: { textAlign: "left" },sortable: true,  },
+        { name: "USER", selector: row => row.user || "-", maxWidth: "100px", wrap: true, style: { textAlign: "left" },sortable: true,  }
       ];
       
     return (

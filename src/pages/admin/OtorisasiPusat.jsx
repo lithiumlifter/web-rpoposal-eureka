@@ -93,14 +93,15 @@ const OtorisasiPusat = () => {
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
+      sortable: true, 
     },
-    { name: "REG", selector: (row) => row.reg_branch ?? "-", width: "100px" },
-    { name: "ID", selector: (row) => row.kode_proposal, wrap: true, style: { textAlign: "left", whiteSpace: "normal" }},
-    { name: "BU", selector: (row) => getBuLabel(row.bisnis_unit), width: "200px" },
-    { name: "DATE INPUT", selector: (row) => row.tgl_pengajuan },
-    { name: "TITLE", selector: (row) => row.title, wrap: true, grow: 3, style: { textAlign: "left", whiteSpace: "normal" }},
-    { name: "TYPE", selector: (row) => row.type },
-    { name: "STATUS", selector: (row) => row.status },
+    { name: "REG", selector: (row) => row.reg_branch ?? "-", width: "100px", sortable: true,  },
+    { name: "ID", selector: (row) => row.kode_proposal, wrap: true, style: { textAlign: "left", whiteSpace: "normal" }, sortable: true, },
+    { name: "BU", selector: (row) => getBuLabel(row.bisnis_unit), width: "200px", sortable: true,  },
+    { name: "DATE INPUT", selector: (row) => row.tgl_pengajuan, sortable: true,  },
+    { name: "TITLE", selector: (row) => row.title, wrap: true, grow: 3, style: { textAlign: "left", whiteSpace: "normal" }, sortable: true, },
+    { name: "TYPE", selector: (row) => row.type, sortable: true,  },
+    { name: "STATUS", selector: (row) => row.status, sortable: true, },
   ];
 
   return (

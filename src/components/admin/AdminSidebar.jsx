@@ -157,7 +157,7 @@ const Sidebar = ({ isOpen }) => {
                           {jumlahProposalPST}
                         </div>
                       )}
-                      <span className="menu-text">Otorisasi Pusat (Non Direktur)</span>
+                      <span className="menu-text">Otorisasi Pusat</span>
                     </Link>
                   </li>
                 )}

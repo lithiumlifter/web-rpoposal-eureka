@@ -814,40 +814,6 @@ const handleConfirmSubmit = async () => {
 
             </div>
 
-            {/* <table style={{ width: '100%', marginBottom: '20px' }}>
-              <tbody>
-                <tr>
-                  <td>Full Name</td><td>:</td><td>{karyawanDetail.full_name}</td>
-                  <td>Email</td><td>:</td><td>{karyawanDetail.email || '-'}</td>
-                </tr>
-                <tr>
-                  <td>NIK</td><td>:</td><td>{karyawanDetail.emp_id}</td>
-                  <td>Marital status</td><td>:</td><td>{karyawanDetail.marital_status}</td>
-                </tr>
-                <tr>
-                  <td>Date of Birth</td><td>:</td>
-                  <td>{new Date(karyawanDetail.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
-                  <td>Phone</td><td>:</td><td>{karyawanDetail.no_telp}</td>
-                </tr>
-                <tr>
-                  <td>Religion</td><td>:</td><td>{karyawanDetail.religion}</td>
-                  <td>Address</td><td>:</td><td>{karyawanDetail.address || '-'}</td>
-                </tr>
-                <tr>
-                  <td>Education</td><td>:</td><td>{karyawanDetail.education}</td>
-                  <td>Major</td><td>:</td><td>{karyawanDetail.education_major}</td>
-                </tr>
-                <tr>
-                  <td>Collage</td><td>:</td><td>{karyawanDetail.collage}</td>
-                  <td>Tax Category</td><td>:</td><td>{karyawanDetail.tax_category}</td>
-                </tr>
-                <tr>
-                  <td>BPJS TK</td><td>:</td><td>{karyawanDetail.bpjs_tk?.low || '-'}</td>
-                  <td>BPJS Kesehatan</td><td>:</td><td>{karyawanDetail.bpjs_kes?.low || '-'}</td>
-                </tr>
-              </tbody>
-            </table> */}
-
             {/* Row 2 */}
             <h2 style={{ fontSize: '18px', marginBottom: '20px', fontWeight: 600 }}>Employee</h2>
             <table style={{ width: '100%' }}>

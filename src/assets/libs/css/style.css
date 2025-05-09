@@ -157,6 +157,7 @@
 
 body {
     /* font-family: 'Circular Std Book'; */
+    font-family: 'Montserrat' !important;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -7041,10 +7042,27 @@ html, body {
 }
 
 /* Jika sidebar terbuka, geser konten */
-.sidebar-open .dashboard-wrapper {
+/* .sidebar-open .dashboard-wrapper {
     margin-left: 250px;
+} */
+
+.dashboard-main-wrapper {
+    width: 100%;
+    overflow-x: hidden; /* cegah konten bocor ke kanan */
+}
+  
+/* Saat sidebar terbuka, geser isi dashboard-wrapper dengan padding */
+.sidebar-open .dashboard-wrapper {
+    padding-left: 11.5%;
 }
 
+.dashboard-wrapper {
+    /* width: 100%; */
+    /* box-sizing: border-box; */
+    /* position: relative; */
+    transition: padding-left 0.3s ease; /* <-- animasi geser mulus */
+  }
+  
 .sidebar-open .dashboard-content {
     width: calc(100vw - 250px);
 }

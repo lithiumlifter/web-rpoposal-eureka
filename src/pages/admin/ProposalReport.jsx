@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import AllReportServices from "../../services/admin/allReportServices";
 import { useNavigate } from "react-router-dom"; 
 import CustomTable from "../../components/table/customTable";
+import CategoryService from "../../services/admin/categoryServices";
 
 const ProposalReport = () => {
     const navigate = useNavigate();
     const today = new Date();
     const threeMonthsAgo = new Date();
+    // const [buOptions, setBuOptions] = useState([]);
+    const [buMasterList, setBuMasterList] = useState([]);
     threeMonthsAgo.setMonth(today.getMonth() - 3);
     
     const formatDate = (date) => date.toISOString().split("T")[0];
@@ -24,6 +27,32 @@ const ProposalReport = () => {
             try {
                 const result = await AllReportServices.getProposalReport(filters);
                 setData(result.data.data || []);
+
+                const categoryRes = await CategoryService.getCategories();
+                const allBU = [];
+    
+                categoryRes.data.bisnisUnit.forEach(unit => {
+                    allBU.push({ value: unit.value, label: unit.name });
+                    unit.branch.forEach(branch => {
+                        allBU.push({ value: branch.value, label: branch.name });
+                    });
+                });
+    
+                setBuMasterList(allBU);
+    
+                // Ambil value unik dari inbox
+                const uniqueBUValues = [...new Set(result.data.data.map(item => item.bisnis_unit))];
+    
+                // Mapping value ke name
+                const buOptions = uniqueBUValues.map(value => {
+                    const match = allBU.find(bu => bu.value === value);
+                    return {
+                        value,
+                        label: match ? match.label : `BU ${value}`,
+                    };
+                });
+    
+                setBuOptions(buOptions);
             } catch (error) {
                 console.error("Error fetching data: ", error);
             } finally {
@@ -129,14 +158,27 @@ const ProposalReport = () => {
           style: { textAlign: "left" },
           sortable: true, 
         },
-        { 
-          name: "BU", 
-          selector: row => row.bisnis_unit || "-", 
-          maxWidth: "70px", 
-          wrap: true, 
-          style: { textAlign: "left" },
-          sortable: true, 
-        },
+        // { 
+        //   name: "BU", 
+        //   selector: row => row.bisnis_unit || "-", 
+        //   maxWidth: "70px", 
+        //   wrap: true, 
+        //   style: { textAlign: "left" },
+        //   sortable: true, 
+        // },
+          {
+            name: "BU",
+            selector: row => {
+              const match = buMasterList.find(bu => bu.value === row.bisnis_unit);
+              return match ? match.label : `BU ${row.bisnis_unit}`;
+            },
+            wrap: true,
+            sortable: true,
+            maxWidth: "200px",
+            style: {
+                textAlign: "left",
+            }
+        },  
         {
           name: "VIEW",
           cell: row => (

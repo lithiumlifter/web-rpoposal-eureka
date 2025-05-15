@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import userServices from "../../services/admin/userServices";
 import CategoryService from "../../services/admin/categoryServices";
 import CustomTable from "../../components/table/customTable";
+import { wrap } from "framer-motion";
 
 const SetupUser = () => {
     const [userData, setUserData] = useState([]);
@@ -115,7 +116,14 @@ const SetupUser = () => {
     const columns = [
         { name: "User Name", selector: row => row.username, sortable: true },
         { name: "Empl Id", selector: row => row.id_user, sortable: true },
-        { name: "Name", selector: row => row.name, sortable: true },
+        { name: "Name", 
+            selector: row => row.name, 
+            sortable: true,
+            wrap: true,
+            style: {
+                textAlign: "left",
+            } 
+        },
         {
             name: "Status",
             cell: row => (
@@ -147,7 +155,14 @@ const SetupUser = () => {
             center: true
         },
         { name: "Level", selector: row => row.role || "-", sortable: true },
-        { name: "BU", selector: row => row.bisnis_unit || "-", sortable: true },
+        { name: "BU", 
+            selector: row => row.bisnis_unit || "-", 
+            sortable: true, 
+            wrap: true,
+            style: {
+                textAlign: "left",
+            }
+        },
         { name: "Wil", selector: row => row.wilayah || "-", sortable: true },
         {
             name: "Aksi",

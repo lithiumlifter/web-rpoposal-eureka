@@ -184,7 +184,7 @@ const optionsBUWilayah = useMemo(() => {
     //   window.location.reload();
     // }, 1000);
       showSuccessToast("Proposal berhasil dikirim!");
-      // window.location.reload();
+      window.location.reload();
       console.log(response);
     } catch (error) {
       showErrorToast(

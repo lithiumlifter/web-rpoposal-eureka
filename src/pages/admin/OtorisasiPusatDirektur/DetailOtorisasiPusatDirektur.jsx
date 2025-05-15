@@ -736,8 +736,14 @@ const handleConfirmSubmit = async () => {
         onClose={() => setShowConfirmationModal(false)}
         onConfirm={handleConfirmSubmit}
         title="Konfirmasi Proses"
-        message={`Apakah kamu yakin ingin mengirim status: "${statusToSubmit}"?`}
-        confirmText="Ya, Kirim"
+        // message={`Apakah kamu yakin ingin mengirim status: "${statusToSubmit}"?`}
+         message={
+          <>
+            Apakah Anda yakin ingin mengubah status otorisasi menjadi
+            <strong> {statusToSubmit}</strong>?
+          </>
+        }
+        confirmText="Iya"
         cancelText="Batal"
         theme="danger"
       />

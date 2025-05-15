@@ -142,7 +142,7 @@ const UpdateStatusCabang = () => {
           selector: row => row.reg_branch || "-",
           sortable: true,
           wrap: true,
-          width: "70px",
+          width: "80px",
           style: {
             whiteSpace: "normal",
             overflow: "visible",
@@ -186,6 +186,7 @@ const UpdateStatusCabang = () => {
             whiteSpace: "normal",
             fontSize: "12px",
             padding: "4px",
+            textAlign: "left",
           }
         },
         {

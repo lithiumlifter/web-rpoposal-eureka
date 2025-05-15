@@ -1,19 +1,48 @@
 import { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
 import RuangLingkupServices from "../../services/admin/ruangLingkupServices";
 import CustomTable from "../../components/table/customTable";
+import CategoryService from "../../services/admin/categoryServices";
+import TableFilterBar from "../../components/table/tableFilterBar";
 
 const RubahRuangLingkup = () => {
     const [data, setData] = useState([]);
     const [selectedBU, setSelectedBU] = useState("");
     const [searchText, setSearchText] = useState("");
     const [loading, setLoading] = useState(true);
+    const [buOptions, setBuOptions] = useState([]);
+    const [buMasterList, setBuMasterList] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await RuangLingkupServices.getRuangLingkup();
                 setData(response.data.data);
+
+                const categoryRes = await CategoryService.getCategories();
+                const allBU = [];
+    
+                categoryRes.data.bisnisUnit.forEach(unit => {
+                    allBU.push({ value: unit.value, label: unit.name });
+                    unit.branch.forEach(branch => {
+                        allBU.push({ value: branch.value, label: branch.name });
+                    });
+                });
+    
+                setBuMasterList(allBU);
+    
+                // Ambil value unik dari inbox
+                const uniqueBUValues = [...new Set(response.data.data.map(item => item.bisnis_unit))];
+    
+                // Mapping value ke name
+                const buOptions = uniqueBUValues.map(value => {
+                    const match = allBU.find(bu => bu.value === value);
+                    return {
+                        value,
+                        label: match ? match.label : `BU ${value}`,
+                    };
+                });
+    
+                setBuOptions(buOptions);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -22,26 +51,6 @@ const RubahRuangLingkup = () => {
         };
         fetchData();
     }, []);
-
-    // const handleRubahClick = async (id, currentRuangLingkup) => {
-    //     const newRuangLingkup = currentRuangLingkup === "PST" ? "CAB" : "PST";
-    //     try {
-    //         const response = await RuangLingkupServices.submitRubahRuangLingkup({
-    //             id_anggaran: id,
-    //             ruang_lingkup: newRuangLingkup
-    //         });
-    //         console.log('Response:', response);
-            
-    //         // Update state tanpa refresh halaman
-    //         setData(prevData => 
-    //             prevData.map(item => 
-    //                 item.id === id ? { ...item, ruang_lingkup: newRuangLingkup } : item
-    //             )
-    //         );
-    //     } catch (error) {
-    //         console.error('Error submitting perubahan ruang lingkup:', error);
-    //     }
-    // };
     
     const handleRubahClick = async (id, currentRuangLingkup) => {
         const newRuangLingkup = currentRuangLingkup === "PST" ? "CAB" : "PST";
@@ -92,9 +101,22 @@ const RubahRuangLingkup = () => {
           sortable: true,
           width: "120px",
           wrap: true,
-          style: { whiteSpace: "normal" },
+          style: { whiteSpace: "normal", textAlign: "left", },
         },
-        { name: "BU", selector: row => row.bisnis_unit, sortable: true, width: "70px" },
+        // { name: "BU", selector: row => row.bisnis_unit, sortable: true, width: "70px" },
+        {
+            name: "BU",
+            selector: row => {
+              const match = buMasterList.find(bu => bu.value === row.bisnis_unit);
+              return match ? match.label : `BU ${row.bisnis_unit}`;
+            },
+            wrap: true,
+            sortable: true,
+            maxWidth: "200px",
+            style: {
+                textAlign: "left",
+            }
+        },  
         { name: "DATE", selector: row => row.tgl_pengajuan, sortable: true, width: "120px" },
         {
           name: "TITLE",
@@ -140,7 +162,7 @@ const RubahRuangLingkup = () => {
         <div className="card">
             <div className="card-body p-0">
                 <div className="d-flex gap-2 mb-3 align-items-center">
-                    <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
+                    {/* <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
                         <option value="">Semua BU</option>
                         <option value="50">BU 50</option>
                         <option value="51">BU 51</option>
@@ -151,6 +173,13 @@ const RubahRuangLingkup = () => {
                         placeholder="Cari Title / Type / ID..."
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
+                    /> */}
+                     <TableFilterBar
+                        selectedBU={selectedBU}
+                        setSelectedBU={setSelectedBU}
+                        buOptions={buOptions}
+                        searchText={searchText}
+                        setSearchText={setSearchText}
                     />
                 </div>
 

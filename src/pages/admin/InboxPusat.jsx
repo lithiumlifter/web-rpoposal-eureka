@@ -77,11 +77,11 @@ const InboxPusat = () => {
         try {
             await inboxPusatServices.approveProposalPusat(selectedItem.id);
             // alert(`Proposal ${selectedItem.id} berhasil di-approve!`);
-            showSuccessToast(`Proposal ${selectedItem.id} berhasil di-approve!`);
+            showSuccessToast(`Proposal ${selectedItem.id} berhasil diproses!`);
             setData(prevData => prevData.filter(item => item.id !== selectedItem.id));
         } catch (error) {
             // alert(`Gagal approve proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
-            showErrorToast(`Gagal approve proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
+            showErrorToast(`Gagal proses proposal ${selectedItem.id}: ${error.response?.data?.message || error.message}`);
         } finally {
             setProcessingId(null);
             setSelectedItem(null);
@@ -203,8 +203,8 @@ const InboxPusat = () => {
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleApprove}
                 title="Konfirmasi Kirim"
-                message={`Apakah Anda yakin ingin menyetujui proposal dengan ID ${selectedItem?.id}?`}
-                confirmText="Ya, Kirim"
+                message={`Apakah Anda yakin ingin memproses proposal dengan ID ${selectedItem?.id}?`}
+                confirmText="Ya, Proses"
                 cancelText="Batal"
                 theme="success"
             />

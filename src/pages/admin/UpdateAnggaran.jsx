@@ -1,132 +1,9 @@
-// const UpdateAnggaran = () => {
-//     return(
-//         <>
-//               <div className="card">
-//                     {/* <h5 className="card-header">Update Anggaran</h5> */}
-//                     <div className="card-body">
-//                         <div className="table-responsive">
-//                         <table className="table table-striped table-bordered first">
-//                             <thead>
-//                             <tr>
-//                                 <th>OTO</th>
-//                                 <th>REQ</th>
-//                                 <th>ID</th>
-//                                 <th>BU</th>
-//                                 <th>TGL INPUT</th>
-//                                 <th>TITLE</th>
-//                                 <th>TYPE</th>
-//                                 <th>STATUS</th>
-//                             </tr>
-//                             </thead>
-//                             <tbody>
-//                             <tr>
-//                                 <td><button className="btn btn-primary" type="submit"><i className="fas fa-edit" /></button></td>
-//                                 <td>RB-8061</td>
-//                                 <td>0314/MASTERDISKON/III/2025</td>
-//                                 <td>50</td>
-//                                 <td>2025-03-10 11:21:12</td>
-//                                 <td>Surat Konfirmasi Issue Tiket Pesawat Peserta Tour Incentive West Europe</td>
-//                                 <td>99.LAIN-LAIN</td>
-//                                 <td>-RecievedPusat</td>
-//                             </tr>
-//                             <tr>
-//                                 <td><button className="btn btn-primary" type="submit"><i className="fas fa-edit" /></button></td>
-//                                 <td>RB-8054</td>
-//                                 <td>0314/MASTERDISKON/III/2025</td>
-//                                 <td>50</td>
-//                                 <td>2025-03-10 11:21:12</td>
-//                                 <td>Surat Konfirmasi Issue Tiket Pesawat Peserta Tour Incentive West Europe</td>
-//                                 <td>99.LAIN-LAIN</td>
-//                                 <td>-RecievedPusat</td>
-//                             </tr>
-//                             </tbody>
-//                         </table>
-//                         </div>
-//                     </div>
-//                     </div>
-
-//         </>
-//     );
-// }
-
-// export default UpdateAnggaran;
-
-// import { useState } from "react";
-
-// const UpdateAnggaran = () => {
-//     const [selectedBU, setSelectedBU] = useState("");
-//     const [searchTitle, setSearchTitle] = useState("");
-
-//     const data = [
-//         { oto: "Edit", req: "RB-8061", id: "0314/MASTERDISKON/III/2025", bu: "50", tglInput: "2025-03-10 11:21:12", title: "Surat Konfirmasi Issue Tiket Pesawat Peserta Tour Incentive West Europe", type: "99.LAIN-LAIN", status: "-RecievedPusat" },
-//         { oto: "Edit", req: "RB-8054", id: "0314/MASTERDISKON/III/2025", bu: "50", tglInput: "2025-03-10 11:21:12", title: "Surat Konfirmasi Issue Tiket Pesawat Peserta Tour Incentive West Europe", type: "99.LAIN-LAIN", status: "-RecievedPusat" }
-//     ];
-
-//     const filteredData = data.filter(item =>
-//         (selectedBU === "" || item.bu === selectedBU) &&
-//         (searchTitle === "" || item.title.toLowerCase().includes(searchTitle.toLowerCase()))
-//     );
-
-//     return (
-//         <>
-//             <div className="card">
-//                 <div className="card-body">
-//                     <div className="d-flex gap-2 mb-3 align-items-center">
-//                         <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
-//                             <option value="">Semua BU</option>
-//                             <option value="50">BU 50</option>
-//                             <option value="51">BU 51</option>
-//                         </select>
-//                         <input type="text" className="form-control w-auto" placeholder="Cari Title..." value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
-//                         {/* <button className="btn btn-primary">Tampilkan</button> */}
-//                     </div>
-//                     <div className="table-responsive">
-//                         <table className="table table-striped table-bordered first">
-//                             <thead>
-//                                 <tr>
-//                                     <th>OTO</th>
-//                                     <th>REQ</th>
-//                                     <th>ID</th>
-//                                     <th>BU</th>
-//                                     <th>TGL INPUT</th>
-//                                     <th>TITLE</th>
-//                                     <th>TYPE</th>
-//                                     <th>STATUS</th>
-//                                 </tr>
-//                             </thead>
-//                             <tbody>
-//                                 {filteredData.map((item, index) => (
-//                                     <tr key={index}>
-//                                         <td>
-//                                             <button className="btn btn-primary" type="submit"><i className="fas fa-edit" /></button>
-//                                         </td>
-//                                         <td>{item.req}</td>
-//                                         <td>{item.id}</td>
-//                                         <td>{item.bu}</td>
-//                                         <td>{item.tglInput}</td>
-//                                         <td>{item.title}</td>
-//                                         <td>{item.type}</td>
-//                                         <td>{item.status}</td>
-//                                     </tr>
-//                                 ))}
-//                             </tbody>
-//                         </table>
-//                     </div>
-//                 </div>
-//             </div>
-//         </>
-//     );
-// }
-
-// export default UpdateAnggaran;
-
 import { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom"; 
-// import inboxCabangServices from "../../services/admin/inboxCabangServices";
 import AnggaranServices from "../../services/admin/anggaranServices";
 import CustomTable from "../../components/table/customTable";
-// import ConfirmationModal from "../../components/ConfirmationModal";
+import CategoryService from "../../services/admin/categoryServices";
+import TableFilterBar from "../../components/table/tableFilterBar";
 
 const UpdateAnggaran = () => {
     const navigate = useNavigate();
@@ -134,12 +11,40 @@ const UpdateAnggaran = () => {
     const [selectedBU, setSelectedBU] = useState("");
     const [searchText, setSearchText] = useState("");
     const [loading, setLoading] = useState(true);
+    const [buOptions, setBuOptions] = useState([]);
+    const [buMasterList, setBuMasterList] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await AnggaranServices.getAnggaran();
                 setData(response.data.data);
+
+                const categoryRes = await CategoryService.getCategories();
+                const allBU = [];
+    
+                categoryRes.data.bisnisUnit.forEach(unit => {
+                    allBU.push({ value: unit.value, label: unit.name });
+                    unit.branch.forEach(branch => {
+                        allBU.push({ value: branch.value, label: branch.name });
+                    });
+                });
+    
+                setBuMasterList(allBU);
+    
+                // Ambil value unik dari inbox
+                const uniqueBUValues = [...new Set(response.data.data.map(item => item.bisnis_unit))];
+    
+                // Mapping value ke name
+                const buOptions = uniqueBUValues.map(value => {
+                    const match = allBU.find(bu => bu.value === value);
+                    return {
+                        value,
+                        label: match ? match.label : `BU ${value}`,
+                    };
+                });
+    
+                setBuOptions(buOptions);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -181,12 +86,25 @@ const UpdateAnggaran = () => {
           sortable: true,
           width: "100px",
         },
-        {
-          name: "BU",
-          selector: row => row.bisnis_unit,
-          sortable: true,
-          width: "80px",
-        },
+        // {
+        //   name: "BU",
+        //   selector: row => row.bisnis_unit,
+        //   sortable: true,
+        //   width: "80px",
+        // },
+         {
+            name: "BU",
+            selector: row => {
+              const match = buMasterList.find(bu => bu.value === row.bisnis_unit);
+              return match ? match.label : `BU ${row.bisnis_unit}`;
+            },
+            wrap: true,
+            sortable: true,
+            maxWidth: "200px",
+            style: {
+                textAlign: "left",
+            }
+        },  
         {
           name: "PRO DATE",
           selector: row => row.tgl_pengajuan,
@@ -216,7 +134,7 @@ const UpdateAnggaran = () => {
         <div className="card">
             <div className="card-body p-0">
                 <div className="d-flex gap-2 mb-3 align-items-center">
-                    <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
+                    {/* <select className="form-control w-auto" value={selectedBU} onChange={(e) => setSelectedBU(e.target.value)}>
                         <option value="">Semua BU</option>
                         <option value="50">BU 50</option>
                         <option value="51">BU 51</option>
@@ -227,6 +145,13 @@ const UpdateAnggaran = () => {
                         placeholder="Cari Title / Type..."
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
+                    /> */}
+                    <TableFilterBar
+                        selectedBU={selectedBU}
+                        setSelectedBU={setSelectedBU}
+                        buOptions={buOptions}
+                        searchText={searchText}
+                        setSearchText={setSearchText}
                     />
                 </div>
 

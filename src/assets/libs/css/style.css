@@ -7157,191 +7157,742 @@ html, body {
     background: rgba(255, 255, 255, 0.4);
 }
 
-
-/* Medium Devices, Desktops */
-
-@media only screen and (max-width:992px) {
-
-/*--------- dashboard-influence -------- */
-    .user-social-media {
-        padding: 16px 45px;
-        text-align: center;
-        width: 100%;
-        border-bottom: 1px solid #dee2e6;
-        border-right: transparent !important;
-    }
-
+@media only screen and (min-width: 992px) {
+   /* Layout Utama */
+html, body {
+    overflow-x: hidden;
 }
 
-/* Small Devices, Tablets */
-
-@media only screen and (max-width:768px) {
-    .dashboard-content {
-    padding: 20px 20px 60px 20px;
+/* Dashboard Wrapper */
+.dashboard-main-wrapper {
+    display: flex;
+    flex-direction: row;
 }
-    .nav-left-sidebar .navbar a {
-        color: #fff;
-        font-size: 18px;
+
+.dashboard-wrapper {
+    width: 94vw;
+    margin-left: 80px; /* Default jika sidebar collapsed */
+    transition: margin-left 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.dashboard-content {
+    flex-grow: 1;
+    width: calc(100vw - 80px);
+    transition: width 0.3s ease-in-out;
+    padding: 20px;
+}
+
+/* Sidebar Default (Collapsed Mode) */
+.nav-left-sidebar {
+    width: 80px;
+    position: fixed;
+    left: 0;
+    top: 60px;
+    /* height: 100vh; */
+    height: calc(100vh - 60px); /* ganti ini */
+    background: #343a40;
+    transition: width 0.3s ease-in-out;
+    overflow-y: auto; /* biar bisa discroll vertikal */
+    overflow-x: hidden; /* tetap hidden horizontal */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Sidebar Expanded */
+.sidebar-open .nav-left-sidebar {
+    width: 250px;
+}
+
+/* Sembunyikan teks jika sidebar collapsed */
+/* .nav-left-sidebar.collapsed .nav-link span {
+    display: none;
+} */
+
+/* Tampilkan teks jika sidebar expanded */
+.nav-left-sidebar.expanded .nav-link span {
+    display: inline;
+}
+
+/* Animasi agar teks muncul dengan smooth */
+.nav-left-sidebar .nav-link span {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.nav-left-sidebar.expanded .nav-link span {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Jika sidebar terbuka, geser konten */
+/* .sidebar-open .dashboard-wrapper {
+    margin-left: 250px;
+} */
+
+.dashboard-main-wrapper {
+    width: 100%;
+    overflow-x: hidden; /* cegah konten bocor ke kanan */
+}
+  
+/* Saat sidebar terbuka, geser isi dashboard-wrapper dengan padding */
+.sidebar-open .dashboard-wrapper {
+    padding-left: 11.5%;
+}
+
+.dashboard-wrapper {
+    /* width: 100%; */
+    /* box-sizing: border-box; */
+    /* position: relative; */
+    transition: padding-left 0.3s ease; /* <-- animasi geser mulus */
+  }
+  
+.sidebar-open .dashboard-content {
+    width: calc(100vw - 250px);
+}
+
+.nav-left-sidebar:hover {
+    width: 250px;
+}
+
+.nav-left-sidebar:hover .nav-link span {
+    display: inline;
+    opacity: 1;
+}
+
+.nav-left-sidebar.expanded {
+    width: 260px; /* Lebar sidebar saat diperluas */
+}
+
+/* Flexbox untuk mencegah pergeseran ikon */
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center; /* Pastikan ikon dan teks sejajar */
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    position: relative; /* Buat teks bisa absolute */
+}
+
+/* Ikon harus punya ukuran tetap */
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px; /* Supaya posisinya tetap */
+    text-align: center;
+}
+
+/* Teks dibuat absolute supaya tidak menggeser ikon */
+.nav-left-sidebar .nav-link .menu-text {
+    position: absolute;
+    left: 50px; /* Jarak dari ikon */
+    visibility: hidden;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateX(-10px);
+}
+
+/* Saat sidebar terbuka, teks muncul */
+.nav-left-sidebar.expanded .nav-link .menu-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+/* Responsive */
+@media only screen and (max-width: 1024px) {
+    .sidebar-open .dashboard-wrapper {
+        margin-left: 0;
     }
-    .nav-left-sidebar .navbar {
-        padding: 14px;
+
+    .sidebar-open .dashboard-content {
+        width: 100vw;
     }
+
     .nav-left-sidebar {
-        width: 100%;
-        position: relative;
-        top: 0px;
-        right: 0px;
-    }
-    .dashboard-wrapper {
-        margin-left: 0px;
-    }
-    .dashboard-footer {
-        margin-left: 0px;
-    }
-    .nav-left-sidebar .navbar-toggler {
-        background-color: #fff;
+        left: -80px;
     }
 
-    /* infulencer dahboard */
-    .dashboard-influence .card-footer-item {
-        padding: 11px 54px;
-    }
-    .influencer-profile .tab-regular .nav.nav-tabs .nav-item .nav-link,
-    .influencer-profile .tab-regular .nav.nav-pills .nav-item .nav-link {
-        display: block;
-        padding: 17px 13px;
-    }
-
-    /* Inbox */
-    .page-aside {
-        background: none repeat scroll 0 0 #ffffff;
-        width: 280px;
-        height: 100%;
-        position: absolute;
-        top: 0;
+    .sidebar-open .nav-left-sidebar {
         left: 0;
-        border-right: 1px solid #e6e6f2;
-        margin-top: 0;
-        padding-bottom: 0px;
-        color: #404040;
     }
+}
+}
 
-    /*--------- dashboard-product-single -------- */
-.product-slider{padding: 131px 30px;}
-.product-carousel .carousel-indicators{bottom: -30px;}
+@media only screen and (min-width: 768px) {
+   /* Layout Utama */
+html, body {
+    overflow-x: hidden;
+}
 
-/*--------- dashboard-influence -------- */
-    .user-social-media {
-        padding: 16px 45px;
-        text-align: center;
-        width: 100%;
-        border-bottom: 1px solid #dee2e6;
-        border-right: transparent !important;
-    }
+/* Dashboard Wrapper */
+.dashboard-main-wrapper {
+    display: flex;
+    flex-direction: row;
+}
 
+.dashboard-wrapper {
+    width: 94vw;
+    margin-left: 80px; /* Default jika sidebar collapsed */
+    transition: margin-left 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
+.dashboard-content {
+    flex-grow: 1;
+    width: calc(100vw - 80px);
+    transition: width 0.3s ease-in-out;
+    padding: 20px;
+}
+
+/* Sidebar Default (Collapsed Mode) */
+.nav-left-sidebar {
+    width: 80px;
+    position: fixed;
+    left: 0;
+    top: 60px;
+    /* height: 100vh; */
+    height: calc(100vh - 60px); /* ganti ini */
+    background: #343a40;
+    transition: width 0.3s ease-in-out;
+    overflow-y: auto; /* biar bisa discroll vertikal */
+    overflow-x: hidden; /* tetap hidden horizontal */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Sidebar Expanded */
+.sidebar-open .nav-left-sidebar {
+    width: 250px;
+}
+
+/* Sembunyikan teks jika sidebar collapsed */
+/* .nav-left-sidebar.collapsed .nav-link span {
+    display: none;
+} */
+
+/* Tampilkan teks jika sidebar expanded */
+.nav-left-sidebar.expanded .nav-link span {
+    display: inline;
+}
+
+/* Animasi agar teks muncul dengan smooth */
+.nav-left-sidebar .nav-link span {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.nav-left-sidebar.expanded .nav-link span {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Jika sidebar terbuka, geser konten */
+/* .sidebar-open .dashboard-wrapper {
+    margin-left: 250px;
+} */
+
+.dashboard-main-wrapper {
+    width: 100%;
+    overflow-x: hidden; /* cegah konten bocor ke kanan */
+}
+  
+/* Saat sidebar terbuka, geser isi dashboard-wrapper dengan padding */
+.sidebar-open .dashboard-wrapper {
+    padding-left: 11.5%;
+}
+
+.dashboard-wrapper {
+    /* width: 100%; */
+    /* box-sizing: border-box; */
+    /* position: relative; */
+    transition: padding-left 0.3s ease; /* <-- animasi geser mulus */
+  }
+  
+.sidebar-open .dashboard-content {
+    width: calc(100vw - 250px);
+}
+
+.nav-left-sidebar:hover {
+    width: 250px;
+}
+
+.nav-left-sidebar:hover .nav-link span {
+    display: inline;
+    opacity: 1;
+}
+
+.nav-left-sidebar.expanded {
+    width: 260px; /* Lebar sidebar saat diperluas */
+}
+
+/* Flexbox untuk mencegah pergeseran ikon */
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center; /* Pastikan ikon dan teks sejajar */
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    position: relative; /* Buat teks bisa absolute */
+}
+
+/* Ikon harus punya ukuran tetap */
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px; /* Supaya posisinya tetap */
+    text-align: center;
+}
+
+/* Teks dibuat absolute supaya tidak menggeser ikon */
+.nav-left-sidebar .nav-link .menu-text {
+    position: absolute;
+    left: 50px; /* Jarak dari ikon */
+    visibility: hidden;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateX(-10px);
+}
+
+/* Saat sidebar terbuka, teks muncul */
+.nav-left-sidebar.expanded .nav-link .menu-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
 }
 
 
-/* Extra Small Devices, Phones */
+/* Responsive */
+@media only screen and (max-width: 1024px) {
+    .sidebar-open .dashboard-wrapper {
+        margin-left: 0;
+    }
 
-@media only screen and (max-width:480px) {
-    .dashboard-content {
-    padding: 20px 20px 60px 20px;
+    .sidebar-open .dashboard-content {
+        width: 100vw;
     }
-    .nav-left-sidebar .navbar a {
-        color: #fff;
-    }
-    .nav-left-sidebar .navbar-toggler {
-        background-color: #fff;
-    }
-    .aside-header .navbar-toggle {
-        display: block;
-    }
-    .nav-left-sidebar .navbar {
-        padding: 14px;
-    }
+
     .nav-left-sidebar {
-        width: 100%;
-        position: relative;
-        top: 0px;
-        right: 0px;
+        left: -80px;
     }
 
-    .dashboard-wrapper {
-        margin-left: 0px;
+    .sidebar-open .nav-left-sidebar {
+        left: 0;
     }
-    .dashboard-footer {
-        margin-left: 0px;
-    }
-    .page-aside {
-        background: none repeat scroll 0 0 #fff;
-        width: 100%;
-        height: 100%;
-        position: relative;
-        top: 0;
-        left: 0px;
-        border-right: transparent;
-        margin-top: 0px;
-        padding-bottom: 0px;
-        color: #404040;
-        border-bottom: 1px solid #e6e6f2;
-    }
-    .aside-nav.collapse {
-        display: none;
-    }
-    .dashboard-main-wrapper .main-content {
-        margin-left: 0px;
-        width: auto;
-    }
-    .aside-nav.show {
-        display: block;
-    }
-
-    /*--------- dashboard-influence -------- */
-    .user-social-media {
-        padding: 16px 45px;
-        text-align: center;
-        width: 100%;
-        border-bottom: 1px solid #dee2e6;
-        border-right: transparent !important;
-    }
-    .user-social-media:last-child {
-        border-bottom: transparent;
-        border-right: transparent !important;
-    }
-    .dashboard-influence .progress {
-        width: 74%;
-    }
-    .footer {
-        margin-left: 0px;
-    }
-    .influencer-profile-data .user-avatar {
-        float: initial;
-    }
-    .influencer-profile-data .user-avatar-name {
-        float: initial;
-    }
-    .dashboard-influence .card-footer-item {
-        padding: 11px 48px;
-    }
-
-    /*--------- dashboard-profile -------- */
-    .tab-regular .nav.nav-tabs .nav-item .nav-link,
-    .tab-regular .nav.nav-pills .nav-item .nav-link {
-        display: block;
-        padding: 17px 38px;
-    }
-    .tab-regular .nav.nav-tabs .nav-item,
-    .tab-regular .nav.nav-pills .nav-item {
-        margin-bottom: 5px;
-    }
-  /*--------- dashboard-product-single -------- */
-.product-slider{padding: 30px 10px;}
-.product-carousel .carousel-indicators{bottom: -30px;}
-.simple-card .nav.nav-tabs .nav-item .nav-link {
-    padding: 17px 29px;}
+}
 }
 
-/* Custom, iPhone Retina */
-@media only screen and (max-width:320px) {}
+@media only screen and (min-width: 480px) {
+   /* Layout Utama */
+html, body {
+    overflow-x: hidden;
+}
+
+/* Dashboard Wrapper */
+.dashboard-main-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.dashboard-wrapper {
+    width: 94vw;
+    margin-left: 80px; /* Default jika sidebar collapsed */
+    transition: margin-left 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.dashboard-content {
+    flex-grow: 1;
+    width: calc(100vw - 80px);
+    transition: width 0.3s ease-in-out;
+    padding: 20px;
+}
+
+/* Sidebar Default (Collapsed Mode) */
+.nav-left-sidebar {
+    width: 80px;
+    position: fixed;
+    left: 0;
+    top: 60px;
+    /* height: 100vh; */
+    height: calc(100vh - 60px); /* ganti ini */
+    background: #343a40;
+    transition: width 0.3s ease-in-out;
+    overflow-y: auto; /* biar bisa discroll vertikal */
+    overflow-x: hidden; /* tetap hidden horizontal */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Sidebar Expanded */
+.sidebar-open .nav-left-sidebar {
+    width: 250px;
+}
+
+/* Sembunyikan teks jika sidebar collapsed */
+/* .nav-left-sidebar.collapsed .nav-link span {
+    display: none;
+} */
+
+/* Tampilkan teks jika sidebar expanded */
+.nav-left-sidebar.expanded .nav-link span {
+    display: inline;
+}
+
+/* Animasi agar teks muncul dengan smooth */
+.nav-left-sidebar .nav-link span {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.nav-left-sidebar.expanded .nav-link span {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Jika sidebar terbuka, geser konten */
+/* .sidebar-open .dashboard-wrapper {
+    margin-left: 250px;
+} */
+
+.dashboard-main-wrapper {
+    width: 100%;
+    overflow-x: hidden; /* cegah konten bocor ke kanan */
+}
+  
+/* Saat sidebar terbuka, geser isi dashboard-wrapper dengan padding */
+.sidebar-open .dashboard-wrapper {
+    padding-left: 11.5%;
+}
+
+.dashboard-wrapper {
+    /* width: 100%; */
+    /* box-sizing: border-box; */
+    /* position: relative; */
+    transition: padding-left 0.3s ease; /* <-- animasi geser mulus */
+  }
+  
+.sidebar-open .dashboard-content {
+    width: calc(100vw - 250px);
+}
+
+.nav-left-sidebar:hover {
+    width: 250px;
+}
+
+.nav-left-sidebar:hover .nav-link span {
+    display: inline;
+    opacity: 1;
+}
+
+.nav-left-sidebar.expanded {
+    width: 260px; /* Lebar sidebar saat diperluas */
+}
+
+/* Flexbox untuk mencegah pergeseran ikon */
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center; /* Pastikan ikon dan teks sejajar */
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    position: relative; /* Buat teks bisa absolute */
+}
+
+/* Ikon harus punya ukuran tetap */
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px; /* Supaya posisinya tetap */
+    text-align: center;
+}
+
+/* Teks dibuat absolute supaya tidak menggeser ikon */
+.nav-left-sidebar .nav-link .menu-text {
+    position: absolute;
+    left: 50px; /* Jarak dari ikon */
+    visibility: hidden;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateX(-10px);
+}
+
+/* Saat sidebar terbuka, teks muncul */
+.nav-left-sidebar.expanded .nav-link .menu-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+/* Responsive */
+@media only screen and (max-width: 1024px) {
+    .sidebar-open .dashboard-wrapper {
+        margin-left: 0;
+    }
+
+    .sidebar-open .dashboard-content {
+        width: 100vw;
+    }
+
+    .nav-left-sidebar {
+        left: -80px;
+    }
+
+    .sidebar-open .nav-left-sidebar {
+        left: 0;
+    }
+}
+}
+
+@media only screen and (min-width: 320px) {
+   /* Layout Utama */
+html, body {
+    overflow-x: hidden;
+}
+
+/* Dashboard Wrapper */
+.dashboard-main-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.dashboard-wrapper {
+    width: 94vw;
+    margin-left: 80px; /* Default jika sidebar collapsed */
+    transition: margin-left 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.dashboard-content {
+    flex-grow: 1;
+    width: calc(100vw - 80px);
+    transition: width 0.3s ease-in-out;
+    padding: 20px;
+}
+
+/* Sidebar Default (Collapsed Mode) */
+.nav-left-sidebar {
+    width: 80px;
+    position: fixed;
+    left: 0;
+    top: 60px;
+    /* height: 100vh; */
+    height: calc(100vh - 60px); /* ganti ini */
+    background: #343a40;
+    transition: width 0.3s ease-in-out;
+    overflow-y: auto; /* biar bisa discroll vertikal */
+    overflow-x: hidden; /* tetap hidden horizontal */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Sidebar Expanded */
+.sidebar-open .nav-left-sidebar {
+    width: 250px;
+}
+
+/* Sembunyikan teks jika sidebar collapsed */
+/* .nav-left-sidebar.collapsed .nav-link span {
+    display: none;
+} */
+
+/* Tampilkan teks jika sidebar expanded */
+.nav-left-sidebar.expanded .nav-link span {
+    display: inline;
+}
+
+/* Animasi agar teks muncul dengan smooth */
+.nav-left-sidebar .nav-link span {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.nav-left-sidebar.expanded .nav-link span {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Jika sidebar terbuka, geser konten */
+/* .sidebar-open .dashboard-wrapper {
+    margin-left: 250px;
+} */
+
+.dashboard-main-wrapper {
+    width: 100%;
+    overflow-x: hidden; /* cegah konten bocor ke kanan */
+}
+  
+/* Saat sidebar terbuka, geser isi dashboard-wrapper dengan padding */
+.sidebar-open .dashboard-wrapper {
+    padding-left: 11.5%;
+}
+
+.dashboard-wrapper {
+    /* width: 100%; */
+    /* box-sizing: border-box; */
+    /* position: relative; */
+    transition: padding-left 0.3s ease; /* <-- animasi geser mulus */
+  }
+  
+.sidebar-open .dashboard-content {
+    width: calc(100vw - 250px);
+}
+
+.nav-left-sidebar:hover {
+    width: 250px;
+}
+
+.nav-left-sidebar:hover .nav-link span {
+    display: inline;
+    opacity: 1;
+}
+
+.nav-left-sidebar.expanded {
+    width: 260px; /* Lebar sidebar saat diperluas */
+}
+
+/* Flexbox untuk mencegah pergeseran ikon */
+.nav-left-sidebar .nav-link {
+    display: flex;
+    align-items: center; /* Pastikan ikon dan teks sejajar */
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    position: relative; /* Buat teks bisa absolute */
+}
+
+/* Ikon harus punya ukuran tetap */
+.nav-left-sidebar .nav-link i {
+    font-size: 18px;
+    min-width: 30px; /* Supaya posisinya tetap */
+    text-align: center;
+}
+
+/* Teks dibuat absolute supaya tidak menggeser ikon */
+.nav-left-sidebar .nav-link .menu-text {
+    position: absolute;
+    left: 50px; /* Jarak dari ikon */
+    visibility: hidden;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateX(-10px);
+}
+
+/* Saat sidebar terbuka, teks muncul */
+.nav-left-sidebar.expanded .nav-link .menu-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+/* Responsive */
+@media only screen and (max-width: 1024px) {
+    .sidebar-open .dashboard-wrapper {
+        margin-left: 0;
+    }
+
+    .sidebar-open .dashboard-content {
+        width: 100vw;
+    }
+
+    .nav-left-sidebar {
+        left: -80px;
+    }
+
+    .sidebar-open .nav-left-sidebar {
+        left: 0;
+    }
+}
+}

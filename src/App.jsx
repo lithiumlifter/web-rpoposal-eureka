@@ -48,6 +48,8 @@ import OtorisasiPusatDirekturRajaCepat from "./pages/admin/OtorisasiPusatDirektu
 import OtorisasiPusatDirekturEurekaBookhouse from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatEurekaBookhouse";
 import OtorisasiPusatDirekturMasterDiskon from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatMasterDiskon";
 import OtorisasiPusatDirekturKataRasa from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatKataRasa";
+import PrivacyPolicy from "./pages/admin/PrivacyPolicy";
+import DeleteAccount from "./pages/admin/DeleteAccount";
 
 Modal.setAppElement('#root');
 
@@ -103,6 +105,8 @@ function App() {
             <Route path="registrasiuser" element={<RegistrasiUser />} />
             <Route path="setupuser" element={<SetupUser />} />
             <Route path="ubahpassword" element={<UbahPassword />} />
+            <Route path="privacypolicy" element={<PrivacyPolicy />} />
+            <Route path="deleteaccount" element={<DeleteAccount />} />
           </Route>
         </Routes>
       </Router>

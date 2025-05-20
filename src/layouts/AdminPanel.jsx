@@ -38,6 +38,10 @@ const pageTitles = {
   "/admin/setupuser": "Setup User",
   "/admin/ubahpassword": "Ubah Password",
   "/admin/detailotorisasipusat": "Detail Otorisasi Pusat",
+  "/admin/privacypolicy": "Kebijakan Privasi",
+  "/admin/deleteaccount": "Hapus Akun",
+
+
 
 };
 

@@ -272,6 +272,9 @@ const Navbar = ({ toggleSidebar }) => {
                     <button className="dropdown-item" onClick={() => setIsModalOpen(true)}>
                         <i className="fas fa-power-off mr-2" /> Logout
                     </button>
+                    <Link className="dropdown-item" to="/admin/deleteaccount">
+                        <i className="fas fa-trash mr-2" /> Hapus Akun
+                    </Link>
                     </div>
                 )}
             </div>
@@ -309,6 +312,9 @@ const Navbar = ({ toggleSidebar }) => {
                   >
                     <i className="fas fa-power-off mr-2" /> Logout
                   </button>
+                  <Link className="dropdown-item" to="/admin/deleteaccount">
+                      <i className="fas fa-trash mr-2" /> Hapus Akun
+                  </Link>
                 </div>
               </li>
             </ul>

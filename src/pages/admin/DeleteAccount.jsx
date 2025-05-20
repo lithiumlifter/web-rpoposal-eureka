@@ -163,7 +163,7 @@ const DeleteAccount = () => {
                         required
                       />
                       <label className="form-check-label" htmlFor="agree">
-                        Dengan menghapus akun ini, Anda menyetujui Syarat & Ketentuan AB Shop.
+                        Dengan menghapus akun ini, Anda menyetujui Syarat & Ketentuan.
                         Setelah proses ini dimulai, tidak dapat dibatalkan dan Anda tidak akan
                         memiliki akses lagi ke akun dan fitur terkait.
                       </label>

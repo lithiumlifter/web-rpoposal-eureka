@@ -85,24 +85,43 @@ const handleConfirmClose = () => {
     return found ? found.name : `BU ${value}`;
   };
 
-  useEffect(() => {
-    if (!id_proposal) return;
+  // useEffect(() => {
+  //   if (!id_proposal) return;
 
-    const fetchDetailProposal = async () => {
-      try {
-        setLoading(true);
-        const data = await DetailProposal.getDetailProposal(id_proposal);
-        setProposal(data.data);
-        setFormData(data.data); 
-      } catch (err) {
-        setError(err.response?.data || err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //   const fetchDetailProposal = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const data = await DetailProposal.getDetailProposal(id_proposal);
+  //       setProposal(data.data);
+  //       setFormData(data.data); 
+  //     } catch (err) {
+  //       setError(err.response?.data || err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchDetailProposal();
-  }, [id_proposal]);
+  //   fetchDetailProposal();
+  // }, [id_proposal]);
+
+  const fetchDetailProposal = async () => {
+  try {
+    setLoading(true);
+    const data = await DetailProposal.getDetailProposal(id_proposal);
+    setProposal(data.data);
+    setFormData(data.data); 
+  } catch (err) {
+    setError(err.response?.data || err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  if (!id_proposal) return;
+  fetchDetailProposal();
+}, [id_proposal]);
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {JSON.stringify(error)}</p>;
@@ -142,7 +161,6 @@ const handleDetail = async (pemohon) => {
   }
 };
 
-
 const handleConfirmSubmit = async () => {
   const role = localStorage.getItem("role");
   console.log("Role Pengguna:", role);
@@ -174,9 +192,10 @@ const handleConfirmSubmit = async () => {
       showErrorToast("Sebagian proses gagal dikirim 😢");
     } else {
       showSuccessToast("Semua proses berhasil dikirim! 🎉");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1500);
+      await fetchDetailProposal();
     }
     
     setShowConfirmationModal(false);
@@ -191,9 +210,10 @@ const handleConfirmSubmit = async () => {
       const result = await OtorisasiServices.otorisasiProposal(bodyRequest);
       console.log('Sukses:', result);
       showSuccessToast("Proses berhasil dikirim! 🎉");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1500);
+      await fetchDetailProposal();
       setShowConfirmationModal(false);
     } catch (error) {
       console.error('Gagal:', error);

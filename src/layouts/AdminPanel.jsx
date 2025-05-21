@@ -46,6 +46,7 @@ const pageTitles = {
 };
 
 const AdminPanel = () => {
+  const [isHovered, setIsHovered] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
   const rawRole = localStorage.getItem("role") || "admin";
@@ -60,9 +61,10 @@ const AdminPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={`dashboard-main-wrapper ${isOpen ? "sidebar-open" : ""}`}>
+    <div className={`dashboard-main-wrapper ${isOpen || isHovered? "sidebar-open" : ""}`}
+    >
       <Navbar toggleSidebar={() => setIsOpen(!isOpen)} />
-      <Sidebar isOpen={isOpen} />
+      <Sidebar isOpen={isOpen} isHovered={isHovered} setIsHovered={setIsHovered}/>
       <div className="dashboard-wrapper min-vh-100 d-flex flex-column">
         <div className="container-fluid dashboard-content flex-grow-1 w-100">
           <div className="row">

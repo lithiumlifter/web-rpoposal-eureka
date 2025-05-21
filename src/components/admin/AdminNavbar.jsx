@@ -210,12 +210,12 @@ const Navbar = ({ toggleSidebar }) => {
             />
 
             {/* Teks di sebelah logo */}
-            {/* <span
-              className="d-none d-md-inline fw-bold text-white text-nowrap"
-              style={{ fontSize: "14px", marginLeft: "20px", flexGrow: 1 }}
+            <span
+              className="d-none d-lg-inline fw-bold text-white text-nowrap"
+              style={{ fontSize: "14px", marginLeft: "250px", flexGrow: 1 }}
             >
               Innovation & Collaboration to Reach Solid Victory!
-            </span> */}
+            </span>
           </a>
 
           {/* <button
@@ -261,7 +261,7 @@ const Navbar = ({ toggleSidebar }) => {
                         right: 0,
                         left: "auto",
                         zIndex: 9999,
-                        minWidth: "10rem", // agar tidak terlalu sempit
+                        minWidth: "10rem",
                     }}
                     >
                     <span className="ms-2 text-nowrap">{name}</span>

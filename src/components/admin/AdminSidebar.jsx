@@ -3,8 +3,8 @@ import { Link, useLocation  } from "react-router-dom";
 import useCategories from "../../hooks/useCategories";
 import proposalServices from "../../services/admin/allDataProposal"
 
-const Sidebar = ({ isOpen }) => {
-    const [isHovered, setIsHovered] = useState(false);
+const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
+    // const [isHovered, setIsHovered] = useState(false);
     const location = useLocation();
     const [masterOpen, setMasterOpen] = useState(false);
     const [otorisasiPusatDirektur, setOtorisasiPusatDirekturOpen] = useState(false);

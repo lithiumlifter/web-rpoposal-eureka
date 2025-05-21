@@ -11,7 +11,6 @@ export const login = async (username, password) => {
 
       const { token, role, name } = response.data.data;
 
-    // Simpan ke localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("name", name);

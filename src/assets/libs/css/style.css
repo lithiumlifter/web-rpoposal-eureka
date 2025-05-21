@@ -7067,15 +7067,6 @@ html, body {
     width: calc(100vw - 250px);
 }
 
-.nav-left-sidebar:hover {
-    width: 250px;
-}
-
-.nav-left-sidebar:hover .nav-link span {
-    display: inline;
-    opacity: 1;
-}
-
 .nav-left-sidebar.expanded {
     width: 260px; /* Lebar sidebar saat diperluas */
 }
@@ -7118,24 +7109,24 @@ html, body {
 }
 
 
-/* Responsive */
-@media only screen and (max-width: 1024px) {
-    .sidebar-open .dashboard-wrapper {
-        margin-left: 0;
-    }
+    /* Responsive */
+    @media only screen and (max-width: 1024px) {
+        .sidebar-open .dashboard-wrapper {
+            margin-left: 0;
+        }
 
-    .sidebar-open .dashboard-content {
-        width: 100vw;
-    }
+        .sidebar-open .dashboard-content {
+            width: 100vw;
+        }
 
-    .nav-left-sidebar {
-        left: -80px;
-    }
+        .nav-left-sidebar {
+            left: -80px;
+        }
 
-    .sidebar-open .nav-left-sidebar {
-        left: 0;
+        .sidebar-open .nav-left-sidebar {
+            left: 0;
+        }
     }
-}
 }
 
 /* scroll */

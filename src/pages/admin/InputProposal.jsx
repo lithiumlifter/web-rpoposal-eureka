@@ -180,11 +180,11 @@ const optionsBUWilayah = useMemo(() => {
       console.log("ISI FORM DATA:", [...formData.entries()]);
 
     // Delay biar alert sempat tampil
-    // setTimeout(() => {
-    //   window.location.reload();
-    // }, 1000);
       showSuccessToast("Proposal berhasil dikirim!");
+      setTimeout(() => {
       window.location.reload();
+    }, 2000);
+      // window.location.reload();
       console.log(response);
     } catch (error) {
       showErrorToast(

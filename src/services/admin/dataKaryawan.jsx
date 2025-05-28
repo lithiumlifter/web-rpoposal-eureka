@@ -1,9 +1,9 @@
 import axios from 'axios';
 const KaryawanServices = {
-    getKaryawan: async () => {
+    getKaryawan: async (emp_id) => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`https://api.dashboard.eurekagroup.id/employee/`, {
+        const response = await axios.get(`https://api.dashboard.eurekagroup.id/employee/get/${emp_id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

@@ -147,20 +147,59 @@ useEffect(() => {
     setShowConfirmationModal(true);
 };
 
-const handleDetail = async (pemohon) => {
+// const handleDetail = async (pemohon) => {
+//   try {
+//     const allKaryawan = await KaryawanServices.getKaryawan();
+//     const detail = allKaryawan.find(k => k.username === pemohon.username);
+//     if (detail) {
+//       setKaryawanDetail(detail);
+//       setModalOpen(true);
+//     } else {
+//       alert('Data karyawan tidak ditemukan');
+//     }
+//   } catch (error) {
+//     alert('Gagal mengambil data karyawan', error);
+//   }
+// };
+
+// const handleDetail = async (pemohon) => {
+//   setModalOpen(true);
+//   setKaryawanDetail(null);
+
+//   try {
+//     const allKaryawan = await KaryawanServices.getKaryawan();
+//     const detail = allKaryawan.find(k => k.username === pemohon.username);
+
+//     if (detail) {
+//       setKaryawanDetail(detail);
+//     } else {
+//       alert('Data karyawan tidak ditemukan');
+//     }
+//   } catch (error) {
+//     alert('Gagal mengambil data karyawan');
+//     console.error(error);
+//   }
+// };
+
+const handleDetail = async (username) => {
+  setModalOpen(true);
+  setKaryawanDetail(null);
+
   try {
-    const allKaryawan = await KaryawanServices.getKaryawan();
-    const detail = allKaryawan.find(k => k.username === pemohon.username);
+    const detail = await KaryawanServices.getKaryawan(username);
+    // const detail = allKaryawan.find(k => k.username === pemohon.username);
+
     if (detail) {
       setKaryawanDetail(detail);
-      setModalOpen(true);
     } else {
-      alert('Data karyawan tidak ditemukan');
+      setKaryawanDetail(false);
     }
   } catch (error) {
-    alert('Gagal mengambil data karyawan', error);
+    setKaryawanDetail(false);
+    console.error('Gagal ambil data karyawan', error);
   }
 };
+
 
 const handleConfirmSubmit = async () => {
   const role = localStorage.getItem("role");
@@ -227,7 +266,53 @@ const handleConfirmSubmit = async () => {
   const historyColumns = [
     { name: "Date", selector: (row) => row.transdate, sortable: true },
     { name: "Position", selector: (row) => row.status_position, sortable: true },
-    { name: "Description", selector: (row) => row.description, sortable: true },
+    // { name: "Description", selector: (row) => row.description, sortable: true },
+    {
+  name: "Description",
+  cell: (row) => {
+    const matchingOtoritas = proposal?.otoritas?.find(
+      (o) => o.emplid === row.username && o.status === row.status
+    );
+
+    const comment = matchingOtoritas?.keterangan;
+
+    let labelColor = "black";
+    let labelText = `[${row.status}]`;
+
+    if (row.status === "Approve") {
+      labelColor = "green";
+      labelText = "[Saya Setuju]";
+    } else if (row.status === "Pending") {
+      labelColor = "orange";
+      labelText = "[Pending]";
+    } else if (row.status === "Close") {
+      labelColor = "red";
+      labelText = "[Close]";
+    }
+
+    // Jika matching otoritas ditemukan dan status-nya relevan (Approve/Pending/Close), tampilkan label
+    if (comment || row.status) {
+      return (
+        <div>
+          <span style={{ color: labelColor }}>{labelText}</span>
+          {comment && (
+            <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
+              - {comment}
+            </span>
+          )}
+        </div>
+      );
+    }
+
+    // Jika tidak ada matching otoritas, tampilkan deskripsi biasa
+    return (
+      <span style={{ fontWeight: "" }}>
+        {row.description ? row.description.toUpperCase() : "-"}
+      </span>
+    );
+  },
+  sortable: false,
+},
     { name: "BY", selector: (row) => row.name, sortable: true },
   ];
 
@@ -304,7 +389,7 @@ const handleConfirmSubmit = async () => {
             <td>
               {proposal.pemohon.name}
               <button
-                onClick={() => handleDetail("P3101")}
+                onClick={() => handleDetail(proposal.pemohon.username)}
                 style={{
                   marginLeft: '10px',
                   padding: '2px 6px',
@@ -345,7 +430,7 @@ const handleConfirmSubmit = async () => {
         <div className="col-md-6">
           <h5 className="fw-semibold mb-2">Nomor Reg : {proposal.id_proposal}</h5>
           <div className="table-responsive">
-            <table className="table table-sm">
+            {/* <table className="table table-sm">
               <thead className="table-success text-white bg-success">
                 <tr>
                   <th>Date</th>
@@ -364,12 +449,69 @@ const handleConfirmSubmit = async () => {
                   </tr>
                 ))}
               </tbody>
+            </table> */}
+            <table className="table table-sm">
+              <thead className="table-success text-white bg-success">
+                <tr>
+                  <th>Date</th>
+                  <th>Position</th>
+                  <th>Description</th>
+                  <th>BY</th>
+                </tr>
+              </thead>
+              <tbody>
+                {proposal.history?.map((item) => {
+                  // Cari komentar dari otoritas berdasarkan username & status
+                  const matchingOtoritas = proposal.otoritas?.find(
+                    (o) => o.emplid === item.username && o.status === item.status
+                  );
+
+                  const comment = matchingOtoritas?.keterangan;
+
+                  // Tentukan warna dan label status
+                  let labelColor = "black";
+                  let labelText = `[${item.status}]`;
+
+                  if (item.status === "Approve") {
+                    labelColor = "green";
+                    labelText = "[Saya Setuju]";
+                  } else if (item.status === "Pending") {
+                    labelColor = "orange";
+                    labelText = "[Pending]";
+                  } else if (item.status === "Close") {
+                    labelColor = "red";
+                    labelText = "[Close]";
+                  }
+
+                  return (
+                    <tr key={item.id_history}>
+                      <td>{item.transdate}</td>
+                      <td>{item.status_position}</td>
+                      <td>
+                        {(comment || item.status) ? (
+                          <div>
+                            <span style={{ color: labelColor }}>{labelText}</span>
+                            {comment && (
+                              <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
+                                - {comment}
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <span>{item.description ? item.description.toUpperCase() : "-"}</span>
+                        )}
+                      </td>
+                      <td>{item.name}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <div className="mt-4 d-flex gap-2 flex-wrap">
+      {/* <div className="mt-4 d-flex gap-2 flex-wrap">
         <button className="btn btn-success text-white" onClick={() => handleSubmit('Approve')}>
           <i className="fas fa-check-circle"></i> Setuju
         </button>
@@ -381,7 +523,120 @@ const handleConfirmSubmit = async () => {
         <button className="btn btn-danger text-white" onClick={() => handleSubmit('Cancel')}>
           <i className="fas fa-times-circle"></i> Tidak Setuju
         </button>
+
+        <button 
+          className="btn btn-warning text-white" 
+          onClick={() => goToPrevNextProposal('prev')}
+          disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
+        >
+          « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
+        </button>
+
+        <button
+          className="btn btn-danger text-white"
+          onClick={() => setShowCloseModal(true)}
+        >
+          Tutup jendela ini
+        </button>
+
+        <button 
+          className="btn btn-warning text-white" 
+          onClick={() => goToPrevNextProposal('next')}
+          disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
+        >
+          Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
+        </button>
+      </div> */}
+
+      <div className="mt-4">
+          {/* Baris 1 */}
+          <div className="d-flex gap-2 flex-wrap mb-2">
+            <button
+              className="btn btn-success text-white"
+              onClick={() => handleSubmit('Approve')}
+            >
+              <i className="fas fa-check-circle me-1"></i> Setuju
+            </button>
+
+            <button
+              className="btn btn-warning text-white"
+              onClick={() => handleSubmit('Pending')}
+            >
+              <i className="fas fa-exclamation-circle me-1"></i> Pending
+            </button>
+
+            <button
+              className="btn btn-danger text-white"
+              onClick={() => handleSubmit('Cancel')}
+            >
+              <i className="fas fa-times-circle me-1"></i> Tidak Setuju
+            </button>
+          </div>
+
+          {/* Baris 2 */}
+          <div className="d-flex gap-2 flex-wrap">
+            <button
+              className="btn btn-success text-white"
+              onClick={() => goToPrevNextProposal('prev')}
+              disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
+            >
+              « Sebelumnya
+            </button>
+
+            <button
+              className="btn btn-info text-white"
+              onClick={() => setShowCloseModal(true)}
+            >
+              Tutup
+            </button>
+
+            <button
+              className="btn btn-warning text-white"
+              onClick={() => goToPrevNextProposal('next')}
+              disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
+            >
+              Selanjutnya »
+            </button>
+          </div>
       </div>
+
+      {/* <div className="mt-4 d-flex gap-2 flex-wrap">
+        <button className="btn btn-success text-white" onClick={() => handleSubmit('Approve')}>
+          <i className="fas fa-check-circle"></i> Setuju
+        </button>
+
+        <button className="btn btn-warning text-white" onClick={() => handleSubmit('Pending')}>
+          <i className="fas fa-exclamation-circle"></i> Pending
+        </button>
+
+        <button className="btn btn-danger text-white" onClick={() => handleSubmit('Cancel')}>
+          <i className="fas fa-times-circle"></i> Tidak Setuju
+        </button>
+      </div> */}
+      {/* <div className="d-flex justify-content-center mb-4">
+              <div className="btn-group">
+                <button 
+                  className="btn btn-warning" 
+                  onClick={() => goToPrevNextProposal('prev')}
+                  disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
+                >
+                  « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => setShowCloseModal(true)}
+                >
+                  Tutup jendela ini
+                </button>
+                <button 
+                  className="btn btn-warning" 
+                  onClick={() => goToPrevNextProposal('next')}
+                  disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
+                >
+                  Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
+                </button>
+              </div>
+          </div> */}
     <div className="row row-cols-2 row-cols-md-6 g-2 mt-4">
     <div className="card-body">
       {proposal.images && proposal.images.length > 0 ? (
@@ -450,7 +705,7 @@ const handleConfirmSubmit = async () => {
                         <td>
                             {proposal.pemohon.name}
                             <button
-                              onClick={() => handleDetail("P3101")}
+                              onClick={() => handleDetail(proposal.pemohon.username)}
                               style={{
                                 marginLeft: '10px',
                                 padding: '2px 6px',
@@ -729,29 +984,29 @@ const handleConfirmSubmit = async () => {
           </div>
         </div>
 
-        <div className="d-flex justify-content-center mb-4">
-            <div className="btn-group">
-              <button 
-                className="btn btn-warning" 
-                onClick={() => goToPrevNextProposal('prev')}
-                disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
-              >
-                « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => setShowCloseModal(true)}
-              >
-                Tutup jendela ini
-              </button>
-              <button 
-                className="btn btn-warning" 
-                onClick={() => goToPrevNextProposal('next')}
-                disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
-              >
-                Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
-              </button>
-            </div>
+           <div className="d-flex justify-content-center mb-4">
+              <div className="btn-group">
+                <button 
+                  className="btn btn-warning" 
+                  onClick={() => goToPrevNextProposal('prev')}
+                  disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
+                >
+                  « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => setShowCloseModal(true)}
+                >
+                  Tutup jendela ini
+                </button>
+                <button 
+                  className="btn btn-warning" 
+                  onClick={() => goToPrevNextProposal('next')}
+                  disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
+                >
+                  Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
+                </button>
+              </div>
           </div>
       </div>
       <ConfirmationModal
@@ -781,123 +1036,147 @@ const handleConfirmSubmit = async () => {
         cancelText="Batal"
         theme="danger"
       />
+      {modalOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 9999
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px 30px',
+            width: '95%',
+            maxWidth: '1100px',
+            borderRadius: '10px',
+            maxHeight: '95vh',
+            overflowY: 'auto',
+            fontFamily: 'Segoe UI, sans-serif',
+            fontSize: '14px'
+          }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '20px' }}>Employee Identity</h2>
 
-      {modalOpen && karyawanDetail && (
-              <div style={{
-                position: 'fixed',
-                top: 0, left: 0, right: 0, bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.5)',
-                display: 'flex', justifyContent: 'center', alignItems: 'center',
-                zIndex: 9999
-              }}>
-                <div style={{
-                  backgroundColor: 'white',
-                  padding: '20px 30px',
-                  width: '95%',
-                  maxWidth: '1100px',
-                  borderRadius: '10px',
-                  maxHeight: '95vh',
-                  overflowY: 'auto',
-                  fontFamily: 'Segoe UI, sans-serif',
-                  fontSize: '14px'
-                }}>
-                  <h2 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '20px' }}>Employee Identity</h2>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                      <div style={{ display: 'flex', gap: '30px', marginBottom: '30px' }}>
-                        {/* Kolom 1: Foto */}
-                        <div style={{ flex: '0 0 150px', textAlign: 'center' }}>
-                          {karyawanDetail.photo ? (
-                            <img
-                              src={`https://api.dashboard.eurekagroup.id/employee/view/${karyawanDetail.photo}`}
-                              crossOrigin="anonymous"
-                              alt="Employee"
-                              style={{ width: '120px', height: '160px', objectFit: 'cover', borderRadius: '6px' }}
-                            />
-                          ) : (
-                            <div style={{ width: '120px', height: '160px', backgroundColor: '#ccc', borderRadius: '6px' }} />
-                          )}
-                        </div>
-
-                        {/* Kolom 2: Fullname s.d. BPJS TK */}
-                        <div style={{ flex: 1 }}>
-                          <table style={{ width: '100%', borderSpacing: '0 6px' }}>
-                            <tbody>
-                              <tr><td>Full Name</td><td>:</td><td>{karyawanDetail.full_name}</td></tr>
-                              <tr><td>NIK</td><td>:</td><td>{karyawanDetail.emp_id}</td></tr>
-                              <tr>
-                                <td>Date of Birth</td><td>:</td>
-                                <td>{new Date(karyawanDetail.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
-                              </tr>
-                              <tr><td>Religion</td><td>:</td><td>{karyawanDetail.religion}</td></tr>
-                              <tr><td>Education</td><td>:</td><td>{karyawanDetail.education}</td></tr>
-                              <tr><td>Collage</td><td>:</td><td>{karyawanDetail.collage}</td></tr>
-                              <tr><td>BPJS TK</td><td>:</td><td>{karyawanDetail.bpjs_tk?.low || '-'}</td></tr>
-                            </tbody>
-                          </table>
-                        </div>
-
-                        {/* Kolom 3: Email s.d. BPJS Kesehatan */}
-                        <div style={{ flex: 1 }}>
-                          <table style={{ width: '100%', borderSpacing: '0 6px', marginLeft: '80px' }}>
-                            <tbody>
-                              <tr><td>Email</td><td>:</td><td>{karyawanDetail.email || '-'}</td></tr>
-                              <tr><td>Marital Status</td><td>:</td><td>{karyawanDetail.marital_status}</td></tr>
-                              <tr><td>Phone</td><td>:</td><td>{karyawanDetail.no_telp}</td></tr>
-                              <tr><td>Address</td><td>:</td><td>{karyawanDetail.address || '-'}</td></tr>
-                              <tr><td>Major</td><td>:</td><td>{karyawanDetail.education_major}</td></tr>
-                              <tr><td>Tax Category</td><td>:</td><td>{karyawanDetail.tax_category}</td></tr>
-                              <tr><td>BPJS Kesehatan</td><td>:</td><td>{karyawanDetail.bpjs_kes?.low || '-'}</td></tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-
-                  </div>
-
-                  {/* Row 2 */}
-                  <h2 style={{ fontSize: '18px', marginBottom: '20px', fontWeight: 600 }}>Employee</h2>
-                  <table style={{ width: '100%' }}>
-                    <tbody>
-                      <tr>
-                        <td>Jabatan</td><td>:</td><td>{karyawanDetail.id_department?.department_name || '-'}</td>
-                        <td>Hire Date</td><td>:</td>
-                        <td>{new Date(karyawanDetail.hire_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
-                      </tr>
-                      <tr>
-                        <td>Business Unit</td><td>:</td><td>{karyawanDetail.id_bu?.bu_name || '-'}</td>
-                        <td>Employee Status</td><td>:</td><td>{karyawanDetail.employee_status}</td>
-                      </tr>
-                      <tr>
-                        <td>Grade</td><td>:</td><td>{karyawanDetail.grade || '-'}</td>
-                        <td>Active/Inactive</td><td>:</td><td>{karyawanDetail.is_active}</td>
-                      </tr>
-                      <tr>
-                        <td>Points</td><td>:</td><td>{karyawanDetail.points}</td>
-                        <td>PPH21</td><td>:</td><td>{karyawanDetail.pph21}</td>
-                      </tr>
-                      <tr>
-                        <td>Date Added</td><td>:</td>
-                        <td>{new Date(karyawanDetail.date_added).toLocaleDateString('id-ID')}</td>
-                        <td>Date Modified</td><td>:</td>
-                        <td>{new Date(karyawanDetail.date_modified).toLocaleDateString('id-ID')}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <div style={{ textAlign: 'right', marginTop: '30px' }}>
-                    <button onClick={() => setModalOpen(false)} style={{
-                      padding: '8px 16px',
-                      backgroundColor: '#333',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '5px',
-                      cursor: 'pointer'
-                    }}>
-                      Close
-                    </button>
-                  </div>
+            {karyawanDetail === null ? (
+              // SKELETON LOADER
+              <div style={{ display: 'flex', gap: '30px', marginBottom: '30px' }}>
+                <div style={{ width: '120px', height: '160px', backgroundColor: '#ddd', borderRadius: '6px' }} />
+                <div style={{ flex: 1 }}>
+                  {[...Array(7)].map((_, i) => (
+                    <div key={i} style={{ height: '16px', backgroundColor: '#eee', marginBottom: '10px', borderRadius: '4px', width: i % 2 === 0 ? '80%' : '60%' }} />
+                  ))}
+                </div>
+                <div style={{ flex: 1 }}>
+                  {[...Array(7)].map((_, i) => (
+                    <div key={i} style={{ height: '16px', backgroundColor: '#eee', marginBottom: '10px', borderRadius: '4px', width: i % 2 === 0 ? '85%' : '55%' }} />
+                  ))}
                 </div>
               </div>
+            ) : karyawanDetail === false ? (
+              // JIKA TIDAK DITEMUKAN
+              <div style={{ textAlign: 'center', padding: '40px 0', color: '#777', fontSize: '16px' }}>
+                Data karyawan tidak tersedia.
+              </div>
+            ) : (
+              // JIKA DATA ADA
+              <>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', gap: '30px', marginBottom: '30px' }}>
+                    {/* Kolom 1: Foto */}
+                    <div style={{ flex: '0 0 150px', textAlign: 'center' }}>
+                      {karyawanDetail.photo ? (
+                        <img
+                          src={`https://api.dashboard.eurekagroup.id/employee/view/${karyawanDetail.photo}`}
+                          crossOrigin="anonymous"
+                          alt="Employee"
+                          style={{ width: '120px', height: '160px', objectFit: 'cover', borderRadius: '6px' }}
+                        />
+                      ) : (
+                        <div style={{ width: '120px', height: '160px', backgroundColor: '#ccc', borderRadius: '6px' }} />
+                      )}
+                    </div>
+
+                    {/* Kolom 2 */}
+                    <div style={{ flex: 1 }}>
+                      <table style={{ width: '100%', borderSpacing: '0 6px' }}>
+                        <tbody>
+                          <tr><td>Full Name</td><td>:</td><td>{karyawanDetail.full_name}</td></tr>
+                          <tr><td>NIK</td><td>:</td><td>{karyawanDetail.emp_id}</td></tr>
+                          <tr>
+                            <td>Date of Birth</td><td>:</td>
+                            <td>{new Date(karyawanDetail.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
+                          </tr>
+                          <tr><td>Religion</td><td>:</td><td>{karyawanDetail.religion}</td></tr>
+                          <tr><td>Education</td><td>:</td><td>{karyawanDetail.education}</td></tr>
+                          <tr><td>Collage</td><td>:</td><td>{karyawanDetail.collage}</td></tr>
+                          <tr><td>BPJS TK</td><td>:</td><td>{karyawanDetail.bpjs_tk?.low || '-'}</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Kolom 3 */}
+                    <div style={{ flex: 1 }}>
+                      <table style={{ width: '100%', borderSpacing: '0 6px', marginLeft: '80px' }}>
+                        <tbody>
+                          <tr><td>Email</td><td>:</td><td>{karyawanDetail.email || '-'}</td></tr>
+                          <tr><td>Marital Status</td><td>:</td><td>{karyawanDetail.marital_status}</td></tr>
+                          <tr><td>Phone</td><td>:</td><td>{karyawanDetail.no_telp}</td></tr>
+                          <tr><td>Address</td><td>:</td><td>{karyawanDetail.address || '-'}</td></tr>
+                          <tr><td>Major</td><td>:</td><td>{karyawanDetail.education_major}</td></tr>
+                          <tr><td>Tax Category</td><td>:</td><td>{karyawanDetail.tax_category}</td></tr>
+                          <tr><td>BPJS Kesehatan</td><td>:</td><td>{karyawanDetail.bpjs_kes?.low || '-'}</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 2 */}
+                <h2 style={{ fontSize: '18px', marginBottom: '20px', fontWeight: 600 }}>Employee</h2>
+                <table style={{ width: '100%' }}>
+                  <tbody>
+                    <tr>
+                      <td>Department</td><td>:</td><td>{karyawanDetail.id_department?.department_name || '-'}</td>
+                      <td>Hire Date</td><td>:</td>
+                      <td>{new Date(karyawanDetail.hire_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
+                    </tr>
+                    <tr>
+                      <td>Business Unit</td><td>:</td><td>{karyawanDetail.id_bu?.bu_name || '-'}</td>
+                      <td>Employee Status</td><td>:</td><td>{karyawanDetail.employee_status}</td>
+                    </tr>
+                    <tr>
+                      <td>Grade</td><td>:</td><td>{karyawanDetail.grade || '-'}</td>
+                      <td>Active/Inactive</td><td>:</td><td>{karyawanDetail.is_active}</td>
+                    </tr>
+                    <tr>
+                      <td>Points</td><td>:</td><td>{karyawanDetail.points}</td>
+                      <td>PPH21</td><td>:</td><td>{karyawanDetail.pph21}</td>
+                    </tr>
+                    <tr>
+                      <td>Date Added</td><td>:</td>
+                      <td>{new Date(karyawanDetail.date_added).toLocaleDateString('id-ID')}</td>
+                      <td>Date Modified</td><td>:</td>
+                      <td>{new Date(karyawanDetail.date_modified).toLocaleDateString('id-ID')}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </>
+            )}
+
+            <div style={{ textAlign: 'right', marginTop: '30px' }}>
+              <button onClick={() => setModalOpen(false)} style={{
+                padding: '8px 16px',
+                backgroundColor: '#333',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
     </>

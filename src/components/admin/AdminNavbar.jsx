@@ -170,7 +170,7 @@ const Navbar = ({ toggleSidebar }) => {
           <button
             className="btn ml-3"
             onClick={toggleSidebar}
-            style={{ backgroundColor: "#f0ad4e" }}
+            style={{ backgroundColor: "#f58426" }}
           >
             <i className="fas fa-bars text-white" />
           </button>
@@ -191,14 +191,15 @@ const Navbar = ({ toggleSidebar }) => {
               src="/images/logo-eurekalogistics.png"
               alt="Eureka Logistics"
               style={{
-                width: 80,
+                width: 100,
+                marginBottom:"5px",
                 height: "auto",
                 borderRadius: "12px",
               }}
             />
 
             {/* Logo Karakter */}
-            <img
+            {/* <img
               src="/images/karakter.png"
               alt="Karakter"
               style={{
@@ -207,12 +208,12 @@ const Navbar = ({ toggleSidebar }) => {
                 borderRadius: "50%",
                 objectFit: "cover",
               }}
-            />
+            /> */}
 
             {/* Teks di sebelah logo */}
             <span
               className="d-none d-lg-inline fw-bold text-white text-nowrap"
-              style={{ fontSize: "14px", marginLeft: "250px", flexGrow: 1 }}
+              style={{ fontSize: "14px", marginLeft: "285px", flexGrow: 1 }}
             >
               Innovation & Collaboration to Reach Solid Victory!
             </span>
@@ -269,12 +270,12 @@ const Navbar = ({ toggleSidebar }) => {
                     <Link className="dropdown-item" to="/admin/ubahpassword">
                         <i className="fas fa-cog mr-2" /> Ubah Password
                     </Link>
-                    <button className="dropdown-item" onClick={() => setIsModalOpen(true)}>
-                        <i className="fas fa-power-off mr-2" /> Logout
-                    </button>
                     <Link className="dropdown-item" to="/admin/deleteaccount">
                         <i className="fas fa-trash mr-2" /> Hapus Akun
                     </Link>
+                    <button className="dropdown-item" onClick={() => setIsModalOpen(true)}>
+                        <i className="fas fa-power-off mr-2" /> Logout
+                    </button>
                     </div>
                 )}
             </div>
@@ -306,15 +307,15 @@ const Navbar = ({ toggleSidebar }) => {
                   <Link className="dropdown-item" to="/admin/ubahpassword">
                     <i className="fas fa-cog mr-2" /> Ubah Password
                   </Link>
+                  <Link className="dropdown-item" to="/admin/deleteaccount">
+                      <i className="fas fa-trash mr-2" /> Hapus Akun
+                  </Link>
                   <button
                     className="dropdown-item"
                     onClick={() => setIsModalOpen(true)}
                   >
                     <i className="fas fa-power-off mr-2" /> Logout
                   </button>
-                  <Link className="dropdown-item" to="/admin/deleteaccount">
-                      <i className="fas fa-trash mr-2" /> Hapus Akun
-                  </Link>
                 </div>
               </li>
             </ul>

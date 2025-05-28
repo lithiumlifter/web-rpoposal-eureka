@@ -1,17 +1,19 @@
 export const tableCustomStyles = {
     rows: {
       style: {
-        backgroundColor: '#d4edda',
+        // backgroundColor: '#d4edda',
+        backgroundColor: '#f4832833',
         transition: 'background-color 0.3s ease',
       },
-      highlightOnHoverStyle: {
-        backgroundColor: '#fff3cd',
-        cursor: 'pointer',
-      },
+      // highlightOnHoverStyle: {
+      //   backgroundColor: '#fff3cd',
+      //   cursor: 'pointer',
+      // },
     },
     headCells: {
       style: {
-        backgroundColor: '#28a745',
+        backgroundColor: '#046ab4',
+        // backgroundColor: '#f58426',
         color: 'white',
         fontWeight: 'bold',
         paddingLeft: '8px',
@@ -34,11 +36,13 @@ export const tableCustomStyles = {
       when: () => true,
       style: {
         // backgroundColor: '#d4edda',
-        transition: 'background-color 0.3s ease',
-        '&:hover': {
-          backgroundColor: '#fff3cd',
-        },
+        // transition: 'background-color 0.3s ease',
+        // '&:hover': {
+        //   backgroundColor: '#fff3cd',
+        // },
       },
     },
   ];
+
+  //  f48328 oren, biru:  046ab4, abu: bcbec4
   

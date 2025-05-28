@@ -2,7 +2,7 @@ const PrivacyPolicy = () => {
     return (
         <div className="container py-2">
             <div>
-                <h1>Privacy Policy</h1>
+                {/* <h1>Privacy Policy</h1> */}
 
                 <h2>About proposal.eurekagroup.id</h2>
                 <p>

@@ -81,6 +81,20 @@ const Login = () => {
               >
                 {loading ? "Loading..." : "Login"}
               </button>
+              <div className="text-center mt-4">
+              <div className="d-inline-flex align-items-center gap-2 text-muted">
+                <a
+                  href="/privacypolicy"
+                  className="text-muted"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Privacy Policy
+                </a>
+                <span>|</span>
+                <span>©2025 EurekaDev</span>
+              </div>
+            </div>
             </form>
           </div>
         </div>

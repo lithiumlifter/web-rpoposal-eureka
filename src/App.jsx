@@ -50,6 +50,7 @@ import OtorisasiPusatDirekturMasterDiskon from "./pages/admin/OtorisasiPusatDire
 import OtorisasiPusatDirekturKataRasa from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatKataRasa";
 import PrivacyPolicy from "./pages/admin/PrivacyPolicy";
 import DeleteAccount from "./pages/admin/DeleteAccount";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 Modal.setAppElement('#root');
 
@@ -62,7 +63,8 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/printview" element={<PrintView />} />
           <Route path="/print-report-cabang" element={<PrintReportCabang />} />
-          <Route path="/admin" element={<AdminPanel />}>
+            <Route path="privacypolicy" element={<PrivacyPolicy />} />
+          <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>}>
             <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
             <Route path="axdimension" element={<AxDimension />} />
@@ -105,7 +107,6 @@ function App() {
             <Route path="registrasiuser" element={<RegistrasiUser />} />
             <Route path="setupuser" element={<SetupUser />} />
             <Route path="ubahpassword" element={<UbahPassword />} />
-            <Route path="privacypolicy" element={<PrivacyPolicy />} />
             <Route path="deleteaccount" element={<DeleteAccount />} />
           </Route>
         </Routes>

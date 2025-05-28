@@ -85,26 +85,26 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <div className="menu-list" style={{ backgroundColor: "#003366", minHeight: "1150px" }}>
+          <div className="menu-list" style={{ backgroundColor: "#046ab4", minHeight: "1150px" }}>
             <nav className="navbar navbar-expand-lg navbar-light">
               <ul className="navbar-nav flex-column">
 
                 <li className={`nav-item ${isActive("/admin") && currentPath === "/admin" ? "active" : ""}`}>
                   <Link className="nav-link" to="/admin">
-                    <i className="fas fa-fw fa-home"></i> <span className="menu-text">Home</span>
+                    <i className="text-white fas fa-fw fa-home"></i> <span className="menu-text text-white">Home</span>
                   </Link>
                 </li>
 
                 <li className={`nav-item ${isActive("/admin/inputproposal") ? "active" : ""}`}>
                   <Link className="nav-link" to="/admin/inputproposal">
-                    <i className="fas fa-fw fa-comment-alt"></i> <span className="menu-text">Input Proposal Baru</span>
+                    <i className="text-white fas fa-fw fa-comment-alt"></i> <span className="menu-text text-white">Input Proposal Baru</span>
                   </Link>
                 </li>
 
                 {hasAccess(["admin","kontrol","kontrol cabang"]) && (
                   <li className={`nav-item ${isActive("/admin/inboxcabang") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/inboxcabang">
-                      <i className="fas fa-fw fa-inbox"></i> <span className="menu-text">Inbox Cabang</span>
+                      <i className="text-white fas fa-fw fa-inbox"></i> <span className="menu-text text-white">Inbox Cabang</span>
                     </Link>
                   </li>
                 )}
@@ -112,7 +112,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                 {hasAccess(["admin","kontrol","kontrol cabang"]) && (
                   <li className={`nav-item ${isActive("/admin/updatestatuscabang") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/updatestatuscabang">
-                      <i className="fas fa-fw fa-edit"></i> <span className="menu-text">Update Status Cabang</span>
+                      <i className="text-white fas fa-fw fa-edit"></i> <span className="menu-text text-white">Update Status Cabang</span>
                     </Link>
                   </li>
                 )}
@@ -120,7 +120,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                 {hasAccess(["admin","kontrol"]) && (
                   <li className={`nav-item ${isActive("/admin/inboxpusat") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/inboxpusat">
-                      <i className="fas fa-fw fa-inbox"></i> <span className="menu-text">Inbox Pusat</span>
+                      <i className="text-white fas fa-fw fa-inbox"></i> <span className="menu-text text-white">Inbox Pusat</span>
                     </Link>
                   </li>
                 )}
@@ -128,7 +128,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                 {hasAccess(["admin","kontrol"]) && (
                   <li className={`nav-item ${isActive("/admin/updatestatuspusat") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/updatestatuspusat">
-                      <i className="fas fa-fw fa-edit"></i> <span className="menu-text">Update Status Pst</span>
+                      <i className="text-white fas fa-fw fa-edit"></i> <span className="menu-text text-white">Update Status Pst</span>
                     </Link>
                   </li>
                 )}
@@ -136,7 +136,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                 {hasAccess(["admin", "otoritor"]) && (
                   <li className={`nav-item ${isActive("/admin/otorisasi-pusat") ? "active" : ""}`}>
                     <Link className="nav-link" to="/admin/otorisasi-pusat">
-                      <i className="fas fa-th-list"></i>
+                      <i className="text-white fas fa-th-list"></i>
                       {jumlahProposalPST > 0 && (
                         <div
                           style={{
@@ -158,7 +158,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                           {jumlahProposalPST}
                         </div>
                       )}
-                      <span className="menu-text">Otorisasi Pusat</span>
+                      <span className="menu-text text-white">Otorisasi Pusat</span>
                     </Link>
                   </li>
                 )}
@@ -171,8 +171,8 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                         style={{ cursor: "pointer", position: "relative" }}
                         onClick={() => setOtorisasiPusatDirekturOpen(!otorisasiPusatDirektur)}
                       >
-                        <i className="fas fa-th-list"></i>{" "}
-                        <span className="menu-text">Otorisasi Pusat (Direktur)</span>
+                        <i className="text-white fas fa-th-list"></i>{" "}
+                        <span className="menu-text text-white">Otorisasi Pusat (Direktur)</span>
 
                         {/* Badge di menu utama */}
                         {jumlahProposalPSTDirektur > 0 && (
@@ -202,7 +202,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                         <ul className="navbar-nav flex-column ms-3">
                           <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur-all") ? "active" : ""}`} style={{ position: "relative" }}>
                             <Link className="nav-link" to="/admin/otorisasipusat-direktur-all">
-                              <i className="fas fa-th-list"></i> <span className="menu-text">Semua BU</span>
+                              <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Semua BU</span>
                               {jumlahProposalPSTDirektur > 0 && (
                                 <div
                                   style={{
@@ -229,7 +229,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
 
                           <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/eurekalogistics") ? "active" : ""}`}>
                             <Link className="nav-link" to="/admin/otorisasipusat-direktur/eurekalogistics">
-                              <i className="fas fa-th-list"></i> <span className="menu-text">Eureka Logistics</span>
+                              <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Eureka Logistics</span>
                               {jumlahEurekaLogistics > 0 && (
                                 <div
                                   style={{
@@ -256,7 +256,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
 
                           <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/eurekabookhouse") ? "active" : ""}`}>
                             <Link className="nav-link" to="/admin/otorisasipusat-direktur/eurekabookhouse">
-                              <i className="fas fa-th-list"></i> <span className="menu-text">Eureka Bookhouse</span>
+                              <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Eureka Bookhouse</span>
                               {jumlahEurekaBookhouse > 0 && (
                                 <div
                                   style={{
@@ -283,7 +283,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
 
                           <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/rajacepat") ? "active" : ""}`}>
                             <Link className="nav-link" to="/admin/otorisasipusat-direktur/rajacepat">
-                              <i className="fas fa-th-list"></i> <span className="menu-text">Raja Cepat</span>
+                              <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Raja Cepat</span>
                               {jumlahRajaCepat > 0 && (
                                 <div
                                   style={{
@@ -310,7 +310,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
 
                           <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/masterdiskon") ? "active" : ""}`}>
                             <Link className="nav-link" to="/admin/otorisasipusat-direktur/masterdiskon">
-                              <i className="fas fa-th-list"></i> <span className="menu-text">Master Diskon</span>
+                              <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Master Diskon</span>
                               {jumlahMasterDiskon > 0 && (
                                 <div
                                   style={{
@@ -337,7 +337,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
 
                           <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/katarasa") ? "active" : ""}`}>
                             <Link className="nav-link" to="/admin/otorisasipusat-direktur/katarasa">
-                              <i className="fas fa-th-list"></i> <span className="menu-text">Kata Rasa</span>
+                              <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Kata Rasa</span>
                               {jumlahKataRasa > 0 && (
                                 <div
                                   style={{
@@ -367,7 +367,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                   )}
                 <li className={`nav-item ${isActive("/admin/proposalreport") ? "active" : ""}`}>
                   <Link className="nav-link" to="/admin/proposalreport">
-                    <i className="fas fa-file"></i> <span className="menu-text">Proposal Report</span>
+                    <i className="text-white fas fa-file"></i> <span className="menu-text text-white">Proposal Report</span>
                   </Link>
                 </li>
 
@@ -380,7 +380,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                         style={{ cursor: "pointer" }}
                         onClick={() => setLainLain(!lainLain)}
                       >
-                        <i className="fas fa-cogs"></i> <span className="menu-text">Lain-lain</span>
+                        <i className="text-white fas fa-cogs"></i> <span className="menu-text text-white">Lain-lain</span>
                       </span>
 
                       {lainLain && (
@@ -388,14 +388,14 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                          {hasAccess(["admin","otoritor cabang"]) && (
                             <li className={`nav-item ${isActive("/admin/otorisasicabang") ? "active" : ""}`}>
                               <Link className="nav-link" to="/admin/otorisasicabang">
-                                <i className="fas fa-wrench"></i> <span className="menu-text">Otorisasi Cabang</span>
+                                <i className="text-white fas fa-wrench"></i> <span className="menu-text text-white">Otorisasi Cabang</span>
                               </Link>
                             </li>
                           )}
                           {hasAccess(["admin", "otoritor"]) && (
                             <li className={`nav-item ${isActive("/admin/updateanggaran") ? "active" : ""}`}>
                               <Link className="nav-link" to="/admin/updateanggaran">
-                                <i className="fas fa-fw fa-edit"></i> <span className="menu-text">Update Anggaran</span>
+                                <i className="text-white fas fa-fw fa-edit"></i> <span className="menu-text text-white">Update Anggaran</span>
                               </Link>
                             </li>
                           )}
@@ -403,7 +403,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                           {hasAccess(["admin", "kontrol", "otoritor", "kontrol cabang", "otoritor cabang"]) && (
                             <li className={`nav-item ${isActive("/admin/reportkpi") ? "active" : ""}`}>
                               <Link className="nav-link" to="/admin/reportkpi">
-                                <i className="fas fa-file"></i> <span className="menu-text">Report KPI</span>
+                                <i className="text-white fas fa-file"></i> <span className="menu-text text-white">Report KPI</span>
                               </Link>
                             </li>
                           )}
@@ -411,7 +411,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                           {hasAccess(["admin", "kontrol"]) && (
                             <li className={`nav-item ${isActive("/admin/reporttocabang") ? "active" : ""}`}>
                               <Link className="nav-link" to="/admin/reporttocabang">
-                                <i className="fas fa-file"></i> <span className="menu-text">Report To Cabang</span>
+                                <i className="text-white fas fa-file"></i> <span className="menu-text text-white">Report To Cabang</span>
                               </Link>
                             </li>
                           )}
@@ -419,7 +419,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                           {hasAccess(["admin", "kontrol", "kontrol cabang"]) && (
                             <li className={`nav-item ${isActive("/admin/otorisationnotcompleted") ? "active" : ""}`}>
                               <Link className="nav-link" to="/admin/otorisationnotcompleted">
-                                <i className="fas fa-file"></i> <span className="menu-text">Otorisation Not Complete</span>
+                                <i className="text-white fas fa-file"></i> <span className="menu-text text-white">Otorisation Not Complete</span>
                               </Link>
                             </li>
                           )}
@@ -427,7 +427,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                           {hasAccess(["admin", "kontrol", "kontrol cabang"]) && (
                             <li className={`nav-item ${isActive("/admin/otorisationpending") ? "active" : ""}`}>
                               <Link className="nav-link" to="/admin/otorisationpending">
-                                <i className="fas fa-file"></i> <span className="menu-text">Otorisation Pending</span>
+                                <i className="text-white fas fa-file"></i> <span className="menu-text text-white">Otorisation Pending</span>
                               </Link>
                             </li>
                           )}
@@ -445,15 +445,15 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                     style={{ cursor: "pointer" }}
                     onClick={() => setMasterOpen(!masterOpen)}
                   >
-                    <i className="fas fa-cogs"></i> <span className="menu-text">User Management</span>
-                    {/* <i className={`fas fa-chevron-${masterOpen ? "down" : "right"} float-end`} style={{ float: "right" }}></i> */}
+                    <i className="text-white fas fa-cogs"></i> <span className="menu-text text-white">User Management</span>
+                    {/* <i className={`text-white fas fa-chevron-${masterOpen ? "down" : "right"} float-end`} style={{ float: "right" }}></i> */}
                   </span>
                   {masterOpen && (
                     <ul className="navbar-nav flex-column ms-3">
                       {hasAccess(["admin","kontrol","kontrol cabang"]) && (
                         <li className={`nav-item ${isActive("/admin/levelotorisasi") ? "active" : ""}`}>
                           <Link className="nav-link" to="/admin/levelotorisasi">
-                            <i className="fas fa-th-list"></i> <span className="menu-text">Level Otorisasi</span>
+                            <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Level Otorisasi</span>
                           </Link>
                         </li>
                       )}
@@ -461,7 +461,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                       {hasAccess(["admin","kontrol","kontrol cabang"]) && (
                         <li className={`nav-item ${isActive("/admin/setupuser") ? "active" : ""}`}>
                           <Link className="nav-link" to="/admin/setupuser">
-                            <i className="fas fa-wrench"></i> <span className="menu-text">Setup User</span>
+                            <i className="text-white fas fa-wrench"></i> <span className="menu-text text-white">Setup User</span>
                           </Link>
                         </li>
                       )}
@@ -469,7 +469,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                       {hasAccess(["admin","kontrol","kontrol cabang"]) && (
                         <li className={`nav-item ${isActive("/admin/registrasiuser") ? "active" : ""}`}>
                           <Link className="nav-link" to="/admin/registrasiuser">
-                            <i className="fas fa-wrench"></i> <span className="menu-text">Registrasi User</span>
+                            <i className="text-white fas fa-wrench"></i> <span className="menu-text text-white">Registrasi User</span>
                           </Link>
                         </li>
                       )}
@@ -477,7 +477,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                       {hasAccess(["admin","kontrol","kontrol cabang"]) && (
                         <li className={`nav-item ${isActive("/admin/validasiotorisasi") ? "active" : ""}`}>
                           <Link className="nav-link" to="/admin/validasiotorisasi">
-                            <i className="fas fa-wrench"></i> <span className="menu-text">Validasi Otorisasi</span>
+                            <i className="text-white fas fa-wrench"></i> <span className="menu-text text-white">Validasi Otorisasi</span>
                           </Link>
                         </li>
                       )}
@@ -485,7 +485,7 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                       {hasAccess(["admin","kontrol","kontrol cabang"]) && (
                         <li className={`nav-item ${isActive("/admin/rubahruanglingkup") ? "active" : ""}`}>
                           <Link className="nav-link" to="/admin/rubahruanglingkup">
-                            <i className="fas fa-wrench"></i> <span className="menu-text">Rubah Ruang Lingkup</span>
+                            <i className="text-white fas fa-wrench"></i> <span className="menu-text text-white">Rubah Ruang Lingkup</span>
                           </Link>
                         </li>
                       )}

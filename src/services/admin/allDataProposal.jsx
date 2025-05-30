@@ -3,6 +3,21 @@ import axios from "axios";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const allDataProposal = {
+     getImageHome: async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${BASE_URL}/master/data-banner`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log('Data Proposal:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Proposal:', error.response?.data || error.message);
+            throw error;
+        }
+    },
     getAllDataProposal: async () => {
         try {
             const token = localStorage.getItem('token');

@@ -160,7 +160,7 @@ const Navbar = ({ toggleSidebar }) => {
         <nav
           className="navbar navbar-expand-lg fixed-top"
           style={{
-            backgroundImage: 'url("/images/banner-proposal.jpg")',
+            backgroundImage: 'url("/images/banner-final.png")',
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -265,7 +265,7 @@ const Navbar = ({ toggleSidebar }) => {
                         minWidth: "10rem",
                     }}
                     >
-                    <span className="ms-2 text-nowrap">{name}</span>
+                    <span className="ms-2 text-nowrap fw-bold">{name}</span>
                     <br></br>
                     <Link className="dropdown-item" to="/admin/ubahpassword">
                         <i className="fas fa-cog mr-2" /> Ubah Password
@@ -297,7 +297,7 @@ const Navbar = ({ toggleSidebar }) => {
                     className="user-avatar-md rounded-circle"
                     style={{ width: 35, height: 35, objectFit: "cover" }}
                   />
-                  <span className="ms-2 text-white text-nowrap">{name}</span>
+                  <span className="ms-2 text-white text-nowrap fw-bold">{name}</span>
                 </a>
                 <div
                   className="dropdown-menu dropdown-menu-right nav-user-dropdown"

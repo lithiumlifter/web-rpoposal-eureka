@@ -163,8 +163,8 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                   </li>
                 )}
 
-                {/* Submenu Otorisasi Pusat Direktur */}
-                {hasAccess(["admin", "direktur"]) && (
+                {/* Submenu Otorisasi Pusat Direktur VIEW ADMIN*/}
+                {hasAccess(["admin"]) && (
                     <li className="nav-item" style={{ position: "relative" }}>
                       <span
                         className="nav-link"
@@ -361,10 +361,233 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                               )}
                             </Link>
                           </li>
+
+                          <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/jajausahalaku") ? "active" : ""}`}>
+                            <Link className="nav-link" to="/admin/otorisasipusat-direktur/jajausahalaku">
+                              <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Jaja Usaha Laku</span>
+                              {jumlahJajaUsahaLaku > 0 && (
+                                <div
+                                  style={{
+                                                    position: "absolute",
+                                                    top: "6px",
+                                                    left: "1px",
+                                                    background: "red",
+                                                    color: "white",
+                                                    borderRadius: "50%",
+                                                    width: "18px",
+                                                    height: "18px",
+                                                    fontSize: "10px",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    zIndex: 2,
+                                                  }}
+                                >
+                                  {jumlahJajaUsahaLaku}
+                                </div>
+                              )}
+                            </Link>
+                          </li>
                         </ul>
                       )}
                     </li>
                   )}
+
+                {/* Submenu Otorisasi Pusat Direktur VIEW DIREKTUR*/}
+               {hasAccess(["direktur"]) && (
+                  <>
+                    <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur-all") ? "active" : ""}`} style={{ position: "relative" }}>
+                      <Link className="nav-link" to="/admin/otorisasipusat-direktur-all">
+                        <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Semua BU</span>
+                        {jumlahProposalPSTDirektur > 0 && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "6px",
+                              left: "1px",
+                              background: "red",
+                              color: "white",
+                              borderRadius: "50%",
+                              width: "18px",
+                              height: "18px",
+                              fontSize: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              zIndex: 2,
+                            }}
+                          >
+                            {jumlahProposalPSTDirektur}
+                          </div>
+                        )}
+                      </Link>
+                    </li>
+
+                    <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/eurekalogistics") ? "active" : ""}`} style={{ position: "relative" }}>
+                      <Link className="nav-link" to="/admin/otorisasipusat-direktur/eurekalogistics">
+                        <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Eureka Logistics</span>
+                        {jumlahEurekaLogistics > 0 && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "6px",
+                              left: "1px",
+                              background: "red",
+                              color: "white",
+                              borderRadius: "50%",
+                              width: "18px",
+                              height: "18px",
+                              fontSize: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              zIndex: 2,
+                            }}
+                          >
+                            {jumlahEurekaLogistics}
+                          </div>
+                        )}
+                      </Link>
+                    </li>
+
+                    <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/eurekabookhouse") ? "active" : ""}`} style={{ position: "relative" }}>
+                      <Link className="nav-link" to="/admin/otorisasipusat-direktur/eurekabookhouse">
+                        <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Eureka Bookhouse</span>
+                        {jumlahEurekaBookhouse > 0 && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "6px",
+                              left: "1px",
+                              background: "red",
+                              color: "white",
+                              borderRadius: "50%",
+                              width: "18px",
+                              height: "18px",
+                              fontSize: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              zIndex: 2,
+                            }}
+                          >
+                            {jumlahEurekaBookhouse}
+                          </div>
+                        )}
+                      </Link>
+                    </li>
+
+                    <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/rajacepat") ? "active" : ""}`} style={{ position: "relative" }}>
+                      <Link className="nav-link" to="/admin/otorisasipusat-direktur/rajacepat">
+                        <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Raja Cepat</span>
+                        {jumlahRajaCepat > 0 && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "6px",
+                              left: "1px",
+                              background: "red",
+                              color: "white",
+                              borderRadius: "50%",
+                              width: "18px",
+                              height: "18px",
+                              fontSize: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              zIndex: 2,
+                            }}
+                          >
+                            {jumlahRajaCepat}
+                          </div>
+                        )}
+                      </Link>
+                    </li>
+
+                    <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/masterdiskon") ? "active" : ""}`} style={{ position: "relative" }}>
+                      <Link className="nav-link" to="/admin/otorisasipusat-direktur/masterdiskon">
+                        <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Master Diskon</span>
+                        {jumlahMasterDiskon > 0 && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "6px",
+                              left: "1px",
+                              background: "red",
+                              color: "white",
+                              borderRadius: "50%",
+                              width: "18px",
+                              height: "18px",
+                              fontSize: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              zIndex: 2,
+                            }}
+                          >
+                            {jumlahMasterDiskon}
+                          </div>
+                        )}
+                      </Link>
+                    </li>
+
+                    <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/katarasa") ? "active" : ""}`} style={{ position: "relative" }}>
+                      <Link className="nav-link" to="/admin/otorisasipusat-direktur/katarasa">
+                        <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Kata Rasa</span>
+                        {jumlahKataRasa > 0 && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "6px",
+                              left: "1px",
+                              background: "red",
+                              color: "white",
+                              borderRadius: "50%",
+                              width: "18px",
+                              height: "18px",
+                              fontSize: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              zIndex: 2,
+                            }}
+                          >
+                            {jumlahKataRasa}
+                          </div>
+                        )}
+                      </Link>
+                    </li>
+
+                    <li className={`nav-item ${isActive("/admin/otorisasipusat-direktur/jajausahalaku") ? "active" : ""}`} style={{ position: "relative" }}>
+                      <Link className="nav-link" to="/admin/otorisasipusat-direktur/jajausahalaku">
+                        <i className="text-white fas fa-th-list"></i> <span className="menu-text text-white">Jaja Usaha Laku</span>
+                        {jumlahJajaUsahaLaku > 0 && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "6px",
+                              left: "1px",
+                              background: "red",
+                              color: "white",
+                              borderRadius: "50%",
+                              width: "18px",
+                              height: "18px",
+                              fontSize: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              zIndex: 2,
+                            }}
+                          >
+                            {jumlahJajaUsahaLaku}
+                          </div>
+                        )}
+                      </Link>
+                    </li>
+                  </>
+                )}
+
+
                 <li className={`nav-item ${isActive("/admin/proposalreport") ? "active" : ""}`}>
                   <Link className="nav-link" to="/admin/proposalreport">
                     <i className="text-white fas fa-file"></i> <span className="menu-text text-white">Proposal Report</span>

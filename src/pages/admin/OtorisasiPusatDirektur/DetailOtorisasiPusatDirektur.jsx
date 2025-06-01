@@ -43,7 +43,7 @@ const handleConfirmClose = () => {
 
   useEffect(() => {
     const fetchDataProposal = async () => {
-      const response = await allDataProposal.getAllDataProposalPST();
+      const response = await allDataProposal.getAllDataProposalPSTDirektur();
       if (response && response.success) {
         const ids = response.data.data.map(item => item.id);
         console.log("ID proposal PST:", ids);
@@ -245,56 +245,99 @@ const handleConfirmSubmit = async () => {
   const historyColumns = [
     { name: "Date", selector: (row) => row.transdate, sortable: true },
     { name: "Position", selector: (row) => row.status_position, sortable: true },
-    // { name: "Description", selector: (row) => row.description, sortable: true },
-     {
-      name: "Description",
-      cell: (row) => {
-        const isDirut = row.status_position;
+    // {
+    //   name: "Description",
+    //   cell: (row) => {
+    //     const isDirut = row.status_position === "Dirut";
     
-        const matchingOtoritas = proposal?.otoritas?.find(
-          (o) => o.emplid === row.username && o.status === row.status
-        );
+    //     const matchingOtoritas = proposal?.otoritas?.find(
+    //       (o) => o.emplid === row.username && o.status === row.status
+    //     );
     
-        const comment = matchingOtoritas?.keterangan;
+    //     const comment = matchingOtoritas?.keterangan;
     
-        if (isDirut) {
-          let labelColor = "black";
-          let labelText = `[${row.status}]`;
+    //     if (isDirut) {
+    //       let labelColor = "black";
+    //       let labelText = `[${row.status}]`;
     
-          if (row.status === "Approve") {
-            labelColor = "green";
-            labelText = "[Saya Setuju]";
-          } else if (row.status === "Pending") {
-            labelColor = "orange";
-            labelText = "[Pending]";
-          } else if (row.status === "Close") {
-            labelColor = "red";
-            labelText = "[Close]";
-          }
+    //       if (row.status === "Approve") {
+    //         labelColor = "green";
+    //         labelText = "[Saya Setuju]";
+    //       } else if (row.status === "Pending") {
+    //         labelColor = "orange";
+    //         labelText = "[Pending]";
+    //       } else if (row.status === "Close") {
+    //         labelColor = "red";
+    //         labelText = "[Close]";
+    //       }
     
-          return (
-            <div>
-              <span style={{ color: labelColor }}>{labelText}</span>
-              {comment && (
-                <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
-                  - {comment}
-                </span>
-              )}
-            </div>
-          );
-        }
+    //       return (
+    //         <div>
+    //           <span style={{ color: labelColor }}>{labelText}</span>
+    //           {comment && (
+    //             <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
+    //               - {comment}
+    //             </span>
+    //           )}
+    //         </div>
+    //       );
+    //     }
     
-        return (
-          <span style={{ fontWeight: "" }}>
-            {row.description ? row.description.toUpperCase() : "-"}
-          </span>
-        );
-      },
-      sortable: false,
-    },    
+    //     return (
+    //       <span style={{ fontWeight: "" }}>
+    //         {row.description ? row.description.toUpperCase() : "-"}
+    //       </span>
+    //     );
+    //   },
+    //   sortable: false,
+    // },  
+    {
+  name: "Description",
+  cell: (row) => {
+    const matchingOtoritas = proposal?.otoritas?.find(
+      (o) => o.emplid === row.username && o.status === row.status
+    );
+
+    const comment = matchingOtoritas?.keterangan;
+
+    let labelColor = "black";
+    let labelText = `[${row.status}]`;
+
+    if (row.status === "Approve") {
+      labelColor = "green";
+      labelText = "[Saya Setuju]";
+    } else if (row.status === "Pending") {
+      labelColor = "orange";
+      labelText = "[Pending]";
+    } else if (row.status === "Close") {
+      labelColor = "red";
+      labelText = "[Close]";
+    }
+
+    if (row.status || comment) {
+      return (
+        <div>
+          <span style={{ color: labelColor }}>{labelText}</span>
+          {comment && (
+            <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
+              - {comment}
+            </span>
+          )}
+        </div>
+      );
+    }
+
+    // fallback jika tidak ada status atau komentar
+    return (
+      <span style={{ fontWeight: "" }}>
+        {row.description ? row.description.toUpperCase() : "-"}
+      </span>
+    );
+  },
+  sortable: false,
+},  
     { name: "BY", selector: (row) => row.name, sortable: true },
   ];
-
   const otoritasColumns = [
     { name: "Urutan No. Level", selector: (row) => row.urutan, sortable: true },
     { name: "EMPLID", selector: (row) => `${row.emplid} ${row.name}`, sortable: true },
@@ -595,46 +638,61 @@ const handleConfirmSubmit = async () => {
       </div>
 
     <div className="row row-cols-2 row-cols-md-6 g-2 mt-4">
-    <div className="card-body">
-      {proposal.images && proposal.images.length > 0 ? (
-        <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
-          {proposal.images.map((image, index) => {
-            const fileName = image.link.split("/").pop();
-            return (
-              <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
-                <img
-                  src={image.link}
-                  alt={fileName}
-                  onClick={() => openModal(index)}
+        <div className="card-body">
+            {proposal.images && proposal.images.length > 0 ? (
+              <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
+                {proposal.images.map((image, index) => {
+                  const fileName = image.link.split("/").pop();
+                  return (
+                    <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
+                      <img
+                        src={image.link}
+                        alt={fileName}
+                        onClick={() => window.open(image.link, "_blank")}
+                        style={{
+                          width: '100%',
+                          height: '150px',
+                          objectFit: 'contain',
+                          border: '1px solid #ccc',
+                          borderRadius: '8px',
+                          padding: '5px',
+                          backgroundColor: '#f9f9f9',
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p>Tidak ada lampiran.</p>
+            )}
+
+             {/* Tombol Slideshow */}
+              {proposal.images && proposal.images.length > 0 && (
+                <button
+                  onClick={() => openModal(0)}  // Menampilkan modal slideshow dari index pertama
                   style={{
-                    width: '100%',
-                    height: '150px',
-                    objectFit: 'contain',
-                    border: '1px solid #ccc',
-                    borderRadius: '8px',
-                    padding: '5px',
-                    backgroundColor: '#f9f9f9',
+                    marginTop: '1rem',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '4px',
+                    backgroundColor: '#007bff',
+                    color: '#fff',
+                    border: 'none',
                     cursor: 'pointer',
                   }}
-                />
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <p>Tidak ada lampiran.</p>
-      )}
-
-      {/* Modal Slideshow */}
-      <ImagePreviewModal 
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        images={proposal.images}
-        activeIndex={activeIndex}
-        setActiveIndex={setActiveIndex}
-      />
-
-    </div>
+                >
+                   <i className="fas fa-play"></i> Slideshow
+                </button>
+              )}
+              <ImagePreviewModal 
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                images={proposal.images}
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
+              />
+          </div>
     </div>
     {/* <button className="btn btn-warning mt-3 text-white">📽 Slideshow</button> */}
     </div>

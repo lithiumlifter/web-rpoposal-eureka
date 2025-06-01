@@ -48,6 +48,7 @@ import OtorisasiPusatDirekturRajaCepat from "./pages/admin/OtorisasiPusatDirektu
 import OtorisasiPusatDirekturEurekaBookhouse from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatEurekaBookhouse";
 import OtorisasiPusatDirekturMasterDiskon from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatMasterDiskon";
 import OtorisasiPusatDirekturKataRasa from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatKataRasa";
+import OtorisasiPusatDirekturJajaUsahaLaku from "./pages/admin/OtorisasiPusatDirektur/OtorisasiPusatJajaUsahaLaku";
 import PrivacyPolicy from "./pages/admin/PrivacyPolicy";
 import DeleteAccount from "./pages/admin/DeleteAccount";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -102,6 +103,7 @@ function App() {
             <Route path="otorisasipusat-direktur/eurekabookhouse" element={<OtorisasiPusatDirekturEurekaBookhouse />} />
             <Route path="otorisasipusat-direktur/masterdiskon" element={<OtorisasiPusatDirekturMasterDiskon />} />
             <Route path="otorisasipusat-direktur/katarasa" element={<OtorisasiPusatDirekturKataRasa />} />
+            <Route path="otorisasipusat-direktur/jajausahalaku" element={<OtorisasiPusatDirekturJajaUsahaLaku />} />
 
             <Route path="printview" element={<PrintView />} />
             <Route path="registrasiuser" element={<RegistrasiUser />} />

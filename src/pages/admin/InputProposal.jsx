@@ -147,6 +147,18 @@ const optionsBUWilayah = useMemo(() => {
       color: "#aaa", // Warna placeholder bisa diubah
     }),
   };
+
+  // SANITIZE
+  const sanitizeText = (text) => {
+  if (!text) return "";
+  return text
+    .normalize("NFKD") // normalize ke bentuk dasar
+    .replace(/[^\x00-\x7F]/g, "") // hapus karakter non-ASCII
+    .replace(/[\u2018\u2019\u201C\u201D]/g, "'") // kutip aneh
+    .replace(/\u00A0/g, " ") // non-breaking space
+    .trim();
+};
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -159,12 +171,17 @@ const optionsBUWilayah = useMemo(() => {
     formData.append("ruanglingkup", selectedRuangLingkup);
     formData.append("kategori", selectedKategori);
     formData.append("proposaldate", proposaldate);
-    formData.append("title", title);
+    // formData.append("title", title);
+    formData.append("title", sanitizeText(title));
     formData.append("biayalainlain", selectedType === "9" ? customNumber : 0);
-    formData.append("description", catatan);
-    formData.append("email1", email1);
-    formData.append("email2", email2);
-    formData.append("email3", email3);
+    // formData.append("description", catatan);
+    formData.append("description", sanitizeText(catatan));
+    // formData.append("email1", email1);
+    // formData.append("email2", email2);
+    // formData.append("email3", email3);
+    formData.append("email1", sanitizeText(email1));
+    formData.append("email2", sanitizeText(email2));
+    formData.append("email3", sanitizeText(email3));
     formData.append("otorisasi", JSON.stringify(addedOtorisasi.map(Number)));
     // Append file gambar ke FormData
     files.forEach((file) => {

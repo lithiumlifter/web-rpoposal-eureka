@@ -136,7 +136,8 @@ const InboxCabang = () => {
             wrap: true,
             grow: 3,
             style: {
-                whiteSpace: 'normal'
+                whiteSpace: 'normal',
+                textAlign: 'left',
             }
         },
         { name: "TYPE", selector: row => row.type, sortable: true, maxWidth: "100px" },

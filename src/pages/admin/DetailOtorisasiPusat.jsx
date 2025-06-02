@@ -266,52 +266,6 @@ const handleConfirmSubmit = async () => {
  const historyColumns = [
     { name: "Date", selector: (row) => row.transdate, sortable: true },
     { name: "Position", selector: (row) => row.status_position, sortable: true },
-    // {
-    //   name: "Description",
-    //   cell: (row) => {
-    //     const isDirut = row.status_position === "Dirut";
-    
-    //     const matchingOtoritas = proposal?.otoritas?.find(
-    //       (o) => o.emplid === row.username && o.status === row.status
-    //     );
-    
-    //     const comment = matchingOtoritas?.keterangan;
-    
-    //     if (isDirut) {
-    //       let labelColor = "black";
-    //       let labelText = `[${row.status}]`;
-    
-    //       if (row.status === "Approve") {
-    //         labelColor = "green";
-    //         labelText = "[Saya Setuju]";
-    //       } else if (row.status === "Pending") {
-    //         labelColor = "orange";
-    //         labelText = "[Pending]";
-    //       } else if (row.status === "Close") {
-    //         labelColor = "red";
-    //         labelText = "[Close]";
-    //       }
-    
-    //       return (
-    //         <div>
-    //           <span style={{ color: labelColor }}>{labelText}</span>
-    //           {comment && (
-    //             <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
-    //               - {comment}
-    //             </span>
-    //           )}
-    //         </div>
-    //       );
-    //     }
-    
-    //     return (
-    //       <span style={{ fontWeight: "" }}>
-    //         {row.description ? row.description.toUpperCase() : "-"}
-    //       </span>
-    //     );
-    //   },
-    //   sortable: false,
-    // },  
     {
   name: "Description",
   cell: (row) => {
@@ -356,6 +310,9 @@ const handleConfirmSubmit = async () => {
     );
   },
   sortable: false,
+   style: {
+    textAlign: "left"
+  }
 },  
     { name: "BY", selector: (row) => row.name, sortable: true },
   ];
@@ -470,6 +427,57 @@ const handleConfirmSubmit = async () => {
             value={keterangan}
             onChange={(e) => setKeterangan(e.target.value)}
           />
+          <div className="mt-4">
+          {/* Baris 1 */}
+          <div className="d-flex gap-2 flex-wrap mb-2">
+            <button
+              className="btn btn-success text-white"
+              onClick={() => handleSubmit('Approve')}
+            >
+              <i className="fas fa-check-circle me-1"></i> Setuju
+            </button>
+
+            <button
+              className="btn btn-warning text-white"
+              onClick={() => handleSubmit('Pending')}
+            >
+              <i className="fas fa-exclamation-circle me-1"></i> Pending
+            </button>
+
+            <button
+              className="btn btn-danger text-white"
+              onClick={() => handleSubmit('Cancel')}
+            >
+              <i className="fas fa-times-circle me-1"></i> Tidak Setuju
+            </button>
+          </div>
+
+          {/* Baris 2 */}
+          <div className="d-flex gap-2 flex-wrap">
+            <button
+              className="btn btn-success text-white"
+              onClick={() => goToPrevNextProposal('prev')}
+              disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
+            >
+              « Sebelumnya
+            </button>
+
+            <button
+              className="btn btn-info text-white"
+              onClick={() => setShowCloseModal(true)}
+            >
+              Tutup
+            </button>
+
+            <button
+              className="btn btn-warning text-white"
+              onClick={() => goToPrevNextProposal('next')}
+              disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
+            >
+              Selanjutnya »
+            </button>
+          </div>
+      </div>
         </div>
         <div className="col-md-6">
           <h5 className="fw-semibold mb-2">Nomor Reg : {proposal.id_proposal}</h5>
@@ -497,10 +505,10 @@ const handleConfirmSubmit = async () => {
             <table className="table table-sm">
               <thead className="table-success text-white bg-success">
                 <tr>
-                  <th>Date</th>
-                  <th>Position</th>
-                  <th>Description</th>
-                  <th>BY</th>
+                  <th style={{ width: "25%" }}>Date</th>
+                  <th style={{ width: "20%" }}>Position</th>
+                  <th style={{ width: "40%" }}>Description</th>
+                  <th style={{ width: "15%" }}>BY</th>
                 </tr>
               </thead>
               <tbody>
@@ -554,189 +562,48 @@ const handleConfirmSubmit = async () => {
           </div>
         </div>
       </div>
-
-      {/* <div className="mt-4 d-flex gap-2 flex-wrap">
-        <button className="btn btn-success text-white" onClick={() => handleSubmit('Approve')}>
-          <i className="fas fa-check-circle"></i> Setuju
-        </button>
-
-        <button className="btn btn-warning text-white" onClick={() => handleSubmit('Pending')}>
-          <i className="fas fa-exclamation-circle"></i> Pending
-        </button>
-
-        <button className="btn btn-danger text-white" onClick={() => handleSubmit('Cancel')}>
-          <i className="fas fa-times-circle"></i> Tidak Setuju
-        </button>
-
-        <button 
-          className="btn btn-warning text-white" 
-          onClick={() => goToPrevNextProposal('prev')}
-          disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
-        >
-          « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
-        </button>
-
-        <button
-          className="btn btn-danger text-white"
-          onClick={() => setShowCloseModal(true)}
-        >
-          Tutup jendela ini
-        </button>
-
-        <button 
-          className="btn btn-warning text-white" 
-          onClick={() => goToPrevNextProposal('next')}
-          disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
-        >
-          Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
-        </button>
-      </div> */}
-
-      <div className="mt-4">
-          {/* Baris 1 */}
-          <div className="d-flex gap-2 flex-wrap mb-2">
-            <button
-              className="btn btn-success text-white"
-              onClick={() => handleSubmit('Approve')}
-            >
-              <i className="fas fa-check-circle me-1"></i> Setuju
-            </button>
-
-            <button
-              className="btn btn-warning text-white"
-              onClick={() => handleSubmit('Pending')}
-            >
-              <i className="fas fa-exclamation-circle me-1"></i> Pending
-            </button>
-
-            <button
-              className="btn btn-danger text-white"
-              onClick={() => handleSubmit('Cancel')}
-            >
-              <i className="fas fa-times-circle me-1"></i> Tidak Setuju
-            </button>
-          </div>
-
-          {/* Baris 2 */}
-          <div className="d-flex gap-2 flex-wrap">
-            <button
-              className="btn btn-success text-white"
-              onClick={() => goToPrevNextProposal('prev')}
-              disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
-            >
-              « Sebelumnya
-            </button>
-
-            <button
-              className="btn btn-info text-white"
-              onClick={() => setShowCloseModal(true)}
-            >
-              Tutup
-            </button>
-
-            <button
-              className="btn btn-warning text-white"
-              onClick={() => goToPrevNextProposal('next')}
-              disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
-            >
-              Selanjutnya »
-            </button>
-          </div>
-      </div>
-
-      {/* <div className="mt-4 d-flex gap-2 flex-wrap">
-        <button className="btn btn-success text-white" onClick={() => handleSubmit('Approve')}>
-          <i className="fas fa-check-circle"></i> Setuju
-        </button>
-
-        <button className="btn btn-warning text-white" onClick={() => handleSubmit('Pending')}>
-          <i className="fas fa-exclamation-circle"></i> Pending
-        </button>
-
-        <button className="btn btn-danger text-white" onClick={() => handleSubmit('Cancel')}>
-          <i className="fas fa-times-circle"></i> Tidak Setuju
-        </button>
-      </div> */}
-      {/* <div className="d-flex justify-content-center mb-4">
-              <div className="btn-group">
-                <button 
-                  className="btn btn-warning" 
-                  onClick={() => goToPrevNextProposal('prev')}
-                  disabled={proposalList.indexOf(Number(id_proposal)) <= 0}
-                >
-                  « Sebelumnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) - 1] || "-"}
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => setShowCloseModal(true)}
-                >
-                  Tutup jendela ini
-                </button>
-                <button 
-                  className="btn btn-warning" 
-                  onClick={() => goToPrevNextProposal('next')}
-                  disabled={proposalList.indexOf(Number(id_proposal)) >= proposalList.length - 1}
-                >
-                  Selanjutnya ID: {proposalList[proposalList.indexOf(Number(id_proposal)) + 1] || "-"} »
-                </button>
-              </div>
-          </div> */}
+      
     <div className="row row-cols-2 row-cols-md-6 g-2 mt-4">
       <div className="card-body">
             {proposal.images && proposal.images.length > 0 ? (
-              <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
-                {proposal.images.map((image, index) => {
-                  const fileName = image.link.split("/").pop();
-                  return (
-                    <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
-                      <img
-                        src={image.link}
-                        alt={fileName}
-                        onClick={() => window.open(image.link, "_blank")}
-                        style={{
-                          width: '100%',
-                          height: '150px',
-                          objectFit: 'contain',
-                          border: '1px solid #ccc',
-                          borderRadius: '8px',
-                          padding: '5px',
-                          backgroundColor: '#f9f9f9',
-                          cursor: 'pointer',
-                        }}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p>Tidak ada lampiran.</p>
-            )}
-
-             {/* Tombol Slideshow */}
-              {proposal.images && proposal.images.length > 0 && (
-                <button
-                  onClick={() => openModal(0)}  // Menampilkan modal slideshow dari index pertama
+        <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
+          {proposal.images.map((image, index) => {
+            const fileName = image.link.split("/").pop();
+            return (
+              <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
+                <img
+                  src={image.link}
+                  alt={fileName}
+                  onClick={() => openModal(index)}
                   style={{
-                    marginTop: '1rem',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '4px',
-                    backgroundColor: '#007bff',
-                    color: '#fff',
-                    border: 'none',
+                    width: '100%',
+                    height: '150px',
+                    objectFit: 'contain',
+                    border: '1px solid #ccc',
+                    borderRadius: '8px',
+                    padding: '5px',
+                    backgroundColor: '#f9f9f9',
                     cursor: 'pointer',
                   }}
-                >
-                   <i className="fas fa-play"></i> Slideshow
-                </button>
-              )}
-              <ImagePreviewModal 
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                images={proposal.images}
-                activeIndex={activeIndex}
-                setActiveIndex={setActiveIndex}
-              />
-          </div>
+                />
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p>Tidak ada lampiran.</p>
+      )}
+
+      {/* Modal Slideshow */}
+      <ImagePreviewModal 
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        images={proposal.images}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+      />
+             
+      </div>
     </div>
     {/* <button className="btn btn-warning mt-3 text-white">📽 Slideshow</button> */}
     </div>

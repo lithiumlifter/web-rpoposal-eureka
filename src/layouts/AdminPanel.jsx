@@ -58,7 +58,7 @@ const AdminPanel = () => {
     return pageTitles[matchedPath] || "Unknown Page";
   };
   const pageTitle = getPageTitle(currentPath);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className={`dashboard-main-wrapper ${isOpen || isHovered? "sidebar-open" : ""}`}

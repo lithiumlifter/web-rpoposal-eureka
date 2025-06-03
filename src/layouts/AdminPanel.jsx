@@ -66,7 +66,7 @@ const AdminPanel = () => {
       <Navbar toggleSidebar={() => setIsOpen(!isOpen)} />
       <Sidebar isOpen={isOpen} isHovered={isHovered} setIsHovered={setIsHovered}/>
       <div className="dashboard-wrapper min-vh-100 d-flex flex-column">
-        <div className="container-fluid dashboard-content flex-grow-1 w-100">
+        <div className="container-fluid dashboard-content flex-grow-1 w-100" style={{ paddingLeft:"5%", paddingRight:"5%" }}>
           <div className="row">
             <div className="col">
             {!location.pathname.startsWith("/admin/detailotorisasipusat") && (

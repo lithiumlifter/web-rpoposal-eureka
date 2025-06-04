@@ -341,15 +341,14 @@ const handleConfirmSubmit = async () => {
       >
         Info ARC
       </button>
-        {/* Bisnis Unit di tengah */}
-        <div className="text-center fs-5 fw-semibold">
-          Bisnis unit:{" "}
-          {proposal.bisnis_unit && (
-            <span className="badge bg-info fs-6 px-3 py-2">
-              {getBuName(proposal.bisnis_unit)}
-            </span>
-          )}
-        </div>
+          {/* Bisnis Unit di tengah */}
+          <div className="text-center fs-5 fw-semibold">
+            {proposal.bisnis_unit && (
+              <span className="badge bg-info fs-5 px-3 py-2">
+                {getBuName(proposal.bisnis_unit)}
+              </span>
+            )}
+          </div>
           <div className="btn-group">
             <button 
               className="btn btn-warning" 

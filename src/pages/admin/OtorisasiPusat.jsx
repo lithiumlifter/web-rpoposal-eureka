@@ -4,6 +4,7 @@ import CustomTable from "../../components/table/customTable";
 import { useNavigate } from "react-router-dom";
 import TableFilterBar from "../../components/table/tableFilterBar";
 import CategoryService from "../../services/admin/categoryServices";
+import detailProposalService from "../../services/admin/detailProposalServices";
 
 const OtorisasiPusat = () => {
   const navigate = useNavigate();
@@ -16,13 +17,77 @@ const OtorisasiPusat = () => {
   const [buMasterList, setBuMasterList] = useState([]);
   const [buOptions, setBuOptions] = useState([]);
 
+  // useEffect(() => {
+  //   const fetchDataProposal = async () => {
+  //     const response = await allDataProposal.getAllDataProposalPST();
+  //     const categoryRes = await CategoryService.getCategories();
+
+  //     if (response && response.success && categoryRes?.data?.bisnisUnit) {
+  //       const proposals = response.data.data;
+  //       setData(proposals);
+  //       setFilteredData(proposals);
+
+  //       // Buat buMasterList dari category
+  //       const allBU = [];
+  //       categoryRes.data.bisnisUnit.forEach(unit => {
+  //         allBU.push({ value: unit.value, label: unit.name });
+  //         unit.branch.forEach(branch => {
+  //           allBU.push({ value: branch.value, label: branch.name });
+  //         });
+  //       });
+  //       setBuMasterList(allBU);
+
+  //       // Buat buOptions hanya dari BU yang digunakan
+  //       const uniqueBU = [...new Set(proposals.map(item => item.bisnis_unit))];
+  //       const mappedOptions = uniqueBU.map(value => {
+  //         const match = allBU.find(bu => bu.value === value);
+  //         return {
+  //           value,
+  //           label: match ? match.label : `BU ${value}`
+  //         };
+  //       });
+  //       setBuOptions(mappedOptions);
+  //     }
+
+  //     setLoading(false);
+  //   };
+
+  //   fetchDataProposal();
+  // }, []);
+
   useEffect(() => {
-    const fetchDataProposal = async () => {
+  const fetchDataProposal = async () => {
+    try {
       const response = await allDataProposal.getAllDataProposalPST();
       const categoryRes = await CategoryService.getCategories();
 
       if (response && response.success && categoryRes?.data?.bisnisUnit) {
-        const proposals = response.data.data;
+        const rawProposals = response.data.data;
+
+        // Ambil status terbaru dari direktur untuk tiap proposal
+        const proposals = await Promise.all(
+          rawProposals.map(async (proposal) => {
+            try {
+              const detailRes = await detailProposalService.getDetailProposal(proposal.id);
+              const otorisasi = detailRes?.data?.otoritas || [];
+
+              const isApprovedByDireksi = otorisasi.some(
+                (item) =>
+                  (item.jabatan === "Direksi" || item.idlevel === "50009") &&
+                  item.status === "Approve"
+              );
+
+              return {
+                ...proposal,
+                status: isApprovedByDireksi ? "OK DIRUT" : proposal.status
+              };
+            } catch (err) {
+              console.error("Gagal ambil detail untuk proposal ID:", proposal.id);
+              return proposal; // fallback ke status aslinya jika gagal
+            }
+          })
+        );
+
         setData(proposals);
         setFilteredData(proposals);
 
@@ -47,12 +112,15 @@ const OtorisasiPusat = () => {
         });
         setBuOptions(mappedOptions);
       }
+    } catch (error) {
+      console.error("Gagal memuat data:", error);
+    }
 
-      setLoading(false);
-    };
+    setLoading(false);
+  };
 
-    fetchDataProposal();
-  }, []);
+  fetchDataProposal();
+}, []);
 
   useEffect(() => {
     let updatedData = [...data];

@@ -283,7 +283,7 @@ const Login = () => {
   const [cardVisible, setCardVisible] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setCardVisible(true), 500);
+    setTimeout(() => setCardVisible(true), 1000);
   }, []);
 
   const { handleLogin, error } = useLogin(() => {
@@ -314,7 +314,7 @@ const Login = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        backgroundImage: "url('../../public/images/bg-login-new.webp')",
+        backgroundImage: "url('/images/bg-login-new.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

@@ -4,7 +4,7 @@
     justify-content: center;
     width: 100vw;
     height: 100vh;
-    background: url("../images/bg-login-new.webp") no-repeat center center;
+    background: url("/images/bg-login-new.webp") no-repeat center center;
     background-size: cover;
     position: relative;
   }

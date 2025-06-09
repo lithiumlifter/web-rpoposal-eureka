@@ -40,6 +40,8 @@ const pageTitles = {
   "/admin/detailotorisasipusat": "Detail Otorisasi Pusat",
   "/admin/privacypolicy": "Kebijakan Privasi",
   "/admin/deleteaccount": "Hapus Akun",
+  "/admin/contact-support": "Contact Support",
+
 
 
 

@@ -53,6 +53,7 @@ import PrivacyPolicy from "./pages/admin/PrivacyPolicy";
 import DeleteAccount from "./pages/admin/DeleteAccount";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ContactSupport from "./pages/admin/OtorisasiPusatDirektur/ContactSupport";
+import ApprovalHistory from "./pages/admin/ApprovalHistory";
 
 Modal.setAppElement('#root');
 
@@ -107,6 +108,7 @@ function App() {
             <Route path="otorisasipusat-direktur/masterdiskon" element={<OtorisasiPusatDirekturMasterDiskon />} />
             <Route path="otorisasipusat-direktur/katarasa" element={<OtorisasiPusatDirekturKataRasa />} />
             <Route path="otorisasipusat-direktur/jajausahalaku" element={<OtorisasiPusatDirekturJajaUsahaLaku />} />
+            <Route path="approval-history" element={<ApprovalHistory />} />
 
             <Route path="printview" element={<PrintView />} />
             <Route path="registrasiuser" element={<RegistrasiUser />} />

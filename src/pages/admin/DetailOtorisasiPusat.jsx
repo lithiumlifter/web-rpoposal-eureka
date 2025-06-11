@@ -349,6 +349,11 @@ const handleConfirmSubmit = async () => {
               </span>
             )}
           </div>
+           <div className="text-center fs-5 fw-semibold">
+              <span className="badge bg-dark fs-5 px-3 py-2">
+                 Nomor Reg : {proposal.id_proposal}
+              </span>
+          </div>
           <div className="btn-group">
             <button 
               className="btn btn-warning" 
@@ -373,50 +378,6 @@ const handleConfirmSubmit = async () => {
           </div>
       </div>
 
-    <h6 className="mb-1">Penanggung Jawab Pelanggan</h6>
-    <table className="table table-bordered table-sm mb-4">
-        <thead className="table-danger text-center">
-        <tr>
-            <th>JABATAN</th>
-            <th>PIC</th>
-            <th>JABATAN</th>
-            <th>PIC</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Nama Pelanggan:</td>
-            <td>
-              {proposal.pemohon.name}
-              <button
-                onClick={() => handleDetail(proposal.pemohon.username)}
-                style={{
-                  marginLeft: '10px',
-                  padding: '2px 6px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                }}
-              >
-                Detail
-              </button>
-            </td>
-            <td>GL:</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>BE:</td>
-            <td></td>
-            <td>ASM:</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Salesman:</td>
-            <td></td>
-            <td>Manager:</td>
-            <td></td>
-        </tr>
-        </tbody>
-    </table>
     <div className="row g-3">
         <div className="col-md-6">
           <textarea
@@ -479,7 +440,49 @@ const handleConfirmSubmit = async () => {
       </div>
         </div>
         <div className="col-md-6">
-          <h5 className="fw-semibold mb-2">Nomor Reg : {proposal.id_proposal}</h5>
+          <table className="table table-bordered table-sm mb-4">
+              <thead className="table-danger text-center">
+              <tr>
+                  <th>JABATAN</th>
+                  <th>PIC</th>
+                  <th>JABATAN</th>
+                  <th>PIC</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                  <td>Nama Pelanggan:</td>
+                  <td>
+                    {proposal.pemohon.name}
+                    <button
+                      onClick={() => handleDetail(proposal.pemohon.username)}
+                      style={{
+                        marginLeft: '10px',
+                        padding: '2px 6px',
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Detail
+                    </button>
+                  </td>
+                  <td>GL:</td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td>BE:</td>
+                  <td></td>
+                  <td>ASM:</td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td>Salesman:</td>
+                  <td></td>
+                  <td>Manager:</td>
+                  <td></td>
+              </tr>
+              </tbody>
+          </table>
           <div className="table-responsive">
             {/* <table className="table table-sm">
               <thead className="table-success text-white bg-success">

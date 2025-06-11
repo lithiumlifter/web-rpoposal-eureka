@@ -587,10 +587,15 @@ const Sidebar = ({ isOpen, setIsHovered, isHovered  }) => {
                   </>
                 )}
 
-
                 <li className={`nav-item ${isActive("/admin/proposalreport") ? "active" : ""}`}>
                   <Link className="nav-link" to="/admin/proposalreport">
                     <i className="text-white fas fa-file"></i> <span className="menu-text text-white">Proposal Report</span>
+                  </Link>
+                </li>
+
+                <li className={`nav-item ${isActive("/admin/approval-history") ? "active" : ""}`}>
+                  <Link className="nav-link" to="/admin/approval-history">
+                    <i className="text-white fas fa-history"></i> <span className="menu-text text-white">Approval History</span>
                   </Link>
                 </li>
 

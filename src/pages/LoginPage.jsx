@@ -283,7 +283,7 @@ const Login = () => {
   const [cardVisible, setCardVisible] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setCardVisible(true), 1000);
+    setTimeout(() => setCardVisible(true), 500);
   }, []);
 
   const { handleLogin, error } = useLogin(() => {

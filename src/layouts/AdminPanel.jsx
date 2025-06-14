@@ -42,6 +42,8 @@ const pageTitles = {
   "/admin/deleteaccount": "Hapus Akun",
   "/admin/contact-support": "Contact Support",
   "/admin/approval-history": "Approval History",
+  "/admin/detailapprovalhistory": "Detail Approval History",
+
 };
 
 const AdminPanel = () => {

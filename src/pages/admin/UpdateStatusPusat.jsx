@@ -59,7 +59,7 @@ const UpdateStatusPusat = () => {
 
     const handleCloseConfirm = async () => {
         try {
-            await updateStatusCabangServices.cancelProposalCabang(selectedItem?.id);
+            await updateStatusPusatServices.cancelProposalCabang(selectedItem?.id);
             // alert(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`);
             showSuccessToast(`Proposal dengan ID ${selectedItem?.id} berhasil di-cancel.`)
             setDataCabang(prev => prev.filter(item => item.id !== selectedItem?.id));

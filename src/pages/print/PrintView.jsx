@@ -1,16 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import Barcode from 'react-barcode';
+import useCategories from '../../hooks/useCategories'; // ⬅️ Tambahkan ini di paling atas
 
 const PrintView = () => {
   const [proposal, setProposal] = useState(null);
   const [formData, setFormData] = useState(null);
   const userRole = localStorage.getItem("name");
-  
+  const { categories } = useCategories();
+  const bisnisUnitList = categories?.data?.bisnisUnit || [];
+
+        const getBuName = () => {
+          const bu = bisnisUnitList.find(
+            (item) => item.value === formData.bisnis_unit
+          );
+          return bu ? bu.name : '-';
+        };
+
+        const getBuWilayahName = () => {
+          const bu = bisnisUnitList.find(
+            (item) => item.value === formData.bisnis_unit
+          );
+          if (bu && bu.branch) {
+            const branch = bu.branch.find(
+              (b) => b.value === formData.bisnis_unit_branch
+            );
+            return branch ? branch.wilayah : '-';
+          }
+          return '-';
+        };
+
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('printData'));
     if (storedData) {
       setProposal(storedData.proposal);
-      setFormData(storedData.formData);
+      const flattenedFormData = storedData.formData.formData ?? storedData.formData;
+      setFormData(flattenedFormData);
   
       const formatTanggal = (isoDate) => {
         if (!isoDate) return '';
@@ -156,13 +180,15 @@ const PrintView = () => {
                 } - Tgl : {formData.tgl_proposal}
               </td>
               <td><strong>BU Name</strong></td>
-              <td>Raja Cepat Nusantara</td>
+              {/* <td>{formData.bisnis_unit}</td> */}
+              <td>{getBuName()}</td>
             </tr>
             <tr>
               <td><strong>Lembaga:</strong></td>
               <td>{formData.lembaga}</td>
               <td><strong>BU Wilayah:</strong></td>
-              <td>Jakarta</td>
+              {/* <td>{formData.bisnis_unit_branch}</td> */}
+              <td>{getBuWilayahName()}</td>
             </tr>
             <tr>
               <td><strong>Kode:</strong></td>
@@ -227,47 +253,51 @@ const PrintView = () => {
                   <tr key={item.id_history}>
                     <td>{item.transdate}</td>
                     <td>{item.status_position}</td>
-                    <td>
-                      {item.status_position === "Dirut" ? (
-                        <>
-                          <span
-                            style={{
-                              color:
-                                item.status === "Approve"
-                                  ? "green"
-                                  : item.status === "Pending"
-                                  ? "warning"
-                                  : item.status === "Close"
-                                  ? "red"
-                                  : "black",
-                            }}
-                          >
-                            [{item.status === "Approve"
-                              ? "Saya Setuju"
-                              : item.status === "Pending"
-                              ? "Pending"
-                              : item.status === "Close"
-                              ? "Close"
-                              : item.status}]
-                          </span>
-                          {proposal?.otoritas?.find(
-                            (o) => o.emplid === item.username && o.status === item.status
-                          )?.keterangan && (
-                            <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
-                              - {
-                                proposal.otoritas.find(
-                                  (o) => o.emplid === item.username && o.status === item.status
-                                ).keterangan
-                              }
-                            </span>
-                          )}
-                        </>
-                      ) : (
-                        <span style={{ fontWeight: "" }}>
-                          {item.description ? item.description.toUpperCase() : "-"}
-                        </span>
-                      )}
-                    </td>
+                    <td style={{ width: '40%', wordWrap: 'break-word', verticalAlign: 'top' }}>
+  <>
+    {item.status ? (
+      <span
+        style={{
+          color:
+            item.status === "Approve"
+              ? "green"
+              : item.status === "Pending"
+              ? "orange"
+              : item.status === "Close"
+              ? "red"
+              : "black",
+        }}
+      >
+        [{item.status === "Approve"
+          ? "Saya Setuju"
+          : item.status === "Pending"
+          ? "Pending"
+          : item.status === "Close"
+          ? "Close"
+          : item.status}]
+      </span>
+    ) : null}
+
+    {proposal?.otoritas?.find(
+      (o) => o.emplid === item.username && o.status === item.status
+    )?.keterangan && (
+      <span style={{ marginLeft: "8px", fontWeight: "bold", color: "#444" }}>
+        - {
+          proposal.otoritas.find(
+            (o) => o.emplid === item.username && o.status === item.status
+          ).keterangan
+        }
+      </span>
+    )}
+
+    {!item.status && (
+      <span style={{ fontWeight: "" }}>
+        {item.description ? item.description.toUpperCase() : "-"}
+      </span>
+    )}
+  </>
+</td>
+
                     <td>{item.name}</td>
                   </tr>
                 ))

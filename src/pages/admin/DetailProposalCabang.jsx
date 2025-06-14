@@ -22,6 +22,8 @@ const DetailProposalCabang = () => {
   const [selectedBUName, setSelectedBUName] = useState(null);
   const [selectedBUWilayah, setSelectedBUWilayah] = useState(null);
   const [removedOtorisasi, setRemovedOtorisasi] = useState([]);
+  const [newImages, setNewImages] = useState([]);
+  const [removedImages, setRemovedImages] = useState([]);
   const [categories, setCategories] = useState({
     bisnisUnit: [],
     ruangLingkup: [],
@@ -30,11 +32,22 @@ const DetailProposalCabang = () => {
     dataOtorisasi: [],
   });
 
-  // const buNames = useMemo(() => {
-  //   return categories.bisnisUnit.length
-  //     ? [...new Set(categories.bisnisUnit.map(item => item.name))] 
-  //     : [];
-  // }, [categories.bisnisUnit]);
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setNewImages((prev) => [...prev, ...files]);
+  };
+
+  const handleRemoveImage = (imageId) => {
+    setRemovedImages((prev) => [...prev, imageId]);
+    setProposal((prevProposal) => ({
+      ...prevProposal,
+      images: prevProposal.images.filter((img) => img.id_image !== imageId),
+    }));
+  };
+
+  const handleRemoveNewImage = (index) => {
+    setNewImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const optionsBUName = useMemo(() => {
     return categories.bisnisUnit.map(item => ({
@@ -647,48 +660,83 @@ const DetailProposalCabang = () => {
           </div>
 
         {/* G. LAMPIRAN */}
-        <div className="card mt-3">
-        <div className="card-header text-start">G. LAMPIRAN</div>
-        <div className="card-body">
-          {proposal.images && proposal.images.length > 0 ? (
-            <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem' }}>
-              {proposal.images.map((image, index) => {
-                const fileName = image.link.split("/").pop();
-                return (
-                  <div key={image.id_image} style={{ minWidth: '200px', flex: '0 0 auto' }}>
-                    <img
-                      src={image.link}
-                      alt={fileName}
-                      onClick={() => openModal(index)}
-                      style={{
-                        width: '100%',
-                        height: '150px',
-                        objectFit: 'contain',
-                        border: '1px solid #ccc',
-                        borderRadius: '8px',
-                        padding: '5px',
-                        backgroundColor: '#f9f9f9',
-                        cursor: 'pointer',
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p>Tidak ada lampiran.</p>
-          )}
-
-          <ImagePreviewModal
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            images={proposal.images}
-            activeIndex={activeIndex}
-            setActiveIndex={setActiveIndex}
+       <div className="card mt-3">
+  <div className="card-header text-start">G. LAMPIRAN</div>
+  <div className="card-body">
+    <div style={{ display: 'flex', overflowX: 'auto', gap: '1rem', flexWrap: 'wrap' }}>
+      {proposal.images && proposal.images.length > 0 && proposal.images.map((image, index) => (
+        <div key={image.id_image} style={{ minWidth: '200px', position: 'relative' }}>
+          <img
+            src={image.link}
+            alt={`lampiran-${index}`}
+            onClick={() => openModal(index)}
+            style={{
+              width: '100%',
+              height: '150px',
+              objectFit: 'contain',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
+              padding: '5px',
+              backgroundColor: '#f9f9f9',
+              cursor: 'pointer',
+            }}
           />
+          {isEditing && (
+            <button
+              type="button"
+              className="btn btn-danger btn-sm"
+              style={{ position: 'absolute', top: 5, right: 5 }}
+              onClick={() => handleRemoveImage(image.id_image)}
+            >
+              Hapus
+            </button>
+          )}
         </div>
+      ))}
 
+      {newImages.length > 0 && newImages.map((file, index) => (
+        <div key={index} style={{ minWidth: '200px', position: 'relative' }}>
+          <img
+            src={URL.createObjectURL(file)}
+            alt={`preview-${index}`}
+            style={{
+              width: '100%',
+              height: '150px',
+              objectFit: 'contain',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
+              padding: '5px',
+              backgroundColor: '#f0f0f0',
+            }}
+          />
+          <button
+            type="button"
+            className="btn btn-warning btn-sm"
+            style={{ position: 'absolute', top: 5, right: 5 }}
+            onClick={() => handleRemoveNewImage(index)}
+          >
+            Batal
+          </button>
         </div>
+      ))}
+    </div>
+
+    {isEditing && (
+      <div className="mt-3">
+        <input type="file" multiple accept="image/*" onChange={handleImageUpload} />
+      </div>
+    )}
+
+    <ImagePreviewModal
+      isOpen={isModalOpen}
+      onClose={closeModal}
+      images={proposal.images}
+      activeIndex={activeIndex}
+      setActiveIndex={setActiveIndex}
+    />
+  </div>
+</div>
+
 
         {/* B. HISTORY */}
         <div className="card mt-3">
